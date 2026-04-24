@@ -87,9 +87,9 @@ class QuoteEstimatorService
 private function companyPriceAdjustment(Company $company): int
     {
         return match ($company) {
-            Company::Axa_Assurance => 200,
+            Company::Axa_Assurance => 500,
             Company::Wafa_Assurance => 0,
-            Company::RMA => -150,
+            Company::RMA => -300,
             default => 0,
         };
     }

@@ -9,7 +9,8 @@ enum Company: string
     case Axa_Assurance = 'Axa Assurance';
     case Wafa_Assurance = 'Wafa Assurance';
     case RMA = 'RMA';
-    case Unknown = '';
+    
+
 
     public static function values(): array
     {
