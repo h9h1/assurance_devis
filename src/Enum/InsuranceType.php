@@ -8,4 +8,5 @@ enum InsuranceType: string
 {
     case AUTO = 'auto';
     case MOTO = 'moto';
+    case Unknown = '';
 }

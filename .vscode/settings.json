@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^php bin/console doctrine:query:sql \"SELECT DISTINCT company FROM quotes LIMIT 10;\" 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

@@ -10,6 +10,7 @@ use App\Enum\City;
 use App\Enum\VehiculeBrand;
 use App\Enum\Company;
 use App\Enum\FuelType;
+use App\Enum\QuoteStatus;
 use App\Repository\QuoteRepository;
 use App\Service\QuoteEstimatorService;
 use App\Service\QuoteMapper;
@@ -79,6 +80,26 @@ class QuoteWizardController extends AbstractController
             'offers' => $estimator->getOffers($quote),
             'companies' => Company::cases(),
         ]);
+    }
+
+    #[Route('/devis/{id}/choisir-offre', name: 'quote_select_offer', requirements: ['id' => '\\d+'], methods: ['POST'])]
+    public function selectOffer(
+        Quote $quote,
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $offerCode = $request->request->get('offer_code');
+
+        if ($offerCode) {
+            $quote->setSelectedOffer($offerCode);
+            $quote->setStatus(QuoteStatus::SUBMITTED);
+            $quote->touch();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Offre "' . ucfirst($offerCode) . '" sélectionnée avec succès!');
+        }
+
+        return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
     }
 
     #[Route('/', name: 'homepage', methods: ['GET'])]

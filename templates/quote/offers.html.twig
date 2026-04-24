@@ -48,7 +48,10 @@
                             {% endif %}
                         </ul>
 
-                        <button class="btn btn-primary">Choisir cette offre</button>
+                        <form method="POST" action="{{ path('quote_select_offer', {id: quote.id}) }}" style="display: inline;">
+                            <input type="hidden" name="offer_code" value="{{ offer.code }}">
+                            <button type="submit" class="btn btn-primary">Choisir cette offre</button>
+                        </form>
                     </div>
                 {% endfor %}
             </div>
