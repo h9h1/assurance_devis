@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos offres{% endblock %}
+
+{% block body %}
+    <section class="offers-page">
+        <div class="container">
+            <h1>Vos offres d’assurance</h1>
+            <p>
+                Merci {{ quote.firstName }} {{ quote.lastName }},
+                voici 3 offres estimatives pour votre demande.
+            </p>
+            <label for="company">choisir une company</label>
+            <select name="quote[company]">
+				{% for company in companies %}
+					<option value="{{ company.value }}" {% if quote.company == company %} selected {% endif %}>
+						{{ company.name }}
+					</option>
+				{% endfor %}
+			</select>
+
+            <div class="offers-grid">
+                {% for offer in offers %}
+                    <div class="offer-card">
+                        <h2>{{ offer.title }}</h2>
+                        <p>{{ offer.description }}</p>
+
+                        <div class="price">
+                            <strong>{{ offer.annual_price }} DH / an</strong><br>
+                            <span>{{ offer.monthly_price }} DH / mois</span>
+                        </div>
+
+                        <ul>
+                            {% if offer.code == 'tiers' %}
+                                <li>Responsabilité civile</li>
+                                <li>Défense et recours</li>
+                            {% elseif offer.code == 'intermediaire' %}
+                                <li>Responsabilité civile</li>
+                                <li>Vol</li>
+                                <li>Incendie</li>
+                                <li>Bris de glace</li>
+                            {% elseif offer.code == 'tous_risques' %}
+                                <li>Responsabilité civile</li>
+                                <li>Vol</li>
+                                <li>Incendie</li>
+                                <li>Dommages tous accidents</li>
+                                <li>Assistance</li>
+                            {% endif %}
+                        </ul>
+
+                        <button class="btn btn-primary">Choisir cette offre</button>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div style="margin-top: 24px;">
+                <a href="{{ path('quote_show', {id: quote.id}) }}" class="btn btn-secondary">
+                    Voir le récapitulatif
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

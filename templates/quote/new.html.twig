@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau devis | {{ app_name }}{% endblock %}
+
+{% block body %}
+<section class="hero-card">
+    <div>
+        <span class="badge">Assurance Auto & Moto</span>
+        <h1>Demande de devis en ligne</h1>
+        <p>Remplissez le formulaire étape par étape puis vérifiez votre récapitulatif avant confirmation.</p>
+    </div>
+   
+</section>
+
+<form method="post" action="{{ path('quote_new') }}" class="wizard js-quote-wizard" novalidate>
+    <div class="wizard__progress">
+        <div class="wizard__progress-bar" data-progress-bar></div>
+    </div>
+
+    <div class="wizard__steps">
+        <button type="button" class="step-pill is-active" data-step-indicator="1">1. Personnel</button>
+        <button type="button" class="step-pill" data-step-indicator="2">2. Conducteur</button>
+        <button type="button" class="step-pill" data-step-indicator="3">3. Assurance</button>
+        <button type="button" class="step-pill" data-step-indicator="4">4. Véhicule</button>
+        <button type="button" class="step-pill" data-step-indicator="5">5. Récapitulatif</button>
+    </div>
+
+    <section class="wizard-step is-active" data-step="1">
+        <h2>Informations personnelles</h2>
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="lastName">Nom</label>
+                <input id="lastName" name="lastName" value="{{ data.lastName|default('') }}" required maxlength="100">
+                {% include 'components/_field_errors.html.twig' with { field: 'lastName', errors: errors } %}
+            </div>
+            <div class="field">
+                <label for="firstName">Prénom</label>
+                <input id="firstName" name="firstName" value="{{ data.firstName|default('') }}" required maxlength="100">
+                {% include 'components/_field_errors.html.twig' with { field: 'firstName', errors: errors } %}
+            </div>
+        </div>
+
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="city">Ville</label>
+                <select id="city" name="city" required>
+                    <option value="">Choisir une ville</option>
+                    {% for city in cities %}
+                        <option value="{{ city.value }}" {{ data.city|default('') == city.value ? 'selected' : '' }}>{{ city.value }}</option>
+                    {% endfor %}
+                </select>
+                {% include 'components/_field_errors.html.twig' with { field: 'city', errors: errors } %}
+            </div>
+            <div class="field">
+                <label for="phoneNumber">Téléphone</label>
+                <input id="phoneNumber" name="phoneNumber" value="{{ data.phoneNumber|default('') }}" required placeholder="0612345678 ou +212612345678">
+                {% include 'components/_field_errors.html.twig' with { field: 'phoneNumber', errors: errors } %}
+            </div>
+        </div>
+    </section>
+
+    <section class="wizard-step" data-step="2">
+        <h2>Informations conducteur</h2>
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="birthDate">Date de naissance</label>
+                <input id="birthDate" type="date" name="birthDate" value="{{ data.birthDate|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'birthDate', errors: errors } %}
+            </div>
+            <div class="field">
+                <label for="licenseDate">Date d'obtention du permis</label>
+                <input id="licenseDate" type="date" name="licenseDate" value="{{ data.licenseDate|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'licenseDate', errors: errors } %}
+            </div>
+        </div>
+    </section>
+
+    <section class="wizard-step" data-step="3">
+        <h2>Type d'assurance</h2>
+        <div class="choice-cards">
+            <label class="choice-card {{ data.insuranceType|default('auto') == 'auto' ? 'is-selected' : '' }}">
+                <input type="radio" name="insuranceType" value="auto" {{ data.insuranceType|default('auto') == 'auto' ? 'checked' : '' }}>
+                <span>Assurance Auto</span>
+                <small>Véhicule particulier</small>
+            </label>
+            <label class="choice-card {{ data.insuranceType|default('') == 'moto' ? 'is-selected' : '' }}">
+                <input type="radio" name="insuranceType" value="moto" {{ data.insuranceType|default('') == 'moto' ? 'checked' : '' }}>
+                <span>Assurance Moto</span>
+                <small>Deux roues</small>
+            </label>
+        </div>
+        {% include 'components/_field_errors.html.twig' with { field: 'insuranceType', errors: errors } %}
+    </section>
+
+    <section class="wizard-step" data-step="4">
+        <h2>Informations véhicule</h2>
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="vehicleBrand">Marque du véhicule</label>
+                <select id="vehicleBrand" name="vehicleBrand" required>
+                    <option value="">Choisir une marque</option>
+                    {% for brand in vehiculeBrands %}
+                        <option value="{{ brand.value }}" {{ data.vehicleBrand|default('') == brand.value ? 'selected' : '' }}>{{ brand.value }}</option>
+                    {% endfor %}
+                </select>
+                {% include 'components/_field_errors.html.twig' with { field: 'vehicleBrand', errors: errors } %}
+            </div>
+            <div class="field">
+                <label for="fuelType">Type de carburant</label>
+                <select id="fuelType" name="fuelType" required>
+                    <option value="">Choisir un carburant</option>
+                    {% for fuel in fuelTypes %}
+                        <option value="{{ fuel.value }}" {{ data.fuelType|default('') == fuel.value ? 'selected' : '' }}>{{ fuel.value|capitalize }}</option>
+                    {% endfor %}
+                </select>
+                {% include 'components/_field_errors.html.twig' with { field: 'fuelType', errors: errors } %}
+            </div>
+        </div>
+
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="firstRegistrationDate">Date de mise en circulation</label>
+                <input id="firstRegistrationDate" type="date" name="firstRegistrationDate" value="{{ data.firstRegistrationDate|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'firstRegistrationDate', errors: errors } %}
+            </div>
+            <div class="field">
+                <label for="seatCount">Nombre de places</label>
+                <input id="seatCount" type="number" name="seatCount" min="1" value="{{ data.seatCount|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'seatCount', errors: errors } %}
+            </div>
+        </div>
+
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="newValue">Valeur à neuf</label>
+                <input id="newValue" type="number" step="0.01" min="1" name="newValue" value="{{ data.newValue|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'newValue', errors: errors } %}
+            </div>
+            <div class="field">
+                <label for="marketValue">Valeur vénale</label>
+                <input id="marketValue" type="number" step="0.01" min="1" name="marketValue" value="{{ data.marketValue|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'marketValue', errors: errors } %}
+            </div>
+        </div>
+
+        <div class="grid grid--2">
+            <div class="field">
+                <label for="registrationNumber">Immatriculation</label>
+                <input id="registrationNumber" name="registrationNumber" value="{{ data.registrationNumber|default('') }}" required>
+                {% include 'components/_field_errors.html.twig' with { field: 'registrationNumber', errors: errors } %}
+            </div>
+            <div class="field js-auto-field" {% if data.insuranceType|default('auto') != 'auto' %}style="display:none"{% endif %}>
+                <label for="fiscalPower">Puissance fiscale</label>
+                <input id="fiscalPower" type="number" min="1" name="fiscalPower" value="{{ data.fiscalPower|default('') }}">
+                {% include 'components/_field_errors.html.twig' with { field: 'fiscalPower', errors: errors } %}
+            </div>
+            <div class="field js-moto-field" {% if data.insuranceType|default('') != 'moto' %}style="display:none"{% endif %}>
+                <label for="engineCapacity">Cylindrée</label>
+                <input id="engineCapacity" type="number" min="1" name="engineCapacity" value="{{ data.engineCapacity|default('') }}">
+                {% include 'components/_field_errors.html.twig' with { field: 'engineCapacity', errors: errors } %}
+            </div>
+        </div>
+    </section>
+
+    <section class="wizard-step" data-step="5">
+        <h2>Récapitulatif</h2>
+        <div class="summary-card" data-summary></div>
+        <p class="summary-note">Vérifiez toutes les informations avant confirmation. Vous pouvez revenir en arrière si nécessaire.</p>
+    </section>
+
+    <div class="wizard__actions">
+        <button type="button" class="btn btn--secondary" data-prev>Précédent</button>
+        <button type="button" class="btn btn--primary" data-next>Suivant</button>
+        <button type="submit" class="btn btn--success" data-submit style="display:none">Confirmer le devis</button>
+    </div>
+</form>
+{% endblock %}
