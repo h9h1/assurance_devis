@@ -1,65 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Devis #{{ quote.id }} | {{ app_name }}{% endblock %}
+{% block title %}Devis #{{ quote.id }}
+	|
+	{{ app_name }}
+{% endblock %}
 
 {% block body %}
-<section class="page-header">
-    <h1>Fiche récapitulative du devis #{{ quote.id }}</h1>
-    <p>Votre demande a bien été enregistrée.</p>
-</section>
+	<section class="page-header">
+		<h1>Fiche récapitulative du devis #{{ quote.id }}</h1>
+		<p>Votre demande a bien été enregistrée.</p>
+	</section>
 
-<div class="summary-grid">
-    <article class="summary-block">
-        <h2>Informations personnelles</h2>
-        <dl>
-            <dt>Nom</dt><dd>{{ quote.lastName }}</dd>
-            <dt>Prénom</dt><dd>{{ quote.firstName }}</dd>
-            <dt>Ville</dt><dd>{{ quote.city }}</dd>
-            <dt>Téléphone</dt><dd>{{ quote.phoneNumber }}</dd>
-        </dl>
-    </article>
+	<div class="summary-grid">
+		<article class="summary-block">
+			<h2>Informations personnelles</h2>
+			<dl>
+				<dt>Nom</dt>
+				<dd>{{ quote.lastName }}</dd>
+				<dt>Prénom</dt>
+				<dd>{{ quote.firstName }}</dd>
+				<dt>Ville</dt>
+				<dd>{{ quote.city }}</dd>
+				<dt>Téléphone</dt>
+				<dd>{{ quote.phoneNumber }}</dd>
+			</dl>
+		</article>
 
-    <article class="summary-block">
-        <h2>Informations conducteur</h2>
-        <dl>
-            <dt>Date de naissance</dt><dd>{{ quote.birthDate }}</dd>
-            <dt>Date du permis</dt><dd>{{ quote.licenseDate }}</dd>
-        </dl>
-    </article>
+		<article class="summary-block">
+			<h2>Informations conducteur</h2>
+			<dl>
+				<dt>Date de naissance</dt>
+				<dd>{{ quote.birthDate }}</dd>
+				<dt>Date du permis</dt>
+				<dd>{{ quote.licenseDate }}</dd>
+			</dl>
+		</article>
 
-    <article class="summary-block">
-        <h2>Assurance</h2>
-        <dl>
-            <dt>Type</dt><dd>{{ quote.insuranceType|upper }}</dd>
-            <dt>Statut</dt><dd>{{ quote.status }}</dd>
-        </dl>
-    </article>
+		<article class="summary-block">
+			<h2>Assurance</h2>
+			<dl>
+				<dt>Type</dt>
+				<dd>{{ quote.insuranceType|upper }}</dd>
+				<dt>Statut</dt>
+				<dd>{{ quote.status }}</dd>
+			</dl>
+		</article>
 
-    <article class="summary-block">
-        <h2>Informations véhicule</h2>
-        <dl>
-            <dt>Marque</dt><dd>{{ quote.vehicleBrand }}</dd>
-            <dt>Carburant</dt><dd>{{ quote.fuelType }}</dd>
-            <dt>Mise en circulation</dt><dd>{{ quote.firstRegistrationDate }}</dd>
-            <dt>Places</dt><dd>{{ quote.seatCount }}</dd>
-            <dt>Valeur à neuf</dt><dd>{{ quote.newValue }} MAD</dd>
-            <dt>Valeur vénale</dt><dd>{{ quote.marketValue }} MAD</dd>
-            <dt>Immatriculation</dt><dd>{{ quote.registrationNumber }}</dd>
-            {% if quote.fiscalPower %}
-                <dt>Puissance fiscale</dt><dd>{{ quote.fiscalPower }}</dd>
-            {% endif %}
-            {% if quote.engineCapacity %}
-                <dt>Cylindrée</dt><dd>{{ quote.engineCapacity }}</dd>
-            {% endif %}
-        </dl>
-    </article>
-</div>
+		<article class="summary-block">
+			<h2>Informations véhicule</h2>
+			<dl>
+				<dt>Marque</dt>
+				<dd>{{ quote.vehicleBrand }}</dd>
+				<dt>Carburant</dt>
+				<dd>{{ quote.fuelType }}</dd>
+				<dt>Mise en circulation</dt>
+				<dd>{{ quote.firstRegistrationDate }}</dd>
+				<dt>Places</dt>
+				<dd>{{ quote.seatCount }}</dd>
+				<dt>Valeur à neuf</dt>
+				<dd>{{ quote.newValue }}
+					MAD</dd>
+				<dt>Valeur vénale</dt>
+				<dd>{{ quote.marketValue }}
+					MAD</dd>
+				<dt>Immatriculation</dt>
+				<dd>{{ quote.registrationNumber }}</dd>
+				{% if quote.fiscalPower %}
+					<dt>Puissance fiscale</dt>
+					<dd>{{ quote.fiscalPower }}</dd>
+				{% endif %}
+				{% if quote.engineCapacity %}
+					<dt>Cylindrée</dt>
+					<dd>{{ quote.engineCapacity }}</dd>
+				{% endif %}
+			</dl>
+		</article>
+	</div>
 
-<div class="actions-row">
-    <a class="btn btn--secondary" href="{{ path('quote_new') }}">Créer un autre devis</a>
-    <a class="btn btn--primary" href="{{ path('quote_list') }}">Voir la liste</a>
-</div>
-<a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
-    Confirmer et voir les offres
-</a>
+	<div class="actions-row">
+		<a class="btn btn--secondary" href="{{ path('quote_new') }}">Créer un autre devis</a>
+	</div>
+	<a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
+		Confirmer et voir les offres
+	</a>
 {% endblock %}

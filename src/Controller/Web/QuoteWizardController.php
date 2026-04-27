@@ -10,6 +10,7 @@ use App\Enum\City;
 use App\Enum\VehiculeBrand;
 use App\Enum\Company;
 use App\Enum\FuelType;
+use App\Enum\QuoteStatus;
 use App\Repository\QuoteRepository;
 use App\Service\QuoteEstimatorService;
 use App\Service\QuoteMapper;
@@ -17,6 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -81,11 +83,64 @@ class QuoteWizardController extends AbstractController
         ]);
     }
 
+    #[Route('/devis/{id}/choisir-offre', name: 'quote_select_offer', requirements: ['id' => '\\d+'], methods: ['POST'])]
+    public function selectOffer(
+        Quote $quote,
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $offerCode = $request->request->get('offer_code');
+
+        if ($offerCode) {
+            $quote->setSelectedOffer($offerCode);
+            $quote->setStatus(QuoteStatus::SUBMITTED);
+            $quote->touch();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Offre "' . ucfirst($offerCode) . '" sélectionnée avec succès!');
+        }
+
+        return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
+    }
+
+    #[Route('/devis/{id}/offres-by-company', name: 'quote_offers_by_company', requirements: ['id' => '\\d+'], methods: ['GET'])]
+    public function offersByCompany(
+        Quote $quote,
+        Request $request,
+        QuoteEstimatorService $estimator,
+    ): JsonResponse {
+        $companyValue = $request->query->get('company');
+
+        if ($companyValue) {
+            // Changer la compagnie temporairement pour calculer les offres
+            $originalCompany = $quote->getCompany();
+            foreach (Company::cases() as $company) {
+                if ($company->value === $companyValue) {
+                    $quote->setCompany($company);
+                    break;
+                }
+            }
+
+            $offers = $estimator->getOffers($quote);
+
+            // Restaurer la compagnie originale
+            $quote->setCompany($originalCompany);
+
+            return new JsonResponse([
+                'success' => true,
+                'offers' => $offers,
+            ]);
+        }
+
+        return new JsonResponse([
+            'success' => false,
+            'message' => 'Company not provided',
+        ], 400);
+    }
+
     #[Route('/', name: 'homepage', methods: ['GET'])]
     public function home(): Response
     {
         return $this->redirectToRoute('quote_new');
     }
-
-    
 }

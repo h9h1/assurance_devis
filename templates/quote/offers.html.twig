@@ -1,63 +1,211 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos offres{% endblock %}
+{% block title %}Nos offres
+{% endblock %}
 
 {% block body %}
-    <section class="offers-page">
-        <div class="container">
-            <h1>Vos offres d’assurance</h1>
-            <p>
-                Merci {{ quote.firstName }} {{ quote.lastName }},
-                voici 3 offres estimatives pour votre demande.
-            </p>
-            <label for="company">choisir une company</label>
-            <select name="quote[company]">
-				{% for company in companies %}
-					<option value="{{ company.value }}" {% if quote.company == company %} selected {% endif %}>
-						{{ company.name }}
-					</option>
+	<section class="offers-page">
+		<div class="container">
+			<h1>Vos offres d’assurance</h1>
+			<p>
+				Merci
+				{{ quote.firstName }}
+				{{ quote.lastName }},
+																				                voici 3 offres estimatives pour votre demande.
+			</p>
+
+			<div class="company-selector">
+				<label for="company-select" class="company-label">Sélectionner une compagnie</label>
+				<select id="company-select" name="quote[company]" class="company-select">
+					{% for company in companies %}
+						<option value="{{ company.value }}" {% if quote.company == company %} selected {% endif %}>
+							{{ company.name }}
+						</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="offers-grid">
+				{% for offer in offers %}
+					<div class="offer-card">
+						<h2>{{ offer.title }}</h2>
+						<p>{{ offer.description }}</p>
+
+						<div class="price">
+							<strong>{{ offer.annual_price }}
+								DH / an</strong><br>
+							<span>{{ offer.monthly_price }}
+								DH / mois</span>
+						</div>
+
+						<ul>
+							{% if offer.code == 'tiers' %}
+								<li>Responsabilité civile</li>
+								<li>Défense et recours</li>
+							{% elseif offer.code == 'intermediaire' %}
+								<li>Responsabilité civile</li>
+								<li>Vol</li>
+								<li>Incendie</li>
+								<li>Bris de glace</li>
+							{% elseif offer.code == 'tous_risques' %}
+								<li>Responsabilité civile</li>
+								<li>Vol</li>
+								<li>Incendie</li>
+								<li>Dommages tous accidents</li>
+								<li>Assistance</li>
+							{% endif %}
+						</ul>
+
+						<form method="POST" action="{{ path('quote_select_offer', {id: quote.id}) }}" style="display: inline;">
+							<input type="hidden" name="offer_code" value="{{ offer.code }}">
+							<button type="submit" class="btn btn-primary">Choisir cette offre</button>
+						</form>
+					</div>
 				{% endfor %}
-			</select>
+			</div>
 
-            <div class="offers-grid">
-                {% for offer in offers %}
-                    <div class="offer-card">
-                        <h2>{{ offer.title }}</h2>
-                        <p>{{ offer.description }}</p>
+			<div style="margin-top: 24px;">
+				<a href="{{ path('quote_show', {id: quote.id}) }}" class="btn btn-secondary">
+					Voir le récapitulatif
+				</a>
+			</div>
+		</div>
+	</section>
 
-                        <div class="price">
-                            <strong>{{ offer.annual_price }} DH / an</strong><br>
-                            <span>{{ offer.monthly_price }} DH / mois</span>
-                        </div>
+	<style>
+		.company-selector {
+			background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+			padding: 25px 30px;
+			border-radius: 12px;
+			margin-bottom: 40px;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		}
 
-                        <ul>
-                            {% if offer.code == 'tiers' %}
-                                <li>Responsabilité civile</li>
-                                <li>Défense et recours</li>
-                            {% elseif offer.code == 'intermediaire' %}
-                                <li>Responsabilité civile</li>
-                                <li>Vol</li>
-                                <li>Incendie</li>
-                                <li>Bris de glace</li>
-                            {% elseif offer.code == 'tous_risques' %}
-                                <li>Responsabilité civile</li>
-                                <li>Vol</li>
-                                <li>Incendie</li>
-                                <li>Dommages tous accidents</li>
-                                <li>Assistance</li>
-                            {% endif %}
-                        </ul>
+		.company-label {
+			display: block;
+			font-size: 16px;
+			font-weight: 600;
+			color: #2c3e50;
+			margin-bottom: 12px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
 
-                        <button class="btn btn-primary">Choisir cette offre</button>
-                    </div>
-                {% endfor %}
-            </div>
+		.company-select {
+			width: 100%;
+			max-width: 500px;
+			padding: 12px 40px 12px 16px;
+			font-size: 15px;
+			border: 2px solid #3498db;
+			border-radius: 8px;
+			background-color: white;
+			color: #2c3e50;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			appearance: none;
+			background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233498db' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 12px center;
+		}
 
-            <div style="margin-top: 24px;">
-                <a href="{{ path('quote_show', {id: quote.id}) }}" class="btn btn-secondary">
-                    Voir le récapitulatif
-                </a>
-            </div>
-        </div>
-    </section>
+		.company-select:hover {
+			border-color: #2980b9;
+			box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+			transform: translateY(-2px);
+		}
+
+		.company-select:focus {
+			outline: none;
+			border-color: #2980b9;
+			box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+		}
+
+		.company-select option {
+			padding: 10px;
+			background-color: white;
+			color: #2c3e50;
+		}
+
+		.company-select option:checked {
+			background: linear-gradient(#3498db, #3498db);
+			background-color: #3498db;
+			color: white;
+		}
+	</style>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const companySelect = document.getElementById('company-select');
+const offersGrid = document.querySelector('.offers-grid');
+
+companySelect.addEventListener('change', function () {
+const selectedCompany = this.value;
+const quoteId = {{ quote.id }};
+
+// Afficher un loader
+offersGrid.style.opacity = '0.5';
+offersGrid.style.pointerEvents = 'none';
+
+// Faire la requête AJAX
+fetch(`/devis/${quoteId}/offres-by-company?company=${
+encodeURIComponent(selectedCompany)
+}`).then(response => response.json()).then(data => {
+if (data.success) { // Mettre à jour les offres
+updateOffers(data.offers);
+offersGrid.style.opacity = '1';
+offersGrid.style.pointerEvents = 'auto';
+}
+}).catch(error => {
+console.error('Erreur:', error);
+offersGrid.style.opacity = '1';
+offersGrid.style.pointerEvents = 'auto';
+});
+});
+});
+
+function updateOffers(offers) {
+const offersGrid = document.querySelector('.offers-grid');
+let html = '';
+
+offers.forEach(offer => {
+let features = '';
+
+if (offer.code === 'tiers') {
+features = '<li>Responsabilité civile</li><li>Défense et recours</li>';
+} else if (offer.code === 'intermediaire') {
+features = '<li>Responsabilité civile</li><li>Vol</li><li>Incendie</li><li>Bris de glace</li>';
+} else if (offer.code === 'tous_risques') {
+features = '<li>Responsabilité civile</li><li>Vol</li><li>Incendie</li><li>Dommages tous accidents</li><li>Assistance</li>';
+}
+
+html += `
+					<div class="offer-card">
+						<h2>${
+offer.title
+}</h2>
+						<p>${
+offer.description
+}</p>
+						<div class="price">
+							<strong>${
+offer.annual_price
+} DH / an</strong><br>
+							<span>${
+offer.monthly_price
+} DH / mois</span>
+						</div>
+						<ul>${features}</ul>
+						<form method="POST" action="/devis/{{ quote.id }}/choisir-offre" style="display: inline;">
+							<input type="hidden" name="offer_code" value="${
+offer.code
+}">
+							<button type="submit" class="btn btn-primary">Choisir cette offre</button>
+						</form>
+					</div>
+				`;
+});
+
+offersGrid.innerHTML = html;
+}
+	</script>
 {% endblock %}

@@ -30,6 +30,5 @@ enum VehiculeBrand: string
     case MAZDA = 'Mazda';
     case LEXUS = 'Lexus';
     case DACIA = 'Dacia';
-    
-    
+    case Unknown = '';
 }

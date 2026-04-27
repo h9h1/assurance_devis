@@ -1,0 +1,172 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Dashboard
+{% endblock %}
+
+{% block main %}
+	<div
+		class="container-fluid mt-5">
+		<!-- Statistiques Cards -->
+		<div class="row mb-4">
+			<div class="col-md-3">
+				<div class="card shadow-sm border-left-primary">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h6 class="text-muted text-uppercase mb-2">Total Devis</h6>
+								<h2 class="mb-0">{{ total }}</h2>
+							</div>
+							<i class="fas fa-file-pdf fa-3x text-primary opacity-50"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="card shadow-sm border-left-success">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h6 class="text-muted text-uppercase mb-2">Acceptés</h6>
+								<h2 class="mb-0 text-success">{{ accepted }}</h2>
+							</div>
+							<i class="fas fa-check-circle fa-3x text-success opacity-50"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="card shadow-sm border-left-warning">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h6 class="text-muted text-uppercase mb-2">Soumis</h6>
+								<h2 class="mb-0 text-warning">{{ submitted }}</h2>
+							</div>
+							<i class="fas fa-paper-plane fa-3x text-warning opacity-50"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="card shadow-sm border-left-danger">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h6 class="text-muted text-uppercase mb-2">Rejetés</h6>
+								<h2 class="mb-0 text-danger">{{ rejected }}</h2>
+							</div>
+							<i class="fas fa-times-circle fa-3x text-danger opacity-50"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Derniers Devis -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card shadow-sm">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">
+							<i class="fas fa-list mr-2"></i>Derniers Devis
+						</h5>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead class="table-light">
+									<tr>
+										<th>N°</th>
+										<th>Nom</th>
+										<th>Prénom</th>
+										<th>Compagnie</th>
+										<th>Statut</th>
+										<th>Estimation</th>
+										<th>Date</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% if latestQuotes|length > 0 %}
+										{% for quote in latestQuotes %}
+											<tr>
+												<td>
+													<strong>#{{ quote.id }}</strong>
+												</td>
+												<td>{{ quote.lastName }}</td>
+												<td>{{ quote.firstName }}</td>
+												<td>
+													<span class="badge bg-secondary">
+														{{ quote.company.value }}
+													</span>
+												</td>
+												<td>
+													{% set statusClass = {
+                                                'DRAFT': 'secondary',
+                                                'SUBMITTED': 'info',
+                                                'ACCEPTED': 'success',
+                                                'REJECTED': 'danger'
+                                            } %}
+													<span class="badge bg-{{ statusClass[quote.status.value] ?? 'secondary' }}">
+														{{ quote.status.value }}
+													</span>
+												</td>
+												<td>
+													{% if quote.customEstimation %}
+														<strong>{{ quote.customEstimation }}€</strong>
+													{% else %}
+														<span class="text-muted">-</span>
+													{% endif %}
+												</td>
+												<td>
+													<small class="text-muted">
+														{{ quote.createdAt|date('d/m/Y H:i') }}
+													</small>
+												</td>
+												<td>
+													<a href="#" class="btn btn-sm btn-info">
+														<i class="fas fa-eye"></i>
+													</a>
+												</td>
+											</tr>
+										{% endfor %}
+									{% else %}
+										<tr>
+											<td colspan="8" class="text-center text-muted py-4">
+												<i class="fas fa-inbox fa-2x mb-2"></i><br>
+												Aucun devis trouvé
+											</td>
+										</tr>
+									{% endif %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="{{ quotesUrl }}" class="btn btn-primary">
+							<i class="fas fa-arrow-right mr-2"></i>Voir tous les devis
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.border-left-primary {
+			border-left: 0.25rem solid #007bff !important;
+		}
+		.border-left-success {
+			border-left: 0.25rem solid #28a745 !important;
+		}
+		.border-left-warning {
+			border-left: 0.25rem solid #ffc107 !important;
+		}
+		.border-left-danger {
+			border-left: 0.25rem solid #dc3545 !important;
+		}
+	</style>
+{% endblock %}

@@ -12,6 +12,7 @@ enum City: string
     case FES = 'Fes';
     case TANGER = 'Tanger';
     case AGADIR = 'Agadir';
+    case Unknown = '';
 
     public static function values(): array
     {

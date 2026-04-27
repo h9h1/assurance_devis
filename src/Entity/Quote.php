@@ -50,7 +50,7 @@ class Quote
     #[ORM\Column(name: 'vehicule_brand', enumType: VehiculeBrand::class)]
     private VehiculeBrand $vehiculeBrand;
 
-    #[ORM\Column(enumType: FuelType::class)] 
+    #[ORM\Column(enumType: FuelType::class)]
     private FuelType $fuelType;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
@@ -76,6 +76,15 @@ class Quote
 
     #[ORM\Column(enumType: QuoteStatus::class)]
     private QuoteStatus $status = QuoteStatus::DRAFT;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $adminNote = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 12, scale: 2, nullable: true)]
+    private ?string $customEstimation = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $selectedOffer = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
@@ -125,7 +134,7 @@ class Quote
         $this->city = $city;
         return $this;
     }
-    
+
     public function getCompany(): Company
     {
         return $this->company;
@@ -192,8 +201,8 @@ class Quote
         $this->vehiculeBrand = $vehiculeBrand;
         return $this;
     }
-    
-    
+
+
     public function getFuelType(): FuelType
     {
         return $this->fuelType;
@@ -273,6 +282,33 @@ class Quote
     public function setStatus(QuoteStatus $status): self
     {
         $this->status = $status;
+        return $this;
+    }
+    public function getAdminNote(): ?string
+    {
+        return $this->adminNote;
+    }
+    public function setAdminNote(?string $adminNote): self
+    {
+        $this->adminNote = $adminNote;
+        return $this;
+    }
+    public function getCustomEstimation(): ?string
+    {
+        return $this->customEstimation;
+    }
+    public function setCustomEstimation(?string $customEstimation): self
+    {
+        $this->customEstimation = $customEstimation;
+        return $this;
+    }
+    public function getSelectedOffer(): ?string
+    {
+        return $this->selectedOffer;
+    }
+    public function setSelectedOffer(?string $selectedOffer): self
+    {
+        $this->selectedOffer = $selectedOffer;
         return $this;
     }
     public function getCreatedAt(): \DateTimeImmutable
