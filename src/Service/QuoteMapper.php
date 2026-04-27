@@ -1,28 +1,32 @@
 <?php
 
-declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Enum\VehiculeBrand;
+use App\Enum\City;
 use App\Enum\Company;
+use App\Enum\VehiculeBrand;
 use App\DTO\QuoteRequest;
 use App\Entity\Quote;
-use App\Enum\City;
 use App\Enum\FuelType;
 use App\Enum\InsuranceType;
+use App\Repository\CityRepository;
+use App\Repository\CompanyRepository;
 
 class QuoteMapper
 {
-    public function mapToEntity(QuoteRequest $dto, ?Quote $quote = null): Quote
+    public function mapToEntity(
+        QuoteRequest $dto,
+        ?Quote $quote = null,
+        ?CityRepository $cityRepository = null,
+        ?CompanyRepository $companyRepository = null,
+    ): Quote
     {
         $quote ??= new Quote();
 
         $quote
             ->setLastName($dto->lastName ?? '')
             ->setFirstName($dto->firstName ?? '')
-            ->setCity(City::from($dto->city ?? 'Casablanca'))
-            ->setCompany(Company::from($dto->company ?? 'RMA'))
             ->setPhoneNumber($dto->phoneNumber ?? '')
             ->setBirthDate(new \DateTimeImmutable($dto->birthDate ?? 'today'))
             ->setLicenseDate(new \DateTimeImmutable($dto->licenseDate ?? 'today'))
@@ -38,6 +42,18 @@ class QuoteMapper
             ->setEngineCapacity($dto->insuranceType === 'moto' ? $dto->engineCapacity : null)
             ->touch();
 
+        if ($cityRepository && $dto->city) {
+            $city = $cityRepository->findOneBy(['name' => $dto->city, 'isActive' => true]);
+            if ($city) $quote->setCity($city);
+        }
+
+        if ($companyRepository) {
+            $companyName = $dto->company ?? 'RMA';
+            $company = $companyRepository->findOneBy(['name' => $companyName, 'isActive' => true])
+                ?? ($companyRepository->findActive()[0] ?? null);
+            if ($company) $quote->setCompany($company);
+        }
+
         return $quote;
     }
 
@@ -47,8 +63,8 @@ class QuoteMapper
             'id' => $quote->getId(),
             'lastName' => $quote->getLastName(),
             'firstName' => $quote->getFirstName(),
-            'city' => $quote->getCity()->value,
-            'company' => $quote->getCompany()->value,
+            'city'    => $quote->getCity()?->value    ?? '',
+            'company' => $quote->getCompany()?->value ?? '',
             'phoneNumber' => $quote->getPhoneNumber(),
             'birthDate' => $quote->getBirthDate()->format('Y-m-d'),
             'licenseDate' => $quote->getLicenseDate()->format('Y-m-d'),

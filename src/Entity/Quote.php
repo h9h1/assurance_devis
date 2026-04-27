@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Enum\City;
-use App\Enum\Company;
+use App\Enum\City as CityEnum;
+use App\Enum\Company as CompanyEnum;
 use App\Enum\FuelType;
 use App\Enum\VehiculeBrand;
 use App\Enum\InsuranceType;
@@ -29,11 +29,19 @@ class Quote
     #[ORM\Column(length: 100)]
     private string $firstName;
 
-    #[ORM\Column(enumType: City::class)]
-    private City $city;
+    #[ORM\Column(enumType: CityEnum::class, nullable: true)]
+    private ?CityEnum $city = null;
 
-    #[ORM\Column(enumType: Company::class)]
-    private Company $company;
+    #[ORM\ManyToOne(targetEntity: City::class)]
+    #[ORM\JoinColumn(name: 'city_entity_id', nullable: true)]
+    private ?City $cityEntity = null;
+
+    #[ORM\Column(enumType: CompanyEnum::class, nullable: true)]
+    private ?CompanyEnum $company = null;
+
+    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\JoinColumn(name: 'company_entity_id', nullable: true)]
+    private ?Company $companyEntity = null;
 
     #[ORM\Column(length: 20)]
     private string $phoneNumber;
@@ -125,21 +133,21 @@ class Quote
         $this->firstName = $firstName;
         return $this;
     }
-    public function getCity(): City
+    public function getCity(): ?CityEnum
     {
         return $this->city;
     }
-    public function setCity(City $city): self
+    public function setCity(?CityEnum $city): self
     {
         $this->city = $city;
         return $this;
     }
 
-    public function getCompany(): Company
+    public function getCompany(): ?CompanyEnum
     {
         return $this->company;
     }
-    public function setCompany(Company $company): self
+    public function setCompany(?CompanyEnum $company): self
     {
         $this->company = $company;
         return $this;

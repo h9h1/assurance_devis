@@ -18,6 +18,15 @@ class OfferRepository extends ServiceEntityRepository
         parent::__construct($registry, Offer::class);
     }
 
+    public function findAllActive(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.isActive = true')
+            ->orderBy('o.annualPrice', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findLatest(int $limit = 10): array
     {
         return $this->createQueryBuilder('o')

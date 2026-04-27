@@ -46,7 +46,7 @@
                 <select id="city" name="city" required>
                     <option value="">Choisir une ville</option>
                     {% for city in cities %}
-                        <option value="{{ city.value }}" {{ data.city|default('') == city.value ? 'selected' : '' }}>{{ city.value }}</option>
+                        <option value="{{ city.name }}" {{ data.city|default('') == city.name ? 'selected' : '' }}>{{ city.name }}</option>
                     {% endfor %}
                 </select>
                 {% include 'components/_field_errors.html.twig' with { field: 'city', errors: errors } %}

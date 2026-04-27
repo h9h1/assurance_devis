@@ -6,6 +6,7 @@ use App\Entity\Quote;
 use App\Entity\Company;
 use App\Entity\City;
 use App\Entity\Offer;
+use App\Entity\CompanyOfferVariation;
 use App\Enum\QuoteStatus;
 use App\Repository\QuoteRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
@@ -70,6 +71,11 @@ class DashboardController extends AbstractDashboardController
             ->setController(OfferCrudController::class)
             ->generateUrl();
         yield MenuItem::linkToUrl('Offres', 'fa fa-tag', $offersUrl);
+
+        $variationsUrl = $this->adminUrlGenerator
+            ->setController(CompanyOfferVariationCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Variations de prix', 'fa fa-percent', $variationsUrl);
     }
 
     private function getQuoteStats(): array

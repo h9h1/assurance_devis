@@ -6,11 +6,11 @@ namespace App\Controller\Web;
 
 use App\DTO\QuoteRequest;
 use App\Entity\Quote;
-use App\Enum\City;
 use App\Enum\VehiculeBrand;
-use App\Enum\Company;
 use App\Enum\FuelType;
 use App\Enum\QuoteStatus;
+use App\Repository\CityRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\QuoteRepository;
 use App\Service\QuoteEstimatorService;
 use App\Service\QuoteMapper;
@@ -30,6 +30,8 @@ class QuoteWizardController extends AbstractController
         ValidatorInterface $validator,
         QuoteMapper $mapper,
         EntityManagerInterface $entityManager,
+        CityRepository $cityRepository,
+        CompanyRepository $companyRepository,
     ): Response {
         $formData = $request->isMethod('POST') ? $request->request->all() : [];
         $dto = QuoteRequest::fromArray($formData);
@@ -39,7 +41,7 @@ class QuoteWizardController extends AbstractController
             $violations = $validator->validate($dto);
 
             if (count($violations) === 0) {
-                $quote = $mapper->mapToEntity($dto);
+                $quote = $mapper->mapToEntity($dto, null, $cityRepository, $companyRepository);
                 $entityManager->persist($quote);
                 $entityManager->flush();
 
@@ -54,7 +56,7 @@ class QuoteWizardController extends AbstractController
         }
 
         return $this->render('quote/new.html.twig', [
-            'cities' => City::cases(),
+            'cities' => $cityRepository->findActive(),
             'fuelTypes' => FuelType::cases(),
             'vehiculeBrands' => VehiculeBrand::cases(),
             'data' => $dto->toArray(),
@@ -74,12 +76,13 @@ class QuoteWizardController extends AbstractController
     public function offers(
         Quote $quote,
         QuoteEstimatorService $estimator,
-        QuoteMapper $mapper
+        QuoteMapper $mapper,
+        CompanyRepository $companyRepository,
     ): Response {
         return $this->render('quote/offers.html.twig', [
             'quote' => $mapper->toArray($quote),
             'offers' => $estimator->getOffers($quote),
-            'companies' => Company::visibleCases(),
+            'companies' => $companyRepository->findActive(),
         ]);
     }
 
@@ -103,33 +106,25 @@ class QuoteWizardController extends AbstractController
         return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
     }
 
-    #[Route('/devis/{id}/offres-by-company', name: 'quote_offers_by_company', requirements: ['id' => '\\d+'], methods: ['GET'])]
+    #[Route('/devis/{id}/offres-by-company', name: 'quote_offers_by_company', requirements: ['id' => '\\d+'], methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])]
     public function offersByCompany(
         Quote $quote,
         Request $request,
         QuoteEstimatorService $estimator,
+        CompanyRepository $companyRepository,
     ): JsonResponse {
-        $companyValue = $request->query->get('company');
+        $companyName = $request->query->get('company');
 
-        if ($companyValue) {
-            // Changer la compagnie temporairement pour calculer les offres
-            $originalCompany = $quote->getCompany();
-            foreach (Company::cases() as $company) {
-                if ($company->value === $companyValue) {
-                    $quote->setCompany($company);
-                    break;
-                }
+        if ($companyName) {
+            $company = $companyRepository->findOneBy(['name' => $companyName, 'isActive' => true]);
+
+            if (!$company) {
+                return new JsonResponse(['success' => false, 'message' => 'Compagnie introuvable.'], 404);
             }
 
-            $offers = $estimator->getOffers($quote);
+            $offers = $estimator->getOffersByCompany($quote, $company);
 
-            // Restaurer la compagnie originale
-            $quote->setCompany($originalCompany);
-
-            return new JsonResponse([
-                'success' => true,
-                'offers' => $offers,
-            ]);
+            return new JsonResponse(['success' => true, 'offers' => $offers]);
         }
 
         return new JsonResponse([

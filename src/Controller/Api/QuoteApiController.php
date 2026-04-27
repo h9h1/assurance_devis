@@ -5,6 +5,8 @@ namespace App\Controller\Api;
 
 use App\DTO\QuoteRequest;
 use App\Entity\Quote;
+use App\Repository\CityRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\QuoteRepository;
 use App\Service\ApiValidationResponder;
 use App\Service\QuoteMapper;
@@ -36,6 +38,8 @@ class QuoteApiController extends AbstractController
         QuoteMapper $mapper,
         ApiValidationResponder $validationResponder,
         EntityManagerInterface $entityManager,
+        CityRepository $cityRepository,
+        CompanyRepository $companyRepository,
     ): JsonResponse {
         $payload = json_decode($request->getContent(), true) ?? [];
         $dto = QuoteRequest::fromArray($payload);
@@ -48,7 +52,7 @@ class QuoteApiController extends AbstractController
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $quote = $mapper->mapToEntity($dto);
+        $quote = $mapper->mapToEntity($dto, null, $cityRepository, $companyRepository);
         $entityManager->persist($quote);
         $entityManager->flush();
 
@@ -72,6 +76,8 @@ class QuoteApiController extends AbstractController
         QuoteMapper $mapper,
         ApiValidationResponder $validationResponder,
         EntityManagerInterface $entityManager,
+        CityRepository $cityRepository,
+        CompanyRepository $companyRepository,
     ): JsonResponse {
         $payload = json_decode($request->getContent(), true) ?? [];
         $dto = QuoteRequest::fromArray($payload);
@@ -84,7 +90,7 @@ class QuoteApiController extends AbstractController
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $mapper->mapToEntity($dto, $quote);
+        $mapper->mapToEntity($dto, $quote, $cityRepository, $companyRepository);
         $entityManager->flush();
 
         return $this->json([

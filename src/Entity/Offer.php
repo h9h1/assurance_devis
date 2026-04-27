@@ -32,6 +32,9 @@ class Offer
     #[ORM\Column(type: Types::DECIMAL, precision: 12, scale: 2)]
     private string $monthlyPrice;
 
+    #[ORM\Column(name: 'is_active', type: Types::BOOLEAN)]
+    private bool $isActive = true;
+
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
     private \DateTime $createdAt;
 
@@ -125,6 +128,9 @@ class Offer
         $this->updatedAt = $updatedAt;
         return $this;
     }
+
+    public function isActive(): bool { return $this->isActive; }
+    public function setIsActive(bool $isActive): self { $this->isActive = $isActive; return $this; }
 
     public function touch(): self
     {

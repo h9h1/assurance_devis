@@ -18,7 +18,7 @@
 				<label for="company-select" class="company-label">Sélectionner une compagnie</label>
 				<select id="company-select" name="quote[company]" class="company-select">
 					{% for company in companies %}
-						<option value="{{ company.value }}" {% if quote.company == company %} selected {% endif %}>
+						<option value="{{ company.name }}" {% if quote.company == company.name %} selected {% endif %}>
 							{{ company.name }}
 						</option>
 					{% endfor %}

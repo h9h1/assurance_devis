@@ -22,7 +22,6 @@ class CompanyCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name')->setLabel('Nom de la compagnie'),
-            TextEditorField::new('description')->setLabel('Description')->hideOnIndex(),
             BooleanField::new('isActive')->setLabel('Actif'),
             DateTimeField::new('createdAt')->setLabel('Créé le')->hideOnForm(),
             DateTimeField::new('updatedAt')->setLabel('Modifié le')->hideOnForm(),
