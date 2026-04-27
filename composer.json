@@ -11,6 +11,7 @@
     "doctrine/orm": "^3.3",
     "easycorp/easyadmin-bundle": "^5.0",
     "symfony/asset": "^7.4",
+    "symfony/asset-mapper": "^8.0",
     "symfony/console": "^7.4",
     "symfony/dotenv": "^7.4",
     "symfony/flex": "^2",
@@ -21,6 +22,7 @@
     "symfony/runtime": "^8.0",
     "symfony/security-csrf": "^8.0",
     "symfony/serializer": "^7.4",
+    "symfony/stimulus-bundle": "^3.0",
     "symfony/twig-bundle": "^7.4",
     "symfony/validator": "^7.4",
     "symfony/var-exporter": "^7.4",
@@ -42,7 +44,8 @@
   "scripts": {
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
-      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+      "assets:install %PUBLIC_DIR%": "symfony-cmd",
+      "importmap:install": "symfony-cmd"
     }
   },
   "extra": {

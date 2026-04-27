@@ -3,6 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Quote;
+use App\Entity\Company;
+use App\Entity\City;
+use App\Entity\Offer;
 use App\Enum\QuoteStatus;
 use App\Repository\QuoteRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
@@ -44,12 +47,29 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
+        yield MenuItem::section('Gestion des devis');
+
         $quotesUrl = $this->adminUrlGenerator
             ->setController(QuoteCrudController::class)
             ->generateUrl();
+        yield MenuItem::linkToUrl('Devis', 'fa fa-file-pdf', $quotesUrl);
 
-        yield MenuItem::linkToUrl('Devis', 'fa fa-file-pdf', $quotesUrl)
-            ->setBadge($this->quoteRepository->count([]) ?? 0);
+        yield MenuItem::section('Configuration');
+
+        $companiesUrl = $this->adminUrlGenerator
+            ->setController(CompanyCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Compagnies', 'fa fa-building', $companiesUrl);
+
+        $citiesUrl = $this->adminUrlGenerator
+            ->setController(CityCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Villes', 'fa fa-map-marker', $citiesUrl);
+
+        $offersUrl = $this->adminUrlGenerator
+            ->setController(OfferCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Offres', 'fa fa-tag', $offersUrl);
     }
 
     private function getQuoteStats(): array

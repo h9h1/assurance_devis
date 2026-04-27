@@ -79,7 +79,7 @@ class QuoteWizardController extends AbstractController
         return $this->render('quote/offers.html.twig', [
             'quote' => $mapper->toArray($quote),
             'offers' => $estimator->getOffers($quote),
-            'companies' => Company::cases(),
+            'companies' => Company::visibleCases(),
         ]);
     }
 
