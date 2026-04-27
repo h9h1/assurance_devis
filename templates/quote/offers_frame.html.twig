@@ -1,0 +1,40 @@
+<turbo-frame id="offers-frame">
+	<div class="offers-grid">
+		{% for offer in offers %}
+			<div class="offer-card">
+				<h2>{{ offer.title }}</h2>
+				<p>{{ offer.description }}</p>
+
+				<div class="price">
+					<strong>{{ offer.annual_price }}
+						DH / an</strong><br>
+					<span>{{ offer.monthly_price }}
+						DH / mois</span>
+				</div>
+
+				<ul>
+					{% if offer.code == 'tiers' %}
+						<li>Responsabilité civile</li>
+						<li>Défense et recours</li>
+					{% elseif offer.code == 'intermediaire' %}
+						<li>Responsabilité civile</li>
+						<li>Vol</li>
+						<li>Incendie</li>
+						<li>Bris de glace</li>
+					{% elseif offer.code == 'tous_risques' %}
+						<li>Responsabilité civile</li>
+						<li>Vol</li>
+						<li>Incendie</li>
+						<li>Dommages tous accidents</li>
+						<li>Assistance</li>
+					{% endif %}
+				</ul>
+
+				<form method="POST" action="{{ path('quote_select_offer', {id: quote.id}) }}" style="display: inline;">
+					<input type="hidden" name="offer_code" value="{{ offer.code }}">
+					<button type="submit" class="btn btn-primary">Choisir cette offre</button>
+				</form>
+			</div>
+		{% endfor %}
+	</div>
+</turbo-frame>
