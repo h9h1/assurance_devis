@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Enum\City as CityEnum;
 use App\Enum\Company as CompanyEnum;
+use App\Repository\CityRepository;
 use App\Enum\FuelType;
 use App\Enum\VehiculeBrand;
 use App\Enum\InsuranceType;
@@ -137,6 +138,17 @@ class Quote
     {
         return $this->city;
     }
+
+    public function getCityEntity(): ?City
+    {
+        return $this->cityEntity;
+    }
+
+    public function setCityEntity(?City $cityEntity): self
+    {
+        $this->cityEntity = $cityEntity;
+        return $this;
+    }
     public function setCity(?CityEnum $city): self
     {
         $this->city = $city;
@@ -146,6 +158,17 @@ class Quote
     public function getCompany(): ?CompanyEnum
     {
         return $this->company;
+    }
+
+    public function getCompanyEntity(): ?Company
+    {
+        return $this->companyEntity;
+    }
+
+    public function setCompanyEntity(?Company $companyEntity): self
+    {
+        $this->companyEntity = $companyEntity;
+        return $this;
     }
     public function setCompany(?CompanyEnum $company): self
     {

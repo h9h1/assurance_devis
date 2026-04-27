@@ -40,8 +40,8 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Assur Quote - Admin Dashboard')
-            ->setFaviconPath('favicon.ico');
+            ->setTitle('<img src="/public/assets/logo.png" alt="Logo" style="height: 30px; margin-right: 10px;">Assurance Aksam')
+            ->setFaviconPath('favicon.png');
     }
 
     public function configureMenuItems(): iterable

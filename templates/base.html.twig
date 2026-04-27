@@ -8,13 +8,13 @@
 			{% endblock %}
 		</title>
 		<link rel="stylesheet" href="{{ asset('assets/css/app.css') }}"> {% block stylesheets %}{% endblock %}
-        <link rel="icon" href="{{ asset('styles/favicon.png') }}">
+        <link rel="icon" href="{{ asset('assets/favicon.png') }}">
 		</head>
 		<body>
 			<header class="topbar">
 				<div class="container topbar__inner">
 					<a href="{{ path('homepage') }}" class="brand">
-						<img src="{{ asset('styles/logo.png') }}" alt="Aksam assurance">
+						<img src="{{ asset('assets/logo.png') }}" alt="Aksam assurance">
 					</a>
 					<nav>
 						<a href="{{ path('quote_new') }}">Nouveau devis</a>
