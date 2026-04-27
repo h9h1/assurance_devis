@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
+
 
 namespace App\Entity;
 
 use App\Enum\City as CityEnum;
 use App\Enum\Company as CompanyEnum;
-use App\Repository\CityRepository;
 use App\Enum\FuelType;
 use App\Enum\VehiculeBrand;
 use App\Enum\InsuranceType;
@@ -84,7 +83,7 @@ class Quote
     private ?int $engineCapacity = null;
 
     #[ORM\Column(enumType: QuoteStatus::class)]
-    private QuoteStatus $status = QuoteStatus::DRAFT;
+    private QuoteStatus $status;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $adminNote = null;

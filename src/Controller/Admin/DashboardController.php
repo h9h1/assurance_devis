@@ -2,11 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Quote;
-use App\Entity\Company;
-use App\Entity\City;
-use App\Entity\Offer;
-use App\Entity\CompanyOfferVariation;
 use App\Enum\QuoteStatus;
 use App\Repository\QuoteRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
@@ -81,7 +76,6 @@ class DashboardController extends AbstractDashboardController
     private function getQuoteStats(): array
     {
         $total = $this->quoteRepository->count([]);
-        $draft = $this->quoteRepository->count(['status' => QuoteStatus::DRAFT]);
         $submitted = $this->quoteRepository->count(['status' => QuoteStatus::SUBMITTED]);
         $accepted = $this->quoteRepository->count(['status' => QuoteStatus::ACCEPTED]);
         $rejected = $this->quoteRepository->count(['status' => QuoteStatus::REJECTED]);
@@ -95,7 +89,6 @@ class DashboardController extends AbstractDashboardController
 
         return [
             'total' => $total,
-            'draft' => $draft,
             'submitted' => $submitted,
             'accepted' => $accepted,
             'rejected' => $rejected,

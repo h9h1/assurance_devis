@@ -1,135 +1,456 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos offres
+{% block title %}Offres d'assurance | Aksam Assurance
 {% endblock %}
 
 {% block body %}
-	<section class="offers-page">
-		<div class="container">
-			<h1>Vos offres d’assurance</h1>
-			<p>
-				Merci
-				{{ quote.firstName }}
-				{{ quote.lastName }},
-																				                voici 3 offres estimatives pour votre demande.
-			</p>
+	<!-- Page Header -->
+	<div class="offers-header">
+		<h1>Vos offres d'assurance personnalisées</h1>
+		<p>Merci
+			<strong>{{ quote.firstName }}
+				{{ quote.lastName }}</strong>, voici les 3 offres estimatives spécialement calculées pour votre demande.</p>
+	</div>
 
-			<div class="company-selector">
-				<label for="company-select" class="company-label">Sélectionner une compagnie</label>
-				<select id="company-select" name="quote[company]" class="company-select">
-					{% for company in companies %}
-						<option value="{{ company.name }}" {% if quote.company == company.name %} selected {% endif %}>
-							{{ company.name }}
-						</option>
-					{% endfor %}
-				</select>
-			</div>
-
-			<div class="offers-grid">
-				{% for offer in offers %}
-					<div class="offer-card">
-						<h2>{{ offer.title }}</h2>
-						<p>{{ offer.description }}</p>
-
-						<div class="price">
-							<strong>{{ offer.annual_price }}
-								DH / an</strong><br>
-							<span>{{ offer.monthly_price }}
-								DH / mois</span>
-						</div>
-
-						<ul>
-							{% if offer.code == 'tiers' %}
-								<li>Responsabilité civile</li>
-								<li>Défense et recours</li>
-							{% elseif offer.code == 'intermediaire' %}
-								<li>Responsabilité civile</li>
-								<li>Vol</li>
-								<li>Incendie</li>
-								<li>Bris de glace</li>
-							{% elseif offer.code == 'tous_risques' %}
-								<li>Responsabilité civile</li>
-								<li>Vol</li>
-								<li>Incendie</li>
-								<li>Dommages tous accidents</li>
-								<li>Assistance</li>
-							{% endif %}
-						</ul>
-
-						<form method="POST" action="{{ path('quote_select_offer', {id: quote.id}) }}" style="display: inline;">
-							<input type="hidden" name="offer_code" value="{{ offer.code }}">
-							<button type="submit" class="btn btn-primary">Choisir cette offre</button>
-						</form>
-					</div>
-				{% endfor %}
-			</div>
-
-			<div style="margin-top: 24px;">
-				<a href="{{ path('quote_show', {id: quote.id}) }}" class="btn btn-secondary">
-					Voir le récapitulatif
-				</a>
-			</div>
+	<!-- Company Selector -->
+	<div class="company-selector-box">
+		<div class="selector-label">
+			<i class="fas fa-building"></i>
+			<label for="company-select">Sélectionner une compagnie</label>
 		</div>
-	</section>
+		<select id="company-select" name="quote[company]" class="company-select">
+			{% for company in companies %}
+				<option value="{{ company.name }}" {% if quote.company == company.name %} selected {% endif %}>
+					{{ company.name }}
+				</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<!-- Offers Grid -->
+	<div class="offers-grid">
+		{% for offer in offers %}
+			<div class="offer-card">
+				<div class="offer-header">
+					<h2 class="offer-title">{{ offer.title }}</h2>
+					<div class="offer-badge">
+						{% if offer.code == 'tiers' %}
+							<span class="badge badge-tiers">Basique</span>
+						{% elseif offer.code == 'intermediaire' %}
+							<span class="badge badge-intermediaire">Populaire</span>
+						{% elseif offer.code == 'tous_risques' %}
+							<span class="badge badge-tous-risques">Premium</span>
+						{% endif %}
+					</div>
+				</div>
+
+				<p class="offer-description">{{ offer.description }}</p>
+
+				<div class="offer-price">
+					<div class="price-main">
+						<span class="price-amount">{{ offer.annual_price }}</span>
+						<span class="price-period">DH/an</span>
+					</div>
+					<div class="price-monthly">
+						<i class="fas fa-calendar"></i>
+						<span>{{ offer.monthly_price }}
+							DH/mois</span>
+					</div>
+				</div>
+
+				<div class="offer-features">
+					<h3 class="features-title">Ce qui est inclus</h3>
+					<ul class="features-list">
+						{% if offer.code == 'tiers' %}
+							<li>
+								<i class="fas fa-check"></i>
+								Responsabilité civile</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Défense et recours</li>
+						{% elseif offer.code == 'intermediaire' %}
+							<li>
+								<i class="fas fa-check"></i>
+								Responsabilité civile</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Vol</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Incendie</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Bris de glace</li>
+						{% elseif offer.code == 'tous_risques' %}
+							<li>
+								<i class="fas fa-check"></i>
+								Responsabilité civile</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Vol</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Incendie</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Dommages tous accidents</li>
+							<li>
+								<i class="fas fa-check"></i>
+								Assistance 24/7</li>
+						{% endif %}
+					</ul>
+				</div>
+
+				<form method="POST" action="{{ path('quote_select_offer', {id: quote.id}) }}" class="offer-form">
+					<input type="hidden" name="offer_code" value="{{ offer.code }}">
+					<button type="submit" class="btn btn-offer">
+						<i class="fas fa-arrow-right"></i>
+						Choisir cette offre
+					</button>
+				</form>
+			</div>
+		{% endfor %}
+	</div>
+
+	<!-- Bottom Actions -->
+	<div class="bottom-actions">
+		<a href="{{ path('quote_show', {id: quote.id}) }}" class="btn btn-secondary">
+			<i class="fas fa-chevron-left"></i>
+			Voir le récapitulatif
+		</a>
+	</div>
 
 	<style>
-		.company-selector {
-			background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-			padding: 25px 30px;
-			border-radius: 12px;
-			margin-bottom: 40px;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		.offers-header {
+			text-align: center;
+			margin-bottom: 48px;
+			padding: 32px 0;
 		}
 
-		.company-label {
-			display: block;
-			font-size: 16px;
+		.offers-header h1 {
+			font-size: 2rem;
+			margin: 0 0 16px;
+			color: var(--text);
+		}
+
+		.offers-header p {
+			font-size: 1.1rem;
+			color: var(--text-secondary);
+			margin: 0 auto;
+			max-width: 600px;
+		}
+
+		.offers-header strong {
+			color: var(--primary);
+			font-weight: 700;
+		}
+
+		.company-selector-box {
+			background: linear-gradient(135deg, var(--primary-light), var(--info-light));
+			border: 2px solid var(--primary);
+			border-radius: var(--radius);
+			padding: 24px;
+			margin-bottom: 48px;
+			display: flex;
+			align-items: center;
+			gap: 16px;
+		}
+
+		.selector-label {
+			display: flex;
+			align-items: center;
+			gap: 8px;
 			font-weight: 600;
-			color: #2c3e50;
-			margin-bottom: 12px;
-			text-transform: uppercase;
-			letter-spacing: 0.5px;
+			color: var(--text);
+			white-space: nowrap;
+		}
+
+		.selector-label i {
+			font-size: 1.2rem;
+			color: var(--primary);
 		}
 
 		.company-select {
-			width: 100%;
-			max-width: 500px;
+			flex: 1;
 			padding: 12px 40px 12px 16px;
-			font-size: 15px;
-			border: 2px solid #3498db;
-			border-radius: 8px;
-			background-color: white;
-			color: #2c3e50;
+			border: 2px solid var(--primary);
+			border-radius: var(--radius);
+			font-size: 1rem;
+			font-family: inherit;
+			background: white;
+			color: var(--text);
 			cursor: pointer;
-			transition: all 0.3s ease;
+			transition: var(--transition);
 			appearance: none;
-			background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233498db' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+			background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230f62fe' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
 			background-repeat: no-repeat;
 			background-position: right 12px center;
+			background-size: 12px;
 		}
 
 		.company-select:hover {
-			border-color: #2980b9;
-			box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-			transform: translateY(-2px);
+			border-color: var(--primary-dark);
+			box-shadow: 0 4px 12px rgba(15, 98, 254, 0.2);
 		}
 
 		.company-select:focus {
 			outline: none;
-			border-color: #2980b9;
-			box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+			border-color: var(--primary-dark);
+			box-shadow: 0 0 0 4px var(--primary-light);
 		}
 
-		.company-select option {
-			padding: 10px;
-			background-color: white;
-			color: #2c3e50;
+		.offers-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 32px;
+			margin-bottom: 48px;
 		}
 
-		.company-select option:checked {
-			background: linear-gradient(#3498db, #3498db);
-			background-color: #3498db;
+		.offer-card {
+			background: var(--surface);
+			border-radius: var(--radius-lg);
+			border: 2px solid var(--border);
+			overflow: hidden;
+			transition: var(--transition);
+			display: flex;
+			flex-direction: column;
+			box-shadow: var(--shadow-sm);
+		}
+
+		.offer-card:hover {
+			transform: translateY(-8px);
+			border-color: var(--primary);
+			box-shadow: var(--shadow);
+		}
+
+		.offer-header {
+			padding: 24px;
+			display: flex;
+			justify-content: space-between;
+			align-items: start;
+			gap: 12px;
+			background: linear-gradient(135deg, var(--surface-muted), var(--surface));
+			border-bottom: 1px solid var(--border);
+		}
+
+		.offer-title {
+			margin: 0;
+			font-size: 1.4rem;
+			color: var(--text);
+			flex: 1;
+		}
+
+		.offer-badge {
+			flex-shrink: 0;
+		}
+
+		.badge {
+			display: inline-block;
+			padding: 6px 12px;
+			border-radius: 6px;
+			font-size: 0.8rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.badge-tiers {
+			background: var(--surface-muted);
+			color: var(--text-secondary);
+		}
+
+		.badge-intermediaire {
+			background: var(--info-light);
+			color: var(--info);
+		}
+
+		.badge-tous-risques {
+			background: var(--success-light);
+			color: var(--success);
+		}
+
+		.offer-description {
+			color: var(--text-secondary);
+			margin: 0;
+			padding: 16px 24px;
+			font-size: 0.95rem;
+		}
+
+		.offer-price {
+			padding: 24px;
+			background: linear-gradient(135deg, var(--primary-light), var(--info-light));
+			border-bottom: 1px solid var(--border);
+		}
+
+		.price-main {
+			display: flex;
+			align-items: baseline;
+			gap: 8px;
+			margin-bottom: 12px;
+		}
+
+		.price-amount {
+			font-size: 2.5rem;
+			font-weight: 700;
+			color: var(--primary);
+		}
+
+		.price-period {
+			font-size: 1rem;
+			color: var(--text-secondary);
+			font-weight: 600;
+		}
+
+		.price-monthly {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			color: var(--text);
+			font-size: 0.95rem;
+		}
+
+		.price-monthly i {
+			color: var(--primary);
+		}
+
+		.offer-features {
+			flex: 1;
+			padding: 24px;
+		}
+
+		.features-title {
+			margin: 0 0 16px;
+			font-size: 1rem;
+			font-weight: 700;
+			color: var(--text);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.features-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.features-list li {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: var(--text);
+			font-size: 0.95rem;
+		}
+
+		.features-list i {
+			color: var(--success);
+			font-weight: 700;
+			flex-shrink: 0;
+		}
+
+		.offer-form {
+			padding: 0 24px 24px;
+		}
+
+		.btn-offer {
+			width: 100%;
+			padding: 14px 20px;
+			background: linear-gradient(135deg, var(--primary), var(--info));
 			color: white;
+			border: none;
+			border-radius: var(--radius);
+			font-weight: 600;
+			cursor: pointer;
+			transition: var(--transition);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			font-size: 1rem;
+		}
+
+		.btn-offer:hover {
+			transform: scale(1.02);
+			box-shadow: 0 8px 20px rgba(15, 98, 254, 0.3);
+		}
+
+		.btn-offer:active {
+			transform: scale(0.98);
+		}
+
+		.bottom-actions {
+			display: flex;
+			justify-content: center;
+			margin-top: 32px;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			padding: 12px 24px;
+			border: none;
+			border-radius: var(--radius);
+			font-weight: 600;
+			cursor: pointer;
+			transition: var(--transition);
+			font-size: 1rem;
+			text-decoration: none;
+		}
+
+		.btn-secondary {
+			background: var(--surface-muted);
+			color: var(--text);
+			border: 1px solid var(--border);
+		}
+
+		.btn-secondary:hover {
+			background: var(--border);
+			transform: translateY(-2px);
+		}
+
+		@media(max-width: 768px) {
+			.offers-header h1 {
+				font-size: 1.5rem;
+			}
+
+			.offers-header p {
+				font-size: 1rem;
+			}
+
+			.company-selector-box {
+				flex-direction: column;
+				align-items: stretch;
+			}
+
+			.selector-label {
+				justify-content: center;
+			}
+
+			.company-select {
+				width: 100%;
+			}
+
+			.offers-grid {
+				grid-template-columns: 1fr;
+				gap: 24px;
+			}
+
+			.offer-header {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.price-amount {
+				font-size: 2rem;
+			}
+
+			.offer-card {
+				border-width: 1px;
+			}
 		}
 	</style>
 
@@ -142,64 +463,84 @@ companySelect.addEventListener('change', function () {
 const selectedCompany = this.value;
 const quoteId = {{ quote.id }};
 
-// Afficher un loader
-offersGrid.style.opacity = '0.5';
+offersGrid.style.opacity = '0.6';
 offersGrid.style.pointerEvents = 'none';
 
-// Faire la requête AJAX
 fetch(`/devis/${quoteId}/offres-by-company?company=${
 encodeURIComponent(selectedCompany)
 }`).then(response => response.json()).then(data => {
-if (data.success) { // Mettre à jour les offres
+if (data.success) {
 updateOffers(data.offers);
+}
 offersGrid.style.opacity = '1';
 offersGrid.style.pointerEvents = 'auto';
-}
 }).catch(error => {
 console.error('Erreur:', error);
 offersGrid.style.opacity = '1';
 offersGrid.style.pointerEvents = 'auto';
 });
 });
-});
 
 function updateOffers(offers) {
-const offersGrid = document.querySelector('.offers-grid');
 let html = '';
 
 offers.forEach(offer => {
 let features = '';
+let badge = '';
+let badgeClass = '';
 
 if (offer.code === 'tiers') {
-features = '<li>Responsabilité civile</li><li>Défense et recours</li>';
+features = '<li><i class="fas fa-check"></i> Responsabilité civile</li><li><i class="fas fa-check"></i> Défense et recours</li>';
+badge = 'Basique';
+badgeClass = 'badge-tiers';
 } else if (offer.code === 'intermediaire') {
-features = '<li>Responsabilité civile</li><li>Vol</li><li>Incendie</li><li>Bris de glace</li>';
+features = '<li><i class="fas fa-check"></i> Responsabilité civile</li><li><i class="fas fa-check"></i> Vol</li><li><i class="fas fa-check"></i> Incendie</li><li><i class="fas fa-check"></i> Bris de glace</li>';
+badge = 'Populaire';
+badgeClass = 'badge-intermediaire';
 } else if (offer.code === 'tous_risques') {
-features = '<li>Responsabilité civile</li><li>Vol</li><li>Incendie</li><li>Dommages tous accidents</li><li>Assistance</li>';
+features = '<li><i class="fas fa-check"></i> Responsabilité civile</li><li><i class="fas fa-check"></i> Vol</li><li><i class="fas fa-check"></i> Incendie</li><li><i class="fas fa-check"></i> Dommages tous accidents</li><li><i class="fas fa-check"></i> Assistance 24/7</li>';
+badge = 'Premium';
+badgeClass = 'badge-tous-risques';
 }
 
 html += `
 					<div class="offer-card">
-						<h2>${
+						<div class="offer-header">
+							<h2 class="offer-title">${
 offer.title
 }</h2>
-						<p>${
+							<div class="offer-badge">
+								<span class="badge ${badgeClass}">${badge}</span>
+							</div>
+						</div>
+						<p class="offer-description">${
 offer.description
 }</p>
-						<div class="price">
-							<strong>${
+						<div class="offer-price">
+							<div class="price-main">
+								<span class="price-amount">${
 offer.annual_price
-} DH / an</strong><br>
-							<span>${
+}</span>
+								<span class="price-period">DH/an</span>
+							</div>
+							<div class="price-monthly">
+								<i class="fas fa-calendar"></i>
+								<span>${
 offer.monthly_price
-} DH / mois</span>
+} DH/mois</span>
+							</div>
 						</div>
-						<ul>${features}</ul>
-						<form method="POST" action="/devis/{{ quote.id }}/choisir-offre" style="display: inline;">
+						<div class="offer-features">
+							<h3 class="features-title">Ce qui est inclus</h3>
+							<ul class="features-list">${features}</ul>
+						</div>
+						<form method="POST" action="/devis/{{ quote.id }}/choisir-offre" class="offer-form">
 							<input type="hidden" name="offer_code" value="${
 offer.code
 }">
-							<button type="submit" class="btn btn-primary">Choisir cette offre</button>
+							<button type="submit" class="btn-offer">
+								<i class="fas fa-arrow-right"></i> Choisir cette offre
+							</button>
 						</form>
 					</div>
 				`;
@@ -207,5 +548,6 @@ offer.code
 
 offersGrid.innerHTML = html;
 }
+});
 	</script>
 {% endblock %}

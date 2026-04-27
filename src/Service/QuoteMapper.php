@@ -10,6 +10,7 @@ use App\Enum\City as CityEnum;
 use App\Enum\Company as CompanyEnum;
 use App\Enum\FuelType;
 use App\Enum\InsuranceType;
+use App\Enum\QuoteStatus;
 use App\Enum\VehiculeBrand;
 use App\Repository\CityRepository;
 use App\Repository\CompanyRepository;
@@ -45,6 +46,11 @@ class QuoteMapper
             // Toujours remplir l'Enum company (NOT NULL en base)
             ->setCompany(CompanyEnum::tryFrom($dto->company ?? '') ?? CompanyEnum::Unknown)
             ->touch();
+
+        // Initialise le statut uniquement à la création (pas en mise à jour)
+        if ($quote->getId() === null) {
+            $quote->setStatus(QuoteStatus::CONFIRMED);
+        }
 
         // City Entity (pour les variations de prix)
         if ($cityRepository && $dto->city) {
@@ -88,7 +94,7 @@ class QuoteMapper
             'registrationNumber'    => $quote->getRegistrationNumber(),
             'fiscalPower'           => $quote->getFiscalPower(),
             'engineCapacity'        => $quote->getEngineCapacity(),
-            'status'                => $quote->getStatus()->value,
+            'status'                => $quote->getStatus()->value ?? '',
             'createdAt'             => $quote->getCreatedAt()->format(DATE_ATOM),
             'updatedAt'             => $quote->getUpdatedAt()->format(DATE_ATOM),
         ];
