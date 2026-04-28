@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Service\QuotePdfService;
 
 class QuoteWizardController extends AbstractController
 {
@@ -69,6 +70,23 @@ class QuoteWizardController extends AbstractController
     {
         return $this->render('quote/show.html.twig', [
             'quote' => $mapper->toArray($quote),
+        ]);
+    }
+     #[Route('/devis/{id}/recap-pdf', name: 'quote_recap_pdf', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function downloadRecap(
+        Quote $quote,
+        QuoteMapper $mapper,
+        QuotePdfService $pdfService,
+    ): Response {
+        $quoteArray = $mapper->toArray($quote);
+        $pdfContent = $pdfService->generateRecap($quote, $quoteArray);
+ 
+        $filename = sprintf('devis_%d_recap.pdf', $quote->getId());
+ 
+        return new Response($pdfContent, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Length'      => strlen($pdfContent),
         ]);
     }
 

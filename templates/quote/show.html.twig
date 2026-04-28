@@ -158,15 +158,24 @@
 
 	<!-- Actions -->
 	<div class="actions-container">
-		<a href="{{ path('quote_new') }}" class="btn btn-secondary">
-			<i class="fas fa-plus-circle"></i>
-			Créer un autre devis
-		</a>
-		<a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
-			<i class="fas fa-arrow-right"></i>
-			Voir les offres disponibles
-		</a>
-	</div>
+        <a href="{{ path('quote_new') }}" class="btn btn-secondary">
+            <i class="fas fa-plus-circle"></i>
+            Créer un autre devis
+        </a>
+
+        {# ── Bouton téléchargement PDF récapitulatif ── #}
+        <a href="{{ path('quote_recap_pdf', {id: quote.id}) }}"
+           class="btn btn-download"
+           title="Télécharger le récapitulatif PDF">
+            <i class="fas fa-file-pdf"></i>
+            Télécharger le récapitulatif
+        </a>
+
+        <a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
+            <i class="fas fa-arrow-right"></i>
+            Voir les offres disponibles
+        </a>
+    </div>
 
 	<style>
 		/* Success Header */
@@ -390,6 +399,15 @@
 			font-size: 1rem;
 			text-decoration: none;
 		}
+		.btn-download {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3);
+        }
 
 		.btn-primary {
 			background: linear-gradient(135deg, var(--primary), var(--info));
