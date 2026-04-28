@@ -91,12 +91,30 @@ class QuoteWizardController extends AbstractController
         Quote $quote,
         Request $request,
         EntityManagerInterface $entityManager,
+        QuoteEstimatorService $estimator,
     ): Response {
         $offerCode = $request->request->get('offer_code');
 
         if ($offerCode) {
+            // Calcul du prix de l'offre choisie
+            $company = $quote->getCompanyEntity();
+            $offers  = $company
+                ? $estimator->getOffersByCompany($quote, $company)
+                : $estimator->getOffers($quote);
+
+            $price = null;
+            foreach ($offers as $offer) {
+                if ($offer['code'] === $offerCode) {
+                    $price = $offer['annual_price'];
+                    break;
+                }
+            }
+
             $quote->setSelectedOffer($offerCode);
             $quote->setStatus(QuoteStatus::SUBMITTED);
+            if ($price !== null) {
+                $quote->setCustomEstimation((string) $price);
+            }
             $quote->touch();
             $entityManager->flush();
 

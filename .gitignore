@@ -15,3 +15,6 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+
+/src/Command/GenerateQuotesCommand.php

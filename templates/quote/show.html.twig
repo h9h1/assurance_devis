@@ -64,7 +64,7 @@
 				<div class="info-row">
 					<span class="label">Expérience</span>
 					<span class="value">
-						{% set years = (now.timestamp - quote.licenseDate.timestamp) / (365.25 * 24 * 3600) | round %}
+						{% set years = (("now"|date('U') - (quote.licenseDate|date('U'))) / 31557600) | round %}
 						{{ years }}
 						an(s)
 					</span>
@@ -82,7 +82,7 @@
 				<div class="info-row">
 					<span class="label">Type</span>
 					<span class="value badge-type">
-						{% if quote.insuranceType.value == 'auto' %}
+						{% if quote.insuranceType == 'auto' %}
 							<i class="fas fa-car"></i>
 							Assurance Auto
 						{% else %}
@@ -93,8 +93,8 @@
 				</div>
 				<div class="info-row">
 					<span class="label">Statut</span>
-					<span class="status-badge status-badge--{{ quote.status.value|lower }}">
-						{{ quote.status.value }}
+					<span class="status-badge status-badge--{{ quote.status|lower }}">
+						{{ quote.status}}
 					</span>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 					</div>
 					<div class="info-row">
 						<span class="label">Carburant</span>
-						<span class="value">{{ quote.fuelType.value|capitalize }}</span>
+						<span class="value">{{ quote.fuelType|capitalize }}</span>
 					</div>
 					<div class="info-row">
 						<span class="label">Mise en circulation</span>
@@ -138,13 +138,13 @@
 						<span class="label">Immatriculation</span>
 						<span class="value font-mono">{{ quote.registrationNumber }}</span>
 					</div>
-					{% if quote.insuranceType.value == 'auto' %}
+					{% if quote.insuranceType == 'auto' %}
 						<div class="info-row">
 							<span class="label">Puissance fiscale</span>
 							<span class="value">{{ quote.fiscalPower ?? '-' }}</span>
 						</div>
 					{% endif %}
-					{% if quote.insuranceType.value == 'moto' %}
+					{% if quote.insuranceType == 'moto' %}
 						<div class="info-row">
 							<span class="label">Cylindrée</span>
 							<span class="value">{{ quote.engineCapacity ?? '-' }}
