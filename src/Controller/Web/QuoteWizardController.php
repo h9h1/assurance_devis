@@ -151,9 +151,4 @@ class QuoteWizardController extends AbstractController
         ], 400);
     }
 
-    #[Route('/', name: 'homepage', methods: ['GET'])]
-    public function home(): Response
-    {
-        return $this->redirectToRoute('quote_new');
-    }
 }
