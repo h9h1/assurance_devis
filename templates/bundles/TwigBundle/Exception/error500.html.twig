@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur serveur — Aksam Assurance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        {% include 'bundles/TwigBundle/Exception/_error_styles.html.twig' %}
+        .error-code { color: #c0392b; }
+        .error-icon { background: linear-gradient(135deg, #ffebee, #fce4ec); color: #c0392b; }
+        .orb-1      { background: #c0392b; top: -180px; right: -100px; }
+        .orb-2      { background: #922b21; bottom: -120px; left: -80px; }
+    </style>
+</head>
+<body>
+    {% include 'bundles/TwigBundle/Exception/_error_layout.html.twig' with {
+        code:     '500',
+        icon:     'fa-server',
+        title:    'Erreur interne',
+        message:  'Une erreur inattendue s\'est produite sur notre serveur.',
+        hint:     'Notre équipe a été notifiée. Veuillez réessayer dans quelques instants.',
+        actions: [
+            { url: 'javascript:location.reload()', icon: 'fa-redo', label: 'Réessayer',      primary: true  },
+            { url: '/',                             icon: 'fa-home', label: 'Retour accueil', primary: false },
+        ]
+    } %}
+</body>
+</html>
