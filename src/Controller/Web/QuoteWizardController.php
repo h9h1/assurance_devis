@@ -14,6 +14,7 @@ use App\Repository\CompanyRepository;
 use App\Repository\QuoteRepository;
 use App\Service\QuoteEstimatorService;
 use App\Service\QuoteMapper;
+use App\Service\QuoteMailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -167,6 +168,34 @@ class QuoteWizardController extends AbstractController
             'success' => false,
             'message' => 'Company not provided',
         ], 400);
+    }
+
+
+    #[Route('/devis/{id}/envoyer-email', name: 'quote_send_email', requirements: ['id' => '\\d+'], methods: ['POST'])]
+    public function sendEmail(
+        Quote $quote,
+        Request $request,
+        EntityManagerInterface $em,
+        QuoteMailerService $mailer,
+    ): Response {
+        $email = trim($request->request->get('email', ''));
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->addFlash('error', 'Adresse email invalide.');
+            return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
+        }
+
+        $quote->setEmail($email);
+        $em->flush();
+
+        try {
+            $mailer->sendRecap($quote);
+            $this->addFlash('success', 'Le récapitulatif a été envoyé à ' . $email . '.');
+        } catch (\Throwable $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi : ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
     }
 
 }

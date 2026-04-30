@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre devis #{{ quote.id }} — Aksam Assurance</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#122033;line-height:1.6;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7fb;padding:40px 16px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+    {# ── Header ── #}
+    <tr>
+        <td style="background:linear-gradient(135deg,#0f62fe 0%,#0043ce 100%);border-radius:16px 16px 0 0;padding:36px 40px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:20px;">
+                            <span style="display:inline-block;background:rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;font-size:18px;">🛡️</span>
+                            <span style="color:white;font-size:1.3rem;font-weight:700;">Aksam Assurance</span>
+                        </div>
+                        <h1 style="color:white;margin:0 0 8px;font-size:1.6rem;font-weight:800;line-height:1.2;">
+                            Votre récapitulatif de devis
+                        </h1>
+                        <p style="color:rgba(255,255,255,.85);margin:0;font-size:.95rem;">
+                            Bonjour <strong>{{ quote.firstName }} {{ quote.lastName }}</strong>, voici le détail de votre demande.
+                        </p>
+                    </td>
+                    <td align="right" style="vertical-align:top;">
+                        <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:12px 20px;text-align:right;border:1px solid rgba(255,255,255,.2);">
+                            <div style="color:rgba(255,255,255,.75);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;">Devis N°</div>
+                            <div style="color:white;font-size:1.6rem;font-weight:900;">#{{ quote.id }}</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    {# ── Status Bar ── #}
+    <tr>
+        <td style="background:#1a4fd6;padding:12px 40px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="color:rgba(255,255,255,.85);font-size:.82rem;">
+                        📅 Envoyé le {{ "now"|date("d/m/Y à H:i") }}
+                    </td>
+                    <td align="right">
+                        {% set statusColors = {
+                            'draft':     '#607086',
+                            'submitted': '#0043ce',
+                            'confirmed': '#0f62fe',
+                            'accepted':  '#12805c',
+                            'rejected':  '#c0392b'
+                        } %}
+                        {% set statusLabels = {
+                            'draft':     'Brouillon',
+                            'submitted': 'Soumis',
+                            'confirmed': 'Confirmé',
+                            'accepted':  'Accepté',
+                            'rejected':  'Rejeté'
+                        } %}
+                        <span style="display:inline-block;background:rgba(255,255,255,.2);color:white;border-radius:999px;padding:4px 14px;font-size:.78rem;font-weight:700;border:1px solid rgba(255,255,255,.3);">
+                            {{ statusLabels[quote.status.value] ?? quote.status.value }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    {# ── Selected Offer ── #}
+    {% if estimation %}
+    <tr>
+        <td style="background:#ffffff;padding:28px 40px 0;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#e3f2fd,#e0e7ff);border-radius:12px;border:1px solid #b3d4fb;overflow:hidden;">
+                <tr>
+                    <td style="padding:8px 20px;background:rgba(15,98,254,.08);border-bottom:1px solid #b3d4fb;">
+                        <span style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#0043ce;">✅ Offre sélectionnée</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:20px 24px;">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <div style="font-size:.78rem;color:#607086;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Formule</div>
+                                    <div style="font-size:1.5rem;font-weight:800;color:#0f62fe;">{{ quote.selectedOffer|capitalize }}</div>
+                                    {% if companyName %}
+                                    <div style="font-size:.85rem;color:#607086;margin-top:4px;">{{ companyName }}</div>
+                                    {% endif %}
+                                </td>
+                                <td align="right">
+                                    <div style="font-size:1.6rem;font-weight:800;color:#12805c;">{{ estimation }}</div>
+                                    {% if monthly %}
+                                    <div style="font-size:.85rem;color:#607086;margin-top:4px;">soit {{ monthly }}</div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endif %}
+
+    {# ── Body ── #}
+    <tr>
+        <td style="background:#ffffff;padding:28px 40px;">
+
+            {# Personal Info #}
+            <h3 style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#607086;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f4f7fb;">👤 Informations personnelles</h3>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;width:45%;">Nom complet</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ quote.firstName }} {{ quote.lastName }}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Téléphone</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ quote.phoneNumber }}</td>
+                </tr>
+                {% if cityName %}
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Ville</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ cityName }}</td>
+                </tr>
+                {% endif %}
+                {% if companyName %}
+                <tr>
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Compagnie choisie</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ companyName }}</td>
+                </tr>
+                {% endif %}
+            </table>
+
+            {# Vehicle Info #}
+            <h3 style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#607086;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f4f7fb;">🚘 Informations du véhicule</h3>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;width:45%;">Type d'assurance</td>
+                    <td style="padding:9px 0;"><span style="display:inline-block;background:#e3f2fd;color:#0043ce;border-radius:6px;padding:3px 10px;font-size:.8rem;font-weight:700;">{{ quote.insuranceType.value|capitalize }}</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Marque</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ quote.vehicleBrand.value }}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Carburant</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ quote.fuelType.value|capitalize }}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Mise en circulation</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ quote.firstRegistrationDate|date('d/m/Y') }}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f4f7fb;">
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Immatriculation</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;font-family:monospace;letter-spacing:1px;">{{ quote.registrationNumber }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:9px 0;color:#607086;font-size:.875rem;font-weight:600;">Valeur à neuf / vénale</td>
+                    <td style="padding:9px 0;color:#122033;font-weight:500;font-size:.9rem;">{{ quote.newValue|number_format(0, ',', ' ') }} / {{ quote.marketValue|number_format(0, ',', ' ') }} MAD</td>
+                </tr>
+            </table>
+
+            {# Admin note #}
+            {% if quote.adminNote %}
+            <div style="background:#fffbeb;border-radius:10px;border:1px solid #fde68a;border-left:4px solid #f59e0b;padding:16px 20px;margin-bottom:24px;">
+                <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:8px;">💬 Note de notre équipe</div>
+                <p style="margin:0;color:#78350f;font-size:.9rem;font-style:italic;line-height:1.6;">{{ quote.adminNote }}</p>
+            </div>
+            {% endif %}
+
+            {# CTA Button #}
+            <div style="text-align:center;margin:32px 0 8px;">
+                <a href="{{ app.request.schemeAndHttpHost }}/devis/{{ quote.id }}"
+                   style="display:inline-block;background:linear-gradient(135deg,#0f62fe,#0043ce);color:white;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:1rem;box-shadow:0 4px 16px rgba(15,98,254,.3);">
+                    Voir mon devis en ligne →
+                </a>
+            </div>
+
+        </td>
+    </tr>
+
+    {# ── Footer ── #}
+    <tr>
+        <td style="background:#f8fafc;border-top:1px solid #dbe4ee;border-radius:0 0 16px 16px;padding:24px 40px;text-align:center;">
+            <p style="margin:0 0 8px;font-size:.875rem;font-weight:700;color:#0f62fe;">🛡️ Aksam Assurance</p>
+            <p style="margin:0 0 12px;font-size:.8rem;color:#607086;">
+                📧 contact@aksam-assurance.ma &nbsp;|&nbsp; 📞  01 82 83 48 00
+            </p>
+            <p style="margin:0;font-size:.75rem;color:#aab4c0;line-height:1.5;">
+                Cet email a été envoyé suite à votre demande de devis. Il ne constitue pas un contrat d'assurance.<br>
+                &copy; 2026 Aksam Assurance — Tous droits réservés.
+            </p>
+        </td>
+    </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
