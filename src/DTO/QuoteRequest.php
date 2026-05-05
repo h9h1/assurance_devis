@@ -45,7 +45,7 @@ class QuoteRequest
     public ?string $vehicleBrand = null;
 
     #[Assert\NotBlank(message: 'Le carburant est obligatoire.')]
-    #[Assert\Choice(choices: ['essence', 'diesel', 'hybride', 'electrique', 'gpl'], message: 'Carburant invalide.')]
+    #[Assert\Choice(choices: ['essence', 'diesel', 'hybride', 'electrique'], message: 'Carburant invalide.')]
     public ?string $fuelType = null;
 
     #[Assert\NotBlank(message: 'La date de mise en circulation est obligatoire.')]

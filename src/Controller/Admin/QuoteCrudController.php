@@ -42,7 +42,7 @@ class QuoteCrudController extends AbstractCrudController
             NumberField::new('fiscalPower')->setLabel('Puissance fiscale')->hideOnIndex(),
             NumberField::new('engineCapacity')->setLabel('Cylindrée')->hideOnIndex(),
             ChoiceField::new('status')->setLabel('Statut'),
-            NumberField::new('customEstimation')->setLabel('Estimation personnalisée (€)')->setFormTypeOption('html5', false),
+            NumberField::new('customEstimation')->setLabel('Estimation personnalisée (MAD)')->setFormTypeOption('html5', false),
             TextEditorField::new('adminNote')->setLabel('Notes admin'),
             DateField::new('createdAt')->setLabel('Créé le')->hideOnForm(),
             DateField::new('updatedAt')->setLabel('Modifié le')->hideOnForm(),

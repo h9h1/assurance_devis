@@ -14,6 +14,7 @@ use App\Repository\CompanyRepository;
 use App\Repository\QuoteRepository;
 use App\Service\QuoteEstimatorService;
 use App\Service\QuoteMapper;
+use App\Service\QuoteMailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Service\QuotePdfService;
 
 class QuoteWizardController extends AbstractController
 {
@@ -69,6 +71,23 @@ class QuoteWizardController extends AbstractController
     {
         return $this->render('quote/show.html.twig', [
             'quote' => $mapper->toArray($quote),
+        ]);
+    }
+     #[Route('/devis/{id}/recap-pdf', name: 'quote_recap_pdf', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function downloadRecap(
+        Quote $quote,
+        QuoteMapper $mapper,
+        QuotePdfService $pdfService,
+    ): Response {
+        $quoteArray = $mapper->toArray($quote);
+        $pdfContent = $pdfService->generateRecap($quote, $quoteArray);
+ 
+        $filename = sprintf('devis_%d_recap.pdf', $quote->getId());
+ 
+        return new Response($pdfContent, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Length'      => strlen($pdfContent),
         ]);
     }
 
@@ -149,6 +168,34 @@ class QuoteWizardController extends AbstractController
             'success' => false,
             'message' => 'Company not provided',
         ], 400);
+    }
+
+
+    #[Route('/devis/{id}/envoyer-email', name: 'quote_send_email', requirements: ['id' => '\\d+'], methods: ['POST'])]
+    public function sendEmail(
+        Quote $quote,
+        Request $request,
+        EntityManagerInterface $em,
+        QuoteMailerService $mailer,
+    ): Response {
+        $email = trim($request->request->get('email', ''));
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->addFlash('error', 'Adresse email invalide.');
+            return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
+        }
+
+        $quote->setEmail($email);
+        $em->flush();
+
+        try {
+            $mailer->sendRecap($quote);
+            $this->addFlash('success', 'Le récapitulatif a été envoyé à ' . $email . '.');
+        } catch (\Throwable $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi : ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('quote_show', ['id' => $quote->getId()]);
     }
 
 }

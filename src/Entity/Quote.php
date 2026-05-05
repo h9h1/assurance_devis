@@ -23,10 +23,10 @@ class Quote
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(name: 'last_name', length: 100)]
     private string $lastName;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(name: 'first_name', length: 100)]
     private string $firstName;
 
     #[ORM\Column(enumType: CityEnum::class, nullable: true)]
@@ -43,8 +43,12 @@ class Quote
     #[ORM\JoinColumn(name: 'company_entity_id', nullable: true)]
     private ?Company $companyEntity = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(name: 'phone_number', length: 20)]
     private string $phoneNumber;
+
+    #[ORM\Column(name: 'email', length: 180, nullable: true)]
+    private ?string $email = null;
+
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private \DateTimeInterface $birthDate;
@@ -73,13 +77,13 @@ class Quote
     #[ORM\Column(type: Types::DECIMAL, precision: 12, scale: 2)]
     private string $marketValue;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(name: 'registration_number', length: 20)]
     private string $registrationNumber;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(name: 'fiscal_power', nullable: true)]
     private ?int $fiscalPower = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(name: 'engine_capacity', nullable: true)]
     private ?int $engineCapacity = null;
 
     #[ORM\Column(enumType: QuoteStatus::class)]
@@ -183,6 +187,10 @@ class Quote
         $this->phoneNumber = $phoneNumber;
         return $this;
     }
+
+    public function getEmail(): ?string { return $this->email; }
+    public function setEmail(?string $email): self { $this->email = $email; return $this; }
+
     public function getBirthDate(): \DateTimeInterface
     {
         return $this->birthDate;

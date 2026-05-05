@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur {{ status_code }} — Aksam Assurance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        {% include 'bundles/TwigBundle/Exception/_error_styles.html.twig' %}
+        .error-code { color: #607086; }
+        .error-icon { background: linear-gradient(135deg, #f4f7fb, #e8edf4); color: #607086; }
+        .orb-1      { background: #607086; top: -180px; right: -100px; }
+        .orb-2      { background: #3d4f60; bottom: -120px; left: -80px; }
+    </style>
+</head>
+<body>
+    {% include 'bundles/TwigBundle/Exception/_error_layout.html.twig' with {
+        code:     status_code,
+        icon:     'fa-exclamation-triangle',
+        title:    status_text,
+        message:  'Une erreur s\'est produite lors du traitement de votre demande.',
+        hint:     'Si le problème persiste, n\'hésitez pas à nous contacter.',
+        actions: [
+            { url: '/',              icon: 'fa-home',          label: 'Retour accueil', primary: true  },
+            { url: '/devis/nouveau', icon: 'fa-file-contract', label: 'Nouveau devis',  primary: false },
+        ]
+    } %}
+</body>
+</html>
