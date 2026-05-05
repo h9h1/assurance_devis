@@ -1,0 +1,1271 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Aksam Assurance — Devis auto & moto en ligne{% endblock %}
+
+{% block body %}
+
+{# ── HERO ─────────────────────────────────────────────────────────────────── #}
+<section class="hero">
+    <div class="hero__bg">
+        <div class="hero__orb hero__orb--1"></div>
+        <div class="hero__orb hero__orb--2"></div>
+        <div class="hero__grid"></div>
+    </div>
+
+    <div class="hero__content">
+        <div class="hero__text">
+            <span class="pill pill--outline animate-in" style="--delay:.0s">
+                <i class="fas fa-shield-alt"></i>
+                Assurance 100% en ligne
+            </span>
+            <h1 class="animate-in" style="--delay:.08s">
+                Votre devis auto &amp; moto<br>
+                <span class="hero__gradient-text">en 3 minutes chrono</span>
+            </h1>
+            <p class="hero__desc animate-in" style="--delay:.16s">
+                Comparez les meilleures offres des compagnies marocaines,
+                obtenez votre estimation personnalisée et choisissez la couverture
+                qui vous convient — sans engagement.
+            </p>
+
+            <div class="hero__actions animate-in" style="--delay:.22s">
+                <a href="{{ path('quote_new') }}" class="btn btn--primary btn--lg">
+                    <i class="fas fa-file-contract"></i>
+                    Obtenir mon devis gratuit
+                    <i class="fas fa-arrow-right btn__arrow"></i>
+                </a>
+                <a href="#how" class="btn btn--ghost btn--lg">
+                    <i class="fas fa-play-circle"></i>
+                    Comment ça marche
+                </a>
+            </div>
+
+            <div class="hero__trust animate-in" style="--delay:.28s">
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Gratuit &amp; sans engagement</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Résultat immédiat</span>
+                </div>
+                <div class="trust-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Données sécurisées</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero__visual animate-in" style="--delay:.1s">
+            <div class="hero-card hero-card--main">
+                <div class="hero-card__header">
+                    <div class="hero-card__dot hero-card__dot--red"></div>
+                    <div class="hero-card__dot hero-card__dot--yellow"></div>
+                    <div class="hero-card__dot hero-card__dot--green"></div>
+                    <span class="hero-card__title">Votre estimation</span>
+                </div>
+                <div class="hero-card__body">
+                    <div class="hero-card__offer">
+                        <div class="offer-pill offer-pill--blue">Tous risques</div>
+                        <div class="hero-card__price">
+                            <span class="price-amount">4 850</span>
+                            <span class="price-unit">MAD / an</span>
+                        </div>
+                        <div class="price-monthly">soit 404 MAD / mois</div>
+                    </div>
+                    <div class="hero-card__items">
+                        <div class="check-item"><i class="fas fa-check"></i> Responsabilité civile</div>
+                        <div class="check-item"><i class="fas fa-check"></i> Vol &amp; incendie</div>
+                        <div class="check-item"><i class="fas fa-check"></i> Dommages tous accidents</div>
+                        <div class="check-item"><i class="fas fa-check"></i> Assistance 24/7</div>
+                    </div>
+                    <div class="hero-card__bar">
+                        <div class="hero-card__bar-fill"></div>
+                    </div>
+                    <div class="hero-card__companies">
+                        <span class="co-pill">RMA</span>
+                        <span class="co-pill">AXA</span>
+                        <span class="co-pill">Wafa</span>
+                        <span class="co-pill co-pill--more">+5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-card hero-card--float hero-card--float-1">
+                <i class="fas fa-car"></i>
+                <span>Auto</span>
+            </div>
+            <div class="hero-card hero-card--float hero-card--float-2">
+                <i class="fas fa-motorcycle"></i>
+                <span>Moto</span>
+            </div>
+            <div class="hero-card hero-card--float hero-card--float-3">
+                <i class="fas fa-bolt"></i>
+                <span>Rapide</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── STATS ────────────────────────────────────────────────────────────────── #}
+<section class="stats-strip">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">+8</span>
+                <span class="stat-label">Compagnies partenaires</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">3 min</span>
+                <span class="stat-label">Pour obtenir un devis</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">En ligne, sans paperasse</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">0 MAD</span>
+                <span class="stat-label">Entièrement gratuit</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── HOW IT WORKS ─────────────────────────────────────────────────────────── #}
+<section class="section" id="how">
+    <div class="container">
+        <div class="section-header">
+            <span class="pill">Comment ça marche</span>
+            <h2>Simple, rapide, transparent</h2>
+            <p>En 3 étapes, votre devis personnalisé est prêt.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step__number">01</div>
+                <div class="step__icon"><i class="fas fa-user-edit"></i></div>
+                <h3>Remplissez le formulaire</h3>
+                <p>Informations personnelles, véhicule, type de couverture — notre assistant vous guide étape par étape.</p>
+            </div>
+            <div class="step__connector">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="step">
+                <div class="step__number">02</div>
+                <div class="step__icon"><i class="fas fa-sliders-h"></i></div>
+                <h3>Choisissez votre compagnie</h3>
+                <p>Sélectionnez parmi nos partenaires et comparez les prix adaptés à votre profil en temps réel.</p>
+            </div>
+            <div class="step__connector">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="step">
+                <div class="step__number">03</div>
+                <div class="step__icon"><i class="fas fa-check-double"></i></div>
+                <h3>Recevez votre estimation</h3>
+                <p>Votre devis détaillé est généré instantanément. Notre équipe vous contacte pour finaliser.</p>
+            </div>
+        </div>
+
+        <div class="cta-center">
+            <a href="{{ path('quote_new') }}" class="btn btn--primary btn--lg">
+                <i class="fas fa-rocket"></i>
+                Commencer maintenant
+            </a>
+        </div>
+    </div>
+</section>
+
+{# ── OFFERS PREVIEW ───────────────────────────────────────────────────────── #}
+<section class="section section--muted">
+    <div class="container">
+        <div class="section-header">
+            <span class="pill">Nos formules</span>
+            <h2>Une couverture pour chaque besoin</h2>
+            <p>Trois niveaux de protection, des tarifs compétitifs.</p>
+        </div>
+
+        <div class="offers-preview">
+            <div class="offer-preview-card">
+                <div class="offer-preview-card__badge offer-preview-card__badge--gray">Basique</div>
+                <div class="offer-preview-card__icon"><i class="fas fa-umbrella"></i></div>
+                <h3>Tiers</h3>
+                <p>La couverture essentielle exigée par la loi. Idéale pour les véhicules anciens.</p>
+                <ul class="offer-preview-card__features">
+                    <li><i class="fas fa-check"></i> Responsabilité civile</li>
+                    <li><i class="fas fa-check"></i> Défense et recours</li>
+                </ul>
+                <a href="{{ path('quote_new') }}" class="btn btn--outline btn--sm">Obtenir un prix</a>
+            </div>
+
+            <div class="offer-preview-card offer-preview-card--featured">
+                <div class="offer-preview-card__popular">Le plus populaire</div>
+                <div class="offer-preview-card__badge offer-preview-card__badge--blue">Intermédiaire</div>
+                <div class="offer-preview-card__icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Intermédiaire</h3>
+                <p>Le meilleur rapport qualité-prix. Couverture étendue pour votre tranquillité.</p>
+                <ul class="offer-preview-card__features">
+                    <li><i class="fas fa-check"></i> Responsabilité civile</li>
+                    <li><i class="fas fa-check"></i> Vol &amp; incendie</li>
+                    <li><i class="fas fa-check"></i> Bris de glace</li>
+                </ul>
+                <a href="{{ path('quote_new') }}" class="btn btn--primary btn--sm">Obtenir un prix</a>
+            </div>
+
+            <div class="offer-preview-card">
+                <div class="offer-preview-card__badge offer-preview-card__badge--green">Premium</div>
+                <div class="offer-preview-card__icon"><i class="fas fa-star"></i></div>
+                <h3>Tous risques</h3>
+                <p>La protection maximale. Couverts en toutes circonstances, 24h/24.</p>
+                <ul class="offer-preview-card__features">
+                    <li><i class="fas fa-check"></i> Tous accidents</li>
+                    <li><i class="fas fa-check"></i> Vol &amp; incendie</li>
+                    <li><i class="fas fa-check"></i> Assistance 24/7</li>
+                </ul>
+                <a href="{{ path('quote_new') }}" class="btn btn--outline btn--sm">Obtenir un prix</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── WHY US ───────────────────────────────────────────────────────────────── #}
+<section class="section">
+    <div class="container">
+        <div class="why-grid">
+            <div class="why-text">
+                <span class="pill">Pourquoi Aksam ?</span>
+                <h2>L'assurance sans les complications</h2>
+                <p>Nous croyons que souscrire une assurance doit être simple, rapide et transparent. C'est pourquoi nous avons tout digitalisé pour vous.</p>
+
+                <div class="why-features">
+                    <div class="why-feature">
+                        <div class="why-feature__icon why-feature__icon--blue">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <strong>Instantané</strong>
+                            <p>Votre devis en moins de 3 minutes, sans attente.</p>
+                        </div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature__icon why-feature__icon--green">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div>
+                            <strong>Sécurisé</strong>
+                            <p>Vos données sont protégées et ne sont jamais revendues.</p>
+                        </div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature__icon why-feature__icon--orange">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div>
+                            <strong>Comparatif</strong>
+                            <p>Plusieurs compagnies, un seul formulaire.</p>
+                        </div>
+                    </div>
+                    <div class="why-feature">
+                        <div class="why-feature__icon why-feature__icon--purple">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div>
+                            <strong>Accompagnement</strong>
+                            <p>Notre équipe vous suit jusqu'à la souscription.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="why-visual">
+                <div class="why-card">
+                    <div class="why-card__row">
+                        <div class="why-card__avatar"><i class="fas fa-car"></i></div>
+                        <div>
+                            <strong>Assurance auto</strong>
+                            <p>Véhicule particulier</p>
+                        </div>
+                        <div class="why-card__check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="why-card__row">
+                        <div class="why-card__avatar why-card__avatar--moto"><i class="fas fa-motorcycle"></i></div>
+                        <div>
+                            <strong>Assurance moto</strong>
+                            <p>Deux roues motorisés</p>
+                        </div>
+                        <div class="why-card__check"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="why-card__footer">
+                        <i class="fas fa-shield-alt"></i>
+                        Couverture activée dès validation
+                    </div>
+                </div>
+
+                <div class="why-badge why-badge--1">
+                    <i class="fas fa-star"></i>
+                    <span>Service de qualité</span>
+                </div>
+                <div class="why-badge why-badge--2">
+                    <i class="fas fa-clock"></i>
+                    <span>Disponible 24/7</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── CTA FINAL ────────────────────────────────────────────────────────────── #}
+<section class="cta-section">
+    <div class="cta-section__bg">
+        <div class="cta-section__orb"></div>
+    </div>
+    <div class="container">
+        <div class="cta-section__content">
+            <span class="pill pill--white"><i class="fas fa-gift"></i> 100% Gratuit</span>
+            <h2>Prêt à obtenir votre devis ?</h2>
+            <p>Rejoignez des milliers de Marocains qui ont simplifié leur assurance avec Aksam.</p>
+            <a href="{{ path('quote_new') }}" class="btn btn--white btn--lg">
+                <i class="fas fa-file-contract"></i>
+                Démarrer mon devis maintenant
+                <i class="fas fa-arrow-right btn__arrow"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+/* ── Tokens ──────────────────────────────────────────────────────────────── */
+:root {
+    --primary:        #0f62fe;
+    --primary-dark:   #0a4bcc;
+    --primary-light:  #e3f2fd;
+    --success:        #12805c;
+    --success-light:  #e8f5e9;
+    --danger:         #c0392b;
+    --warning:        #f59e0b;
+    --warning-light:  #fffbeb;
+    --info:           #0043ce;
+    --info-light:     #e0e7ff;
+    --bg:             #f4f7fb;
+    --surface:        #ffffff;
+    --surface-muted:  #f8fafc;
+    --text:           #122033;
+    --text-secondary: #607086;
+    --border:         #dbe4ee;
+    --shadow:         0 20px 45px rgba(15,48,87,.08);
+    --shadow-sm:      0 2px 8px rgba(15,48,87,.06);
+    --shadow-lg:      0 32px 64px rgba(15,48,87,.14);
+    --radius:         12px;
+    --radius-lg:      18px;
+    --transition:     all .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Animations ──────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+}
+@keyframes pulse-bar {
+    0%   { width: 0; }
+    100% { width: 72%; }
+}
+
+.animate-in {
+    opacity: 0;
+    animation: fadeUp .6s ease forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.section {
+    padding: 100px 0;
+}
+
+.section--muted {
+    background: var(--surface-muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.section-header h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 700;
+    color: var(--text);
+    margin: 16px 0 12px;
+    line-height: 1.2;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+/* ── Pills ───────────────────────────────────────────────────────────────── */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.pill--outline {
+    background: transparent;
+    border: 2px solid rgba(15,98,254,.25);
+    color: var(--primary);
+}
+
+.pill--white {
+    background: rgba(255,255,255,.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,.3);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    border: none;
+}
+
+.btn--lg { padding: 16px 32px; font-size: 1.05rem; }
+.btn--sm { padding: 10px 20px; font-size: .875rem; }
+
+.btn--primary {
+    background: linear-gradient(135deg, var(--primary), var(--info));
+    color: white;
+    box-shadow: 0 4px 16px rgba(15,98,254,.25);
+}
+.btn--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(15,98,254,.35);
+    color: white;
+    text-decoration: none;
+}
+
+.btn--ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+}
+.btn--ghost:hover {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.btn--outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+.btn--outline:hover {
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+}
+
+.btn--white {
+    background: white;
+    color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(0,0,0,.15);
+}
+.btn--white:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(0,0,0,.2);
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.btn__arrow {
+    transition: transform .3s ease;
+}
+.btn:hover .btn__arrow {
+    transform: translateX(4px);
+}
+
+/* ── HERO ────────────────────────────────────────────────────────────────── */
+.hero {
+    position: relative;
+    padding: 80px 0 100px;
+    overflow: hidden;
+}
+
+.hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.hero__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .12;
+}
+
+.hero__orb--1 {
+    width: 600px; height: 600px;
+    top: -200px; right: -100px;
+    background: var(--primary);
+}
+
+.hero__orb--2 {
+    width: 400px; height: 400px;
+    bottom: -100px; left: -80px;
+    background: var(--info);
+    opacity: .08;
+}
+
+.hero__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(15,98,254,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,98,254,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
+
+.hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+
+.hero__text h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.15;
+    margin: 20px 0 20px;
+    letter-spacing: -.02em;
+}
+
+.hero__gradient-text {
+    background: linear-gradient(135deg, var(--primary), #4d9ef7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero__desc {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 36px;
+    max-width: 480px;
+}
+
+.hero__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.hero__trust {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.trust-item i {
+    color: var(--success);
+    font-size: .9rem;
+}
+
+/* ── Hero Card ───────────────────────────────────────────────────────────── */
+.hero__visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: float 4s ease-in-out infinite;
+}
+
+.hero-card--main {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    width: 100%;
+    max-width: 360px;
+}
+
+.hero-card__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 20px;
+    background: var(--surface-muted);
+    border-bottom: 1px solid var(--border);
+}
+
+.hero-card__dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+}
+.hero-card__dot--red    { background: #ff5f57; }
+.hero-card__dot--yellow { background: #febc2e; }
+.hero-card__dot--green  { background: #28c840; }
+
+.hero-card__title {
+    font-size: .8rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.hero-card__body {
+    padding: 24px;
+}
+
+.hero-card__offer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.offer-pill {
+    display: inline-flex;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 16px;
+}
+
+.offer-pill--blue { background: var(--info-light); color: var(--info); }
+
+.hero-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.price-amount {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.price-unit {
+    font-size: .9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.price-monthly {
+    font-size: .8rem;
+    color: var(--text-secondary);
+}
+
+.hero-card__items {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .875rem;
+    color: var(--text);
+}
+
+.check-item i { color: var(--success); font-size: .8rem; }
+
+.hero-card__bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.hero-card__bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--info));
+    border-radius: 999px;
+    animation: pulse-bar 1.5s .6s ease forwards;
+    width: 0;
+}
+
+.hero-card__companies {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.co-pill {
+    display: inline-flex;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.co-pill--more {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: transparent;
+}
+
+/* Floating cards */
+.hero-card--float {
+    position: absolute;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.hero-card--float i {
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.hero-card--float-1 { top: 10%; left: -12%; animation: float 3.5s 0.4s ease-in-out infinite; }
+.hero-card--float-2 { bottom: 18%; left: -8%; animation: float 4.2s 0.8s ease-in-out infinite; }
+.hero-card--float-3 { top: 8%; right: -4%; animation: float 3.8s 1.2s ease-in-out infinite; }
+
+/* ── Stats Strip ─────────────────────────────────────────────────────────── */
+.stats-strip {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 0;
+}
+
+.stats-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 48px;
+    gap: 6px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: .82rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-align: center;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--border);
+}
+
+/* ── Steps ───────────────────────────────────────────────────────────────── */
+.steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 56px;
+    position: relative;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.step__number {
+    font-size: .78rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 2px;
+    opacity: .5;
+    margin-bottom: 20px;
+}
+
+.step__icon {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary-light), var(--info-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin: 0 auto 20px;
+    border: 1px solid rgba(15,98,254,.15);
+    transition: var(--transition);
+}
+
+.step:hover .step__icon {
+    background: linear-gradient(135deg, var(--primary), var(--info));
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 12px 28px rgba(15,98,254,.3);
+}
+
+.step h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 12px;
+}
+
+.step p {
+    font-size: .9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.step__connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--border);
+    font-size: 1.2rem;
+    padding-top: 46px;
+    flex-shrink: 0;
+}
+
+.cta-center {
+    text-align: center;
+}
+
+/* ── Offers Preview ──────────────────────────────────────────────────────── */
+.offers-preview {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+.offer-preview-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.offer-preview-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary);
+}
+
+.offer-preview-card--featured {
+    border-color: var(--primary);
+    box-shadow: var(--shadow);
+    transform: scale(1.03);
+}
+
+.offer-preview-card--featured:hover {
+    transform: scale(1.03) translateY(-6px);
+}
+
+.offer-preview-card__popular {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--primary), var(--info));
+    color: white;
+    padding: 5px 18px;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    white-space: nowrap;
+}
+
+.offer-preview-card__badge {
+    display: inline-flex;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    align-self: flex-start;
+}
+
+.offer-preview-card__badge--gray  { background: var(--surface-muted); color: var(--text-secondary); border:1px solid var(--border); }
+.offer-preview-card__badge--blue  { background: var(--info-light);    color: var(--info);    }
+.offer-preview-card__badge--green { background: var(--success-light); color: var(--success); }
+
+.offer-preview-card__icon {
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+.offer-preview-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.offer-preview-card p {
+    font-size: .9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.offer-preview-card__features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.offer-preview-card__features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .875rem;
+    color: var(--text);
+}
+
+.offer-preview-card__features i {
+    color: var(--success);
+    font-size: .8rem;
+}
+
+/* ── Why Section ─────────────────────────────────────────────────────────── */
+.why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.why-text .pill { margin-bottom: 20px; }
+
+.why-text h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 16px;
+    line-height: 1.2;
+}
+
+.why-text > p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 0 40px;
+}
+
+.why-features {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.why-feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.why-feature__icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.why-feature__icon--blue   { background: var(--primary-light); color: var(--primary); }
+.why-feature__icon--green  { background: var(--success-light); color: var(--success); }
+.why-feature__icon--orange { background: var(--warning-light); color: var(--warning); }
+.why-feature__icon--purple { background: var(--info-light);    color: var(--info);    }
+
+.why-feature strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.why-feature p {
+    margin: 0;
+    font-size: .875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.why-visual {
+    position: relative;
+}
+
+.why-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: float 4s ease-in-out infinite;
+}
+
+.why-card__row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.why-card__row:last-of-type { border-bottom: none; }
+.why-card__row:hover { background: var(--surface-muted); }
+
+.why-card__avatar {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.why-card__avatar--moto { background: var(--info-light); color: var(--info); }
+
+.why-card__row strong {
+    display: block;
+    font-size: .95rem;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.why-card__row p {
+    margin: 0;
+    font-size: .8rem;
+    color: var(--text-secondary);
+}
+
+.why-card__check {
+    margin-left: auto;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--success-light);
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+}
+
+.why-card__footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--primary-light), var(--info-light));
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.why-badge {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+}
+
+.why-badge i { color: var(--primary); }
+
+.why-badge--1 { top: -16px; right: -20px; }
+.why-badge--2 { bottom: -16px; left: -20px; }
+
+/* ── CTA Section ─────────────────────────────────────────────────────────── */
+.cta-section {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--info) 100%);
+    padding: 100px 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.cta-section__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.cta-section__orb {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+    top: -200px; right: -100px;
+    filter: blur(40px);
+}
+
+.cta-section__content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.cta-section__content h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: white;
+    margin: 20px 0 16px;
+    line-height: 1.15;
+}
+
+.cta-section__content p {
+    color: rgba(255,255,255,.85);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0 0 40px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .hero__content { grid-template-columns: 1fr; gap: 48px; }
+    .hero__visual  { order: -1; max-width: 340px; margin: 0 auto; }
+    .why-grid { grid-template-columns: 1fr; gap: 48px; }
+    .why-visual { max-width: 400px; margin: 0 auto; }
+}
+
+@media (max-width: 768px) {
+    .section { padding: 64px 0; }
+
+    .hero { padding: 48px 0 64px; }
+
+    .hero__text h1 { font-size: 2rem; }
+
+    .hero-card--float { display: none; }
+
+    .stats-grid { flex-direction: column; gap: 0; }
+    .stat-item  { padding: 16px 24px; width: 100%; }
+    .stat-divider { width: 80%; height: 1px; }
+
+    .steps { flex-direction: column; gap: 32px; }
+    .step__connector { display: none; }
+    .step { padding: 0; }
+
+    .offers-preview {
+        grid-template-columns: 1fr;
+        max-width: 380px;
+        margin: 0 auto;
+    }
+
+    .offer-preview-card--featured { transform: none; }
+    .offer-preview-card--featured:hover { transform: translateY(-6px); }
+
+    .hero__actions { flex-direction: column; }
+    .btn--lg { width: 100%; justify-content: center; }
+}
+</style>
+
+{% endblock %}

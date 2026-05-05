@@ -1,172 +1,680 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block page_title %}Dashboard
-{% endblock %}
+{% block page_title %}Tableau de Bord{% endblock %}
 
 {% block main %}
-	<div
-		class="container-fluid mt-5">
-		<!-- Statistiques Cards -->
-		<div class="row mb-4">
-			<div class="col-md-3">
-				<div class="card shadow-sm border-left-primary">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center">
-							<div>
-								<h6 class="text-muted text-uppercase mb-2">Total Devis</h6>
-								<h2 class="mb-0">{{ total }}</h2>
-							</div>
-							<i class="fas fa-file-pdf fa-3x text-primary opacity-50"></i>
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="admin-dashboard">
 
-			<div class="col-md-3">
-				<div class="card shadow-sm border-left-success">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center">
-							<div>
-								<h6 class="text-muted text-uppercase mb-2">Acceptés</h6>
-								<h2 class="mb-0 text-success">{{ accepted }}</h2>
-							</div>
-							<i class="fas fa-check-circle fa-3x text-success opacity-50"></i>
-						</div>
-					</div>
-				</div>
-			</div>
+    {# ── Hero Header ──────────────────────────────────────────────────────── #}
+    <div class="dash-hero">
+        <div class="dash-hero__content">
+            <span class="hero-badge">
+                <i class="fas fa-shield-alt"></i>
+                Aksam Assurance — Espace Admin
+            </span>
+            <h1>Tableau de Bord</h1>
+            <p>Bienvenue dans votre espace de gestion. Voici un aperçu de l'activité en temps réel.</p>
+        </div>
+        <div class="dash-hero__illustration">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
 
-			<div class="col-md-3">
-				<div class="card shadow-sm border-left-warning">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center">
-							<div>
-								<h6 class="text-muted text-uppercase mb-2">Soumis</h6>
-								<h2 class="mb-0 text-warning">{{ submitted }}</h2>
-							</div>
-							<i class="fas fa-paper-plane fa-3x text-warning opacity-50"></i>
-						</div>
-					</div>
-				</div>
-			</div>
+    {# ── Stats Grid ────────────────────────────────────────────────────────── #}
+    <div class="stats-grid">
+        <div class="stat-card stat-card--primary">
+            <div class="stat-card__icon">
+                <i class="fas fa-file-contract"></i>
+            </div>
+            <div class="stat-card__body">
+                <p class="stat-card__label">Total Devis</p>
+                <h2 class="stat-card__value">{{ total }}</h2>
+            </div>
+            <div class="stat-card__glow"></div>
+        </div>
 
-			<div class="col-md-3">
-				<div class="card shadow-sm border-left-danger">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center">
-							<div>
-								<h6 class="text-muted text-uppercase mb-2">Rejetés</h6>
-								<h2 class="mb-0 text-danger">{{ rejected }}</h2>
-							</div>
-							<i class="fas fa-times-circle fa-3x text-danger opacity-50"></i>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="stat-card stat-card--info">
+            <div class="stat-card__icon">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <div class="stat-card__body">
+                <p class="stat-card__label">Soumis</p>
+                <h2 class="stat-card__value">{{ submitted }}</h2>
+            </div>
+            <div class="stat-card__glow"></div>
+        </div>
 
-		<!-- Derniers Devis -->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card shadow-sm">
-					<div class="card-header bg-primary text-white">
-						<h5 class="mb-0">
-							<i class="fas fa-list mr-2"></i>Derniers Devis
-						</h5>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-hover">
-								<thead class="table-light">
-									<tr>
-										<th>N°</th>
-										<th>Nom</th>
-										<th>Prénom</th>
-										<th>Compagnie</th>
-										<th>Statut</th>
-										<th>Estimation</th>
-										<th>Date</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% if latestQuotes|length > 0 %}
-										{% for quote in latestQuotes %}
-											<tr>
-												<td>
-													<strong>#{{ quote.id }}</strong>
-												</td>
-												<td>{{ quote.lastName }}</td>
-												<td>{{ quote.firstName }}</td>
-												<td>
-													<span class="badge bg-secondary">
-														{{ quote.company.value }}
-													</span>
-												</td>
-												<td>
-													{% set statusClass = {
-                                                'DRAFT': 'secondary',
-                                                'SUBMITTED': 'info',
-                                                'ACCEPTED': 'success',
-                                                'REJECTED': 'danger'
-                                            } %}
-													<span class="badge bg-{{ statusClass[quote.status.value] ?? 'secondary' }}">
-														{{ quote.status.value }}
-													</span>
-												</td>
-												<td>
-													{% if quote.customEstimation %}
-														<strong>{{ quote.customEstimation }}€</strong>
-													{% else %}
-														<span class="text-muted">-</span>
-													{% endif %}
-												</td>
-												<td>
-													<small class="text-muted">
-														{{ quote.createdAt|date('d/m/Y H:i') }}
-													</small>
-												</td>
-												<td>
-													<a href="#" class="btn btn-sm btn-info">
-														<i class="fas fa-eye"></i>
-													</a>
-												</td>
-											</tr>
-										{% endfor %}
-									{% else %}
-										<tr>
-											<td colspan="8" class="text-center text-muted py-4">
-												<i class="fas fa-inbox fa-2x mb-2"></i><br>
-												Aucun devis trouvé
-											</td>
-										</tr>
-									{% endif %}
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="card-footer">
-						<a href="{{ quotesUrl }}" class="btn btn-primary">
-							<i class="fas fa-arrow-right mr-2"></i>Voir tous les devis
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="stat-card stat-card--success">
+            <div class="stat-card__icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-card__body">
+                <p class="stat-card__label">Acceptés</p>
+                <h2 class="stat-card__value">{{ accepted }}</h2>
+            </div>
+            <div class="stat-card__glow"></div>
+        </div>
 
-	<style>
-		.border-left-primary {
-			border-left: 0.25rem solid #007bff !important;
-		}
-		.border-left-success {
-			border-left: 0.25rem solid #28a745 !important;
-		}
-		.border-left-warning {
-			border-left: 0.25rem solid #ffc107 !important;
-		}
-		.border-left-danger {
-			border-left: 0.25rem solid #dc3545 !important;
-		}
-	</style>
+        <div class="stat-card stat-card--danger">
+            <div class="stat-card__icon">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="stat-card__body">
+                <p class="stat-card__label">Rejetés</p>
+                <h2 class="stat-card__value">{{ rejected }}</h2>
+            </div>
+            <div class="stat-card__glow"></div>
+        </div>
+    </div>
+
+    {# ── Taux d'acceptation ────────────────────────────────────────────────── #}
+    {% if total > 0 %}
+    <div class="rate-bar-wrapper">
+        <div class="rate-bar-header">
+            <span class="rate-bar-label">
+                <i class="fas fa-chart-bar"></i>
+                Taux d'acceptation global
+            </span>
+            {% set rate = ((accepted / total) * 100)|round %}
+            <span class="rate-bar-value">{{ rate }}%</span>
+        </div>
+        <div class="rate-bar-track">
+            <div class="rate-bar-fill" style="width: {{ rate }}%"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    {# ── Latest Quotes Table ───────────────────────────────────────────────── #}
+    <div class="table-wrapper">
+        <div class="table-header">
+            <div class="table-header__left">
+                <h2>Derniers Devis</h2>
+                <p class="table-subtitle">Les 5 demandes les plus récentes</p>
+            </div>
+            <a href="{{ quotesUrl }}" class="btn btn-primary">
+                <i class="fas fa-arrow-right"></i>
+                Tous les devis
+            </a>
+        </div>
+
+        <div class="table-container">
+            {% if latestQuotes|length > 0 %}
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Client</th>
+                            <th>Ville</th>
+                            <th>Compagnie</th>
+                            <th>Statut</th>
+                            <th>Estimation</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quote in latestQuotes %}
+                            <tr class="table-row">
+                                <td class="td-id">
+                                    <strong>#{{ quote.id }}</strong>
+                                </td>
+                                <td class="td-client">
+                                    <div class="client-info">
+                                        <div class="client-avatar">
+                                            {{ quote.firstName|slice(0,1)|upper }}{{ quote.lastName|slice(0,1)|upper }}
+                                        </div>
+                                        <div>
+                                            <p class="client-name">{{ quote.firstName }} {{ quote.lastName }}</p>
+                                            <p class="client-phone">{{ quote.phoneNumber }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge-city">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {% if quote.cityEntity %}
+                                            {{ quote.cityEntity.name }}
+                                        {% elseif quote.city %}
+                                            {{ quote.city.value }}
+                                        {% else %}
+                                            <span class="text-muted">—</span>
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge-company">
+                                        {% if quote.companyEntity %}
+                                            {{ quote.companyEntity.name }}
+                                        {% elseif quote.company %}
+                                            {{ quote.company.value }}
+                                        {% else %}
+                                            <span class="text-muted">—</span>
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-badge--{{ quote.status.value|lower }}">
+                                        {% if quote.status.value == 'draft' %}
+                                            <i class="fas fa-pencil-alt"></i>
+                                        {% elseif quote.status.value == 'submitted' %}
+                                            <i class="fas fa-paper-plane"></i>
+                                        {% elseif quote.status.value == 'accepted' %}
+                                            <i class="fas fa-check"></i>
+                                        {% elseif quote.status.value == 'rejected' %}
+                                            <i class="fas fa-times"></i>
+                                        {% elseif quote.status.value == 'confirmed' %}
+                                            <i class="fas fa-thumbs-up"></i>
+                                        {% endif %}
+                                        {{ quote.status.value|replace({'_': ' '})|capitalize }}
+                                    </span>
+                                </td>
+                                <td class="td-price">
+                                    {% if quote.customEstimation %}
+                                        <strong class="price">{{ quote.customEstimation|number_format(2, ',', ' ') }} MAD</strong>
+                                    {% else %}
+                                        <span class="text-muted">En attente</span>
+                                    {% endif %}
+                                </td>
+                                <td class="td-date">
+                                    <time class="date-time">{{ quote.createdAt|date('d/m/Y') }}</time>
+                                    <time class="date-hour">{{ quote.createdAt|date('H:i') }}</time>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state__icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <p class="empty-state__title">Aucun devis pour le moment</p>
+                    <p class="empty-state__subtitle">Les nouvelles demandes apparaîtront ici</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<style>
+    /* ── Design tokens (mirror des pages devis) ───────────────────────────── */
+    :root {
+        --primary:        #0f62fe;
+        --primary-dark:   #0a4bcc;
+        --primary-light:  #e3f2fd;
+        --success:        #12805c;
+        --success-light:  #e8f5e9;
+        --danger:         #c0392b;
+        --danger-light:   #ffebee;
+        --warning:        #f59e0b;
+        --warning-light:  #fffbeb;
+        --info:           #0043ce;
+        --info-light:     #e0e7ff;
+        --bg:             #f4f7fb;
+        --surface:        #ffffff;
+        --surface-muted:  #f8fafc;
+        --text:           #122033;
+        --text-secondary: #607086;
+        --border:         #dbe4ee;
+        --shadow:         0 20px 45px rgba(15,48,87,.08);
+        --shadow-sm:      0 2px 8px rgba(15,48,87,.06);
+        --radius:         12px;
+        --radius-lg:      18px;
+        --transition:     all .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Dashboard wrapper ─────────────────────────────────────────────────── */
+    .admin-dashboard {
+        padding: 8px 0 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    /* ── Hero ──────────────────────────────────────────────────────────────── */
+    .dash-hero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 32px;
+        padding: 36px 40px;
+        background: linear-gradient(135deg,rgba(15,98,254,.05),rgba(0,67,206,.05));
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(15,98,254,.1);
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-size: .85rem;
+        font-weight: 600;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+
+    .dash-hero__content h1 {
+        font-size: clamp(1.8rem,4vw,2.5rem);
+        margin: 0 0 10px;
+        color: var(--text);
+        line-height: 1.2;
+    }
+
+    .dash-hero__content p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    .dash-hero__illustration {
+        font-size: 96px;
+        color: var(--primary);
+        opacity: .08;
+    }
+
+    /* ── Stats Grid ────────────────────────────────────────────────────────── */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+        gap: 20px;
+    }
+
+    .stat-card {
+        position: relative;
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        padding: 28px 24px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+    }
+
+    .stat-card__icon {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        transition: var(--transition);
+    }
+
+    .stat-card:hover .stat-card__icon {
+        transform: scale(1.08);
+    }
+
+    .stat-card--primary .stat-card__icon { background:rgba(15,98,254,.12); color:var(--primary); }
+    .stat-card--info    .stat-card__icon { background:rgba(0,67,206,.12);  color:var(--info);    }
+    .stat-card--success .stat-card__icon { background:rgba(18,128,92,.12); color:var(--success); }
+    .stat-card--danger  .stat-card__icon { background:rgba(192,57,43,.12); color:var(--danger);  }
+
+    .stat-card__glow {
+        position: absolute;
+        top: -40px; right: -40px;
+        width: 120px; height: 120px;
+        border-radius: 50%;
+        opacity: .04;
+        pointer-events: none;
+    }
+
+    .stat-card--primary .stat-card__glow { background:var(--primary); }
+    .stat-card--info    .stat-card__glow { background:var(--info);    }
+    .stat-card--success .stat-card__glow { background:var(--success); }
+    .stat-card--danger  .stat-card__glow { background:var(--danger);  }
+
+    .stat-card__label {
+        margin: 0 0 6px;
+        font-size: .8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: .6px;
+    }
+
+    .stat-card__value {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1;
+    }
+
+    /* ── Rate Bar ──────────────────────────────────────────────────────────── */
+    .rate-bar-wrapper {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 20px 24px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .rate-bar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .rate-bar-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: .9rem;
+        color: var(--text);
+    }
+
+    .rate-bar-label i { color: var(--primary); }
+
+    .rate-bar-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--success);
+    }
+
+    .rate-bar-track {
+        height: 10px;
+        background: var(--surface-muted);
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
+
+    .rate-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg,var(--success),#16a34a);
+        border-radius: 999px;
+        transition: width .8s cubic-bezier(.4,0,.2,1);
+        min-width: 4px;
+    }
+
+    /* ── Table Wrapper ─────────────────────────────────────────────────────── */
+    .table-wrapper {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(135deg,var(--surface-muted),var(--surface));
+    }
+
+    .table-header h2 {
+        margin: 0 0 4px;
+        font-size: 1.2rem;
+        color: var(--text);
+    }
+
+    .table-subtitle {
+        margin: 0;
+        font-size: .85rem;
+        color: var(--text-secondary);
+    }
+
+    .table-container { overflow-x: auto; }
+
+    /* ── Table ─────────────────────────────────────────────────────────────── */
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .modern-table thead {
+        background: var(--bg);
+        border-bottom: 2px solid var(--border);
+    }
+
+    .modern-table th {
+        padding: 14px 20px;
+        text-align: left;
+        font-size: .8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: .6px;
+        white-space: nowrap;
+    }
+
+    .modern-table tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: var(--transition);
+    }
+
+    .modern-table tbody tr:last-child { border-bottom: none; }
+
+    .modern-table tbody tr:hover { background: var(--surface-muted); }
+
+    .modern-table td {
+        padding: 16px 20px;
+        color: var(--text);
+        vertical-align: middle;
+    }
+
+    .td-id { font-weight: 700; color: var(--primary); }
+
+    /* ── Client Info ───────────────────────────────────────────────────────── */
+    .client-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .client-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg,var(--primary),var(--info));
+        color: white;
+        font-weight: 700;
+        font-size: .8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .client-name {
+        margin: 0;
+        font-weight: 600;
+        font-size: .95rem;
+        color: var(--text);
+    }
+
+    .client-phone {
+        margin: 3px 0 0;
+        font-size: .82rem;
+        color: var(--text-secondary);
+    }
+
+    /* ── Badges ────────────────────────────────────────────────────────────── */
+    .badge-company,
+    .badge-city {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: .82rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .badge-company {
+        background: rgba(15,98,254,.1);
+        color: var(--primary);
+    }
+
+    .badge-city {
+        background: var(--surface-muted);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+    }
+
+    .badge-city i { font-size: .75rem; color:var(--primary); }
+
+    /* ── Status Badges ─────────────────────────────────────────────────────── */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: .82rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-badge i { font-size: .75rem; }
+
+    .status-badge--draft     { background:var(--surface-muted); color:var(--text-secondary); border:1px solid var(--border); }
+    .status-badge--submitted { background:var(--info-light);    color:var(--info);    }
+    .status-badge--accepted  { background:var(--success-light); color:var(--success); }
+    .status-badge--rejected  { background:var(--danger-light);  color:var(--danger);  }
+    .status-badge--confirmed { background:var(--primary-light); color:var(--primary); }
+
+    /* ── Price & Date ──────────────────────────────────────────────────────── */
+    .price {
+        color: var(--success);
+        font-size: .95rem;
+        font-weight: 700;
+    }
+
+    .td-date {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .date-time {
+        font-size: .875rem;
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .date-hour {
+        font-size: .78rem;
+        color: var(--text-secondary);
+    }
+
+    /* ── Buttons ───────────────────────────────────────────────────────────── */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: .9rem;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg,var(--primary),var(--info));
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(15,98,254,.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* ── Empty State ───────────────────────────────────────────────────────── */
+    .empty-state {
+        text-align: center;
+        padding: 64px 24px;
+    }
+
+    .empty-state__icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: var(--surface-muted);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: var(--text-secondary);
+        opacity: .5;
+        margin: 0 auto 20px;
+    }
+
+    .empty-state__title {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .empty-state__subtitle {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: .9rem;
+    }
+
+    .text-muted { color: var(--text-secondary); }
+
+    /* ── Responsive ────────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+        .dash-hero {
+            grid-template-columns: 1fr;
+            padding: 28px 24px;
+        }
+        .dash-hero__illustration { display: none; }
+    }
+
+    @media (max-width: 768px) {
+        .admin-dashboard { gap: 20px; }
+
+        .stats-grid {
+            grid-template-columns: repeat(2,1fr);
+            gap: 12px;
+        }
+
+        .stat-card { padding: 20px 16px; flex-direction: column; text-align: center; gap: 12px; }
+        .stat-card__value { font-size: 1.8rem; }
+
+        .table-header { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px 20px; }
+
+        .modern-table th,
+        .modern-table td { padding: 12px 12px; font-size: .8rem; }
+
+        .client-phone { display: none; }
+        .td-date { flex-direction: row; gap: 4px; align-items: center; }
+        .date-hour::before { content: "•"; margin-right: 4px; }
+    }
+
+    @media (max-width: 480px) {
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .badge-city { display: none; }
+    }
+</style>
 {% endblock %}

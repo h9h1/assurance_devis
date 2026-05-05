@@ -1,86 +1,458 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Devis #{{ quote.id }}
-	|
-	{{ app_name }}
+	| Aksam Assurance
 {% endblock %}
 
 {% block body %}
-	<section class="page-header">
-		<h1>Fiche récapitulative du devis #{{ quote.id }}</h1>
-		<p>Votre demande a bien été enregistrée.</p>
-	</section>
-
-	<div class="summary-grid">
-		<article class="summary-block">
-			<h2>Informations personnelles</h2>
-			<dl>
-				<dt>Nom</dt>
-				<dd>{{ quote.lastName }}</dd>
-				<dt>Prénom</dt>
-				<dd>{{ quote.firstName }}</dd>
-				<dt>Ville</dt>
-				<dd>{{ quote.city }}</dd>
-				<dt>Téléphone</dt>
-				<dd>{{ quote.phoneNumber }}</dd>
-			</dl>
-		</article>
-
-		<article class="summary-block">
-			<h2>Informations conducteur</h2>
-			<dl>
-				<dt>Date de naissance</dt>
-				<dd>{{ quote.birthDate }}</dd>
-				<dt>Date du permis</dt>
-				<dd>{{ quote.licenseDate }}</dd>
-			</dl>
-		</article>
-
-		<article class="summary-block">
-			<h2>Assurance</h2>
-			<dl>
-				<dt>Type</dt>
-				<dd>{{ quote.insuranceType|upper }}</dd>
-				<dt>Statut</dt>
-				<dd>{{ quote.status }}</dd>
-			</dl>
-		</article>
-
-		<article class="summary-block">
-			<h2>Informations véhicule</h2>
-			<dl>
-				<dt>Marque</dt>
-				<dd>{{ quote.vehicleBrand }}</dd>
-				<dt>Carburant</dt>
-				<dd>{{ quote.fuelType }}</dd>
-				<dt>Mise en circulation</dt>
-				<dd>{{ quote.firstRegistrationDate }}</dd>
-				<dt>Places</dt>
-				<dd>{{ quote.seatCount }}</dd>
-				<dt>Valeur à neuf</dt>
-				<dd>{{ quote.newValue }}
-					MAD</dd>
-				<dt>Valeur vénale</dt>
-				<dd>{{ quote.marketValue }}
-					MAD</dd>
-				<dt>Immatriculation</dt>
-				<dd>{{ quote.registrationNumber }}</dd>
-				{% if quote.fiscalPower %}
-					<dt>Puissance fiscale</dt>
-					<dd>{{ quote.fiscalPower }}</dd>
-				{% endif %}
-				{% if quote.engineCapacity %}
-					<dt>Cylindrée</dt>
-					<dd>{{ quote.engineCapacity }}</dd>
-				{% endif %}
-			</dl>
-		</article>
+	<!-- Success Header -->
+	<div class="success-header">
+		<div class="success-icon">
+			<i class="fas fa-check-circle"></i>
+		</div>
+		<h1>Devis enregistré avec succès</h1>
+		<p>Votre demande de devis #{{ quote.id }}
+			a été bien reçue</p>
 	</div>
 
-	<div class="actions-row">
-		<a class="btn btn--secondary" href="{{ path('quote_new') }}">Créer un autre devis</a>
+	<!-- Summary Grid -->
+	<div
+		class="summary-grid">
+		<!-- Personal Information -->
+		<div class="summary-section">
+			<div class="section-header">
+				<i class="fas fa-user"></i>
+				<h2>Informations personnelles</h2>
+			</div>
+			<div class="section-body">
+				<div class="info-row">
+					<span class="label">Nom</span>
+					<span class="value">{{ quote.lastName }}</span>
+				</div>
+				<div class="info-row">
+					<span class="label">Prénom</span>
+					<span class="value">{{ quote.firstName }}</span>
+				</div>
+				<div class="info-row">
+					<span class="label">Ville</span>
+					<span class="value">{{ quote.city }}</span>
+				</div>
+				<div class="info-row">
+					<span class="label">Téléphone</span>
+					<span class="value">
+						<a href="tel:{{ quote.phoneNumber }}">{{ quote.phoneNumber }}</a>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Driver Information -->
+		<div class="summary-section">
+			<div class="section-header">
+				<i class="fas fa-id-card"></i>
+				<h2>Informations du conducteur</h2>
+			</div>
+			<div class="section-body">
+				<div class="info-row">
+					<span class="label">Date de naissance</span>
+					<span class="value">{{ quote.birthDate|date('d/m/Y') }}</span>
+				</div>
+				<div class="info-row">
+					<span class="label">Date du permis</span>
+					<span class="value">{{ quote.licenseDate|date('d/m/Y') }}</span>
+				</div>
+				<div class="info-row">
+					<span class="label">Expérience</span>
+					<span class="value">
+						{% set years = (("now"|date('U') - (quote.licenseDate|date('U'))) / 31557600) | round %}
+						{{ years }}
+						an(s)
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Insurance Information -->
+		<div class="summary-section">
+			<div class="section-header">
+				<i class="fas fa-shield-alt"></i>
+				<h2>Type d'assurance</h2>
+			</div>
+			<div class="section-body">
+				<div class="info-row">
+					<span class="label">Type</span>
+					<span class="value badge-type">
+						{% if quote.insuranceType == 'auto' %}
+							<i class="fas fa-car"></i>
+							Assurance Auto
+						{% else %}
+							<i class="fas fa-motorcycle"></i>
+							Assurance Moto
+						{% endif %}
+					</span>
+				</div>
+				<div class="info-row">
+					<span class="label">Statut</span>
+					<span class="status-badge status-badge--{{ quote.status|lower }}">
+						{{ quote.status}}
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Vehicle Information -->
+		<div class="summary-section section-full">
+			<div class="section-header">
+				<i class="fas fa-car-alt"></i>
+				<h2>Informations du véhicule</h2>
+			</div>
+			<div class="section-body">
+				<div class="vehicle-grid">
+					<div class="info-row">
+						<span class="label">Marque</span>
+						<span class="value">{{ quote.vehicleBrand }}</span>
+					</div>
+					<div class="info-row">
+						<span class="label">Carburant</span>
+						<span class="value">{{ quote.fuelType|capitalize }}</span>
+					</div>
+					<div class="info-row">
+						<span class="label">Mise en circulation</span>
+						<span class="value">{{ quote.firstRegistrationDate|date('d/m/Y') }}</span>
+					</div>
+					<div class="info-row">
+						<span class="label">Nombre de places</span>
+						<span class="value">{{ quote.seatCount }}</span>
+					</div>
+					<div class="info-row">
+						<span class="label">Valeur à neuf</span>
+						<span class="value">{{ quote.newValue }}
+							MAD</span>
+					</div>
+					<div class="info-row">
+						<span class="label">Valeur vénale</span>
+						<span class="value">{{ quote.marketValue }}
+							MAD</span>
+					</div>
+					<div class="info-row">
+						<span class="label">Immatriculation</span>
+						<span class="value font-mono">{{ quote.registrationNumber }}</span>
+					</div>
+					{% if quote.insuranceType == 'auto' %}
+						<div class="info-row">
+							<span class="label">Puissance fiscale</span>
+							<span class="value">{{ quote.fiscalPower ?? '-' }}</span>
+						</div>
+					{% endif %}
+					{% if quote.insuranceType == 'moto' %}
+						<div class="info-row">
+							<span class="label">Cylindrée</span>
+							<span class="value">{{ quote.engineCapacity ?? '-' }}
+								cc</span>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
 	</div>
-	<a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
-		Confirmer et voir les offres
-	</a>
+
+	<!-- Actions -->
+	<div class="actions-container">
+		<a href="{{ path('quote_new') }}" class="btn btn-secondary">
+			<i class="fas fa-plus-circle"></i>
+			Créer un autre devis
+		</a>
+		<a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
+			<i class="fas fa-arrow-right"></i>
+			Voir les offres disponibles
+		</a>
+	</div>
+
+	<style>
+		/* Success Header */
+		.success-header {
+			text-align: center;
+			padding: 48px 24px;
+			margin-bottom: 48px;
+			background: linear-gradient(135deg, var(--success-light), rgba(18, 128, 92, 0.05));
+			border-radius: var(--radius-lg);
+			border: 2px solid var(--success);
+		}
+
+		.success-icon {
+			font-size: 4rem;
+			color: var(--success);
+			margin-bottom: 16px;
+			animation: bounceIn 0.6s ease;
+		}
+
+		@keyframes bounceIn {
+			0% {
+				transform: scale(0);
+				opacity: 0;
+			}
+			50% {
+				transform: scale(1.05);
+			}
+			100% {
+				transform: scale(1);
+				opacity: 1;
+			}
+		}
+
+		.success-header h1 {
+			font-size: 2rem;
+			margin: 0 0 8px;
+			color: var(--success);
+		}
+
+		.success-header p {
+			margin: 0;
+			color: var(--text-secondary);
+			font-size: 1.1rem;
+		}
+
+		/* Summary Grid */
+		.summary-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 24px;
+			margin-bottom: 48px;
+		}
+
+		.section-full {
+			grid-column: 1 / -1;
+		}
+
+		.summary-section {
+			background: var(--surface);
+			border-radius: var(--radius);
+			border: 1px solid var(--border);
+			overflow: hidden;
+			transition: var(--transition);
+			box-shadow: var(--shadow-sm);
+		}
+
+		.summary-section:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow);
+			border-color: var(--primary);
+		}
+
+		.section-header {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 20px 24px;
+			background: linear-gradient(135deg, var(--primary-light), var(--info-light));
+			border-bottom: 1px solid var(--border);
+		}
+
+		.section-header i {
+			font-size: 1.5rem;
+			color: var(--primary);
+		}
+
+		.section-header h2 {
+			margin: 0;
+			font-size: 1.1rem;
+			color: var(--text);
+		}
+
+		.section-body {
+			padding: 24px;
+		}
+
+		.info-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 12px 0;
+			border-bottom: 1px solid var(--surface-muted);
+		}
+
+		.info-row:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		.info-row:first-child {
+			padding-top: 0;
+		}
+
+		.label {
+			font-weight: 600;
+			color: var(--text-secondary);
+			font-size: 0.9rem;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.value {
+			font-weight: 500;
+			color: var(--text);
+			text-align: right;
+		}
+
+		.value a {
+			color: var(--primary);
+			text-decoration: none;
+			transition: var(--transition);
+		}
+
+		.value a:hover {
+			color: var(--primary-dark);
+		}
+
+		.font-mono {
+			font-family: 'Courier New', monospace;
+			letter-spacing: 1px;
+			font-weight: 700;
+		}
+
+		.badge-type {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			background: var(--primary-light);
+			color: var(--primary);
+			padding: 6px 12px;
+			border-radius: 6px;
+			font-weight: 600;
+			font-size: 0.85rem;
+		}
+
+		.status-badge {
+			display: inline-block;
+			padding: 6px 12px;
+			border-radius: 6px;
+			font-size: 0.85rem;
+			font-weight: 600;
+			text-transform: capitalize;
+		}
+
+		.status-badge--confirmed {
+			background: var(--primary-light);
+			color: var(--primary);
+		}
+
+		.status-badge--submitted {
+			background: var(--info-light);
+			color: var(--info);
+		}
+
+		.status-badge--accepted {
+			background: var(--success-light);
+			color: var(--success);
+		}
+
+		.status-badge--rejected {
+			background: var(--danger-light);
+			color: var(--danger);
+		}
+
+		/* Vehicle Grid */
+		.vehicle-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 16px;
+		}
+
+		.vehicle-grid .info-row {
+			border: none;
+			padding: 12px;
+			background: var(--surface-muted);
+			border-radius: 8px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 4px;
+		}
+
+		/* Actions */
+		.actions-container {
+			display: flex;
+			gap: 16px;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			padding: 12px 24px;
+			border: none;
+			border-radius: var(--radius);
+			font-weight: 600;
+			cursor: pointer;
+			transition: var(--transition);
+			font-size: 1rem;
+			text-decoration: none;
+		}
+
+		.btn-primary {
+			background: linear-gradient(135deg, var(--primary), var(--info));
+			color: white;
+		}
+
+		.btn-primary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 16px rgba(15, 98, 254, 0.3);
+		}
+
+		.btn-secondary {
+			background: var(--surface-muted);
+			color: var(--text);
+			border: 1px solid var(--border);
+		}
+
+		.btn-secondary:hover {
+			background: var(--border);
+			border-color: var(--text-secondary);
+			transform: translateY(-2px);
+		}
+
+		/* Responsive */
+		@media(max-width: 768px) {
+			.summary-grid {
+				grid-template-columns: 1fr;
+				gap: 16px;
+			}
+
+			.success-header {
+				padding: 32px 16px;
+			}
+
+			.success-header h1 {
+				font-size: 1.5rem;
+			}
+
+			.success-icon {
+				font-size: 3rem;
+			}
+
+			.info-row {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 6px;
+			}
+
+			.value {
+				text-align: left;
+			}
+
+			.vehicle-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.actions-container {
+				flex-direction: column;
+			}
+
+			.btn {
+				width: 100%;
+			}
+		}
+	</style>
 {% endblock %}

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
-use App\Enum\City;
 use App\Enum\FuelType;
 use App\Enum\InsuranceType;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,8 +20,9 @@ class QuoteRequest
     public ?string $firstName = null;
 
     #[Assert\NotBlank(message: 'La ville est obligatoire.')]
-    #[Assert\Choice(callback: [City::class, 'values'], message: 'Ville invalide.')]
     public ?string $city = null;
+
+    public ?string $company = null;
 
     #[Assert\NotBlank(message: 'Le téléphone est obligatoire.')]
     #[Assert\Regex(pattern: '/^(\+212|0)[5-7][0-9]{8}$/', message: 'Format de téléphone invalide.')]
@@ -139,7 +139,8 @@ class QuoteRequest
         $dto = new self();
         $dto->lastName = self::stringOrNull($data['lastName'] ?? null);
         $dto->firstName = self::stringOrNull($data['firstName'] ?? null);
-        $dto->city = self::stringOrNull($data['city'] ?? null);
+        $dto->city    = self::stringOrNull($data['city'] ?? null);
+        $dto->company = self::stringOrNull($data['company'] ?? null);
         $dto->phoneNumber = self::stringOrNull($data['phoneNumber'] ?? null);
         $dto->birthDate = self::stringOrNull($data['birthDate'] ?? null);
         $dto->licenseDate = self::stringOrNull($data['licenseDate'] ?? null);

@@ -4,36 +4,371 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
-			{% block title %}Aksam assurance
+			{% block title %}Aksam Assurance - Devis en ligne
 			{% endblock %}
 		</title>
-		<link rel="stylesheet" href="{{ asset('assets/css/app.css') }}"> {% block stylesheets %}{% endblock %}
-        <link rel="icon" href="{{ asset('styles/favicon.png') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link rel="icon" href="{{ asset('assets/favicon.png') }}"> {% block stylesheets %}{% endblock %}
 		</head>
 		<body>
-			<header class="topbar">
-				<div class="container topbar__inner">
-					<a href="{{ path('homepage') }}" class="brand">
-						<img src="{{ asset('styles/logo.png') }}" alt="Aksam assurance">
+			<!-- Header/Navigation -->
+			<header class="main-header">
+				<div class="header-container">
+					<a href="{{ path('homepage') }}" class="logo">
+						<img src="{{ asset('assets/logo.png') }}" alt="Aksam Assurance">
 					</a>
-					<nav>
-						<a href="{{ path('quote_new') }}">Nouveau devis</a>
-
+					<nav class="main-nav">
+						<a href="{{ path('quote_new') }}" class="nav-link">
+							<i class="fas fa-plus-circle"></i>
+							Nouveau devis
+						</a>
 					</nav>
 				</div>
 			</header>
 
-			<main class="container page-content">
-				{% for label, messages in app.flashes %}
-					{% for message in messages %}
-						<div class="alert alert--{{ label }}">{{ message }}</div>
-					{% endfor %}
-				{% endfor %}
+			<!-- Main Content -->
+			<main
+				class="main-content">
+				<!-- Flash Messages -->
+				{% if app.flashes %}
+					<div class="flash-container">
+						{% for label, messages in app.flashes %}
+							{% for message in messages %}
+								<div class="alert alert--{{ label }}">
+									<i class="fas fa-check-circle"></i>
+									<span>{{ message }}</span>
+									<button class="alert-close" onclick="this.parentElement.style.display='none';">&times;</button>
+								</div>
+							{% endfor %}
+						{% endfor %}
+					</div>
+				{% endif %}
 
-				{% block body %}{% endblock %}
-			</main>
+				<!-- Page Content -->
+				<div class="page-container"> {% block body %}{% endblock %}
+					</div>
+				</main>
 
-			<script src="{{ asset('assets/js/quote-wizard.js') }}"></script>
-			{% block javascripts %}{% endblock %}
+				<!-- Footer -->
+				<footer class="main-footer">
+					<div class="footer-content">
+						<div class="footer-section">
+							<h3>À propos</h3>
+							<p>Aksam Assurance vous offre des devis d'assurance rapides et transparents pour votre véhicule.</p>
+						</div>
+						<div class="footer-section">
+							<h3>Liens rapides</h3>
+							<ul>
+								<li><ahref="{{ path('quote_new') }}">Demander un devis</a></li>
+								<li><a href="#">À propos</a></li>
+								<li><a href="#">Contact</a></li>
+							</ul>
+						</div>
+						<div class="footer-section">
+							<h3>Contact</h3>
+							<p>Email: contact@aksam-assurances.fr</p>
+							<p>Téléphone: 0182834800 </p>
+						</div>
+					</div>
+					<div class="footer-bottom">
+						<p>&copy; 2026 Aksam Assurance. Tous droits réservés.</p>
+					</div>
+				</footer>
+
+				<!-- Scripts -->
+				<script src="{{ asset('assets/js/quote-wizard.js') }}"></script>
+				{% block javascripts %}{% endblock %}
+				{% block importmap %}{{ importmap('app') }}{% endblock %}
+
+				<!-- Global Styles -->
+				<style>:root
+				{
+					--primary: #0f62fe;
+					--primary-dark: #0a4bcc;
+					--primary-light: #e3f2fd;
+					--success: #12805c;
+					--success-light: #e8f5e9;
+					--danger: #c0392b;
+					--danger-light: #ffebee;
+					--warning: #f59e0b;
+					--warning-light: #fffbeb;
+					--info: #0043ce;
+					--info-light: #e0e7ff;
+					--bg: #f4f7fb;
+					--surface: #ffffff;
+					--surface-muted: #f8fafc;
+					--text: #122033;
+					--text-secondary: #607086;
+					--border: #dbe4ee;
+					--shadow: 0 20px 45px rgba(15, 48, 87, 0.08);
+					--shadow-sm: 0 2px 8px rgba(15, 48, 87, 0.06);
+					--shadow-lg: 0 25px 50px rgba(15, 48, 87, 0.12);
+					--radius: 12px;
+					--radius-lg: 18px;
+					--transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				}
+
+				* {
+					margin: 0;
+					padding: 0;
+					box-sizing: border-box;
+				}
+
+				html,
+				body {
+					height: 100%;
+				}
+
+				body {
+					font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+					background: linear-gradient(180deg, #eef4fb 0%, var(--bg) 100%);
+					color: var(--text);
+					line-height: 1.6;
+					display: flex;
+					flex-direction: column;
+				}
+
+				/* Header */
+				.main-header {
+					position: sticky;
+					top: 0;
+					z-index: 100;
+					background: rgba(255, 255, 255, 0.95);
+					backdrop-filter: blur(12px);
+					border-bottom: 1px solid rgba(219, 228, 238, 0.5);
+					box-shadow: var(--shadow-sm);
+				}
+
+				.header-container {
+					max-width: 1200px;
+					margin: 0 auto;
+					padding: 16px 24px;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					gap: 32px;
+				}
+
+				.logo {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+					text-decoration: none;
+					font-weight: 700;
+					font-size: 1.25rem;
+					color: var(--primary);
+					transition: var(--transition);
+				}
+
+				.logo:hover {
+					color: var(--primary-dark);
+				}
+
+				.logo img {
+					height: 40px;
+					width: auto;
+				}
+
+				.logo span {
+					background: linear-gradient(135deg, var(--primary), var(--info));
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+					background-clip: text;
+				}
+
+				.main-nav {
+					display: flex;
+					align-items: center;
+					gap: 24px;
+				}
+
+				.nav-link {
+					display: inline-flex;
+					align-items: center;
+					gap: 8px;
+					padding: 10px 20px;
+					background: linear-gradient(135deg, var(--primary), var(--info));
+					color: white;
+					border-radius: 8px;
+					font-weight: 600;
+					text-decoration: none;
+					transition: var(--transition);
+					font-size: 0.95rem;
+				}
+
+				.nav-link:hover {
+					transform: translateY(-2px);
+					box-shadow: 0 8px 16px rgba(15, 98, 254, 0.3);
+				}
+
+				/* Main Content */
+				.main-content {
+					flex: 1;
+					padding: 32px 24px;
+				}
+
+				.page-container {
+					max-width: 1200px;
+					margin: 0 auto;
+					width: 100%;
+				}
+
+				/* Flash Messages */
+				.flash-container {
+					margin-bottom: 24px;
+					display: flex;
+					flex-direction: column;
+					gap: 12px;
+				}
+
+				.alert {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+					padding: 16px 20px;
+					border-radius: var(--radius);
+					font-weight: 500;
+					animation: slideIn 0.3s ease;
+				}
+
+				@keyframes slideIn {
+					from {
+						opacity: 0;
+						transform: translateX(-20px);
+					}
+					to {
+						opacity: 1;
+						transform: translateX(0);
+					}
+				}
+
+				.alert--success {
+					background: var(--success-light);
+					color: var(--success);
+					border: 1px solid rgba(18, 128, 92, 0.2);
+				}
+
+				.alert--danger {
+					background: var(--danger-light);
+					color: var(--danger);
+					border: 1px solid rgba(192, 57, 43, 0.2);
+				}
+
+				.alert--warning {
+					background: var(--warning-light);
+					color: var(--warning);
+					border: 1px solid rgba(245, 158, 11, 0.2);
+				}
+
+				.alert--info {
+					background: var(--info-light);
+					color: var(--info);
+					border: 1px solid rgba(0, 67, 206, 0.2);
+				}
+
+				.alert-close {
+					background: none;
+					border: none;
+					font-size: 1.5rem;
+					cursor: pointer;
+					color: inherit;
+					opacity: 0.7;
+					transition: var(--transition);
+					margin-left: auto;
+					padding: 0;
+				}
+
+				.alert-close:hover {
+					opacity: 1;
+				}
+
+				/* Footer */
+				.main-footer {
+					background: var(--text);
+					color: white;
+					padding: 48px 24px 24px;
+					margin-top: 64px;
+				}
+
+				.footer-content {
+					max-width: 1200px;
+					margin: 0 auto 32px;
+					display: grid;
+					grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+					gap: 32px;
+				}
+
+				.footer-section h3 {
+					font-size: 1.1rem;
+					margin-bottom: 12px;
+				}
+
+				.footer-section p {
+					color: rgba(255, 255, 255, 0.8);
+					font-size: 0.95rem;
+					margin-bottom: 8px;
+				}
+
+				.footer-section ul {
+					list-style: none;
+				}
+
+				.footer-section ul li {
+					margin-bottom: 8px;
+				}
+
+				.footer-section a {
+					color: rgba(255, 255, 255, 0.8);
+					text-decoration: none;
+					transition: var(--transition);
+				}
+
+				.footer-section a:hover {
+					color: var(--primary-light);
+				}
+
+				.footer-bottom {
+					text-align: center;
+					padding-top: 24px;
+					border-top: 1px solid rgba(255, 255, 255, 0.1);
+					color: rgba(255, 255, 255, 0.6);
+					font-size: 0.9rem;
+				}
+
+				/* Responsive */
+				@media(max-width: 768px) {
+					.header-container {
+						padding: 12px 16px;
+						gap: 16px;
+					}
+
+					.logo {
+						font-size: 1.1rem;
+					}
+
+					.logo img {
+						height: 32px;
+					}
+
+					.main-nav {
+						gap: 12px;
+					}
+
+					.nav-link {
+						padding: 8px 16px;
+						font-size: 0.85rem;
+					}
+
+					.main-content {
+						padding: 16px 12px;
+					}
+
+					.footer-content {
+						grid-template-columns: 1fr;
+						gap: 24px;
+					}
+				}
+			</style>
 		</body>
 	</html>

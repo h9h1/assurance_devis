@@ -3,43 +3,68 @@
 
 namespace App\Service;
 
+use App\Entity\Company;
 use App\Entity\Quote;
-use App\Enum\Company;
+use App\Repository\OfferRepository;
+use App\Repository\CompanyOfferVariationRepository;
 
 class QuoteEstimatorService
 {
+    public function __construct(
+        private readonly OfferRepository                 $offerRepository,
+        private readonly CompanyOfferVariationRepository $variationRepository,
+    ) {}
+
     public function getOffers(Quote $quote): array
     {
-        $basePrice = $this->calculateBasePrice($quote);
-
-        return [
-            [
-                'code' => 'tiers',
-                'title' => 'Offre Tiers',
-                'description' => 'Protection de base avec responsabilité civile.',
-                'annual_price' => $basePrice,
-                'monthly_price' => round($basePrice / 12, 2),
-            ],
-            [
-                'code' => 'intermediaire',
-                'title' => 'Offre Intermédiaire',
-                'description' => 'Protection élargie avec garanties complémentaires.',
-                'annual_price' => $basePrice + 1200,
-                'monthly_price' => round(($basePrice + 1200) / 12, 2),
-            ],
-            [
-                'code' => 'tous_risques',
-                'title' => 'Offre Tous Risques',
-                'description' => 'Couverture complète pour le véhicule et le conducteur.',
-                'annual_price' => $basePrice + 2500,
-                'monthly_price' => round(($basePrice + 2500) / 12, 2),
-            ],
-        ];
+        return $this->buildOffers($this->offerRepository->findAllActive(), $this->calculateAdjustment($quote));
     }
 
-    private function calculateBasePrice(Quote $quote): float
+    public function getOffersByCompany(Quote $quote, Company $company): array
     {
-        $price = 2500;
+        $baseAdjustment = $this->calculateAdjustment($quote);
+        $dbOffers       = $this->offerRepository->findAllActive();
+        $variations     = $this->variationRepository->findActiveByCompanyIndexedByOffer($company);
+
+        $offers = [];
+        foreach ($dbOffers as $offer) {
+            $annualPrice = max(0.0, (float) $offer->getAnnualPrice() + $baseAdjustment);
+
+            if (isset($variations[$offer->getId()])) {
+                $annualPrice = $variations[$offer->getId()]->applyTo($annualPrice);
+            }
+
+            $annualPrice  = round($annualPrice, 2);
+            $offers[] = [
+                'code'          => $offer->getCode(),
+                'title'         => $offer->getTitle(),
+                'description'   => $offer->getDescription(),
+                'annual_price'  => $annualPrice,
+                'monthly_price' => round($annualPrice / 12, 2),
+            ];
+        }
+        return $offers;
+    }
+
+    private function buildOffers(array $dbOffers, int $adjustment): array
+    {
+        $offers = [];
+        foreach ($dbOffers as $offer) {
+            $annualPrice = max(0, (float) $offer->getAnnualPrice() + $adjustment);
+            $offers[] = [
+                'code'          => $offer->getCode(),
+                'title'         => $offer->getTitle(),
+                'description'   => $offer->getDescription(),
+                'annual_price'  => round($annualPrice, 2),
+                'monthly_price' => round($annualPrice / 12, 2),
+            ];
+        }
+        return $offers;
+    }
+
+    private function calculateAdjustment(Quote $quote): int
+    {
+        $adjustment = 0;
 
         $birthDate = $quote->getBirthDate();
         $licenseDate = $quote->getLicenseDate();
@@ -49,51 +74,41 @@ class QuoteEstimatorService
         $licenseYears = $licenseDate ? $licenseDate->diff($today)->y : 5;
 
         if ($age < 25) {
-            $price += 1200;
+            $adjustment += 1200;
         }
 
         if ($licenseYears < 2) {
-            $price += 900;
+            $adjustment += 900;
         }
 
         if ($quote->getInsuranceType()?->value === 'auto') {
-            $price += 800;
+            $adjustment += 800;
 
             if ($quote->getFiscalPower() !== null && $quote->getFiscalPower() > 8) {
-                $price += 700;
+                $adjustment += 700;
             }
         }
 
         if ($quote->getInsuranceType()?->value === 'moto') {
-            $price += 500;
+            $adjustment += 500;
 
             if ($quote->getEngineCapacity() !== null && $quote->getEngineCapacity() > 600) {
-                $price += 900;
+                $adjustment += 900;
             }
         }
 
         if ($quote->getNewValue() !== null && $quote->getNewValue() > 200000) {
-            $price += 1000;
+            $adjustment += 1000;
         }
 
         if ($quote->getMarketValue() !== null && $quote->getMarketValue() > 100000) {
-            $price += 600;
+            $adjustment += 600;
         }
         
-    $price += $this->companyPriceAdjustment($quote->getCompany());
-    return $price;
-}
-
-private function companyPriceAdjustment(Company $company): int
-    {
-        return match ($company) {
-            Company::Axa_Assurance => 500,
-            Company::Wafa_Assurance => 0,
-            Company::RMA => -300,
-            default => 0,
-        };
+    return $adjustment;
     }
-}
+    }
+
 
 
 

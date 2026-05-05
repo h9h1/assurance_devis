@@ -2,11 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Quote;
 use App\Enum\QuoteStatus;
 use App\Repository\QuoteRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\LocaleDto;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -36,26 +36,48 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Assur Quote - Admin Dashboard')
-            ->setFaviconPath('favicon.ico');
+            ->setTitle('Assurance Aksam')
+            ->setFaviconPath('favicon.png')
+            ->disableDarkMode();
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
+        yield MenuItem::section('Gestion des devis');
+
         $quotesUrl = $this->adminUrlGenerator
             ->setController(QuoteCrudController::class)
             ->generateUrl();
+        yield MenuItem::linkToUrl('Devis', 'fa fa-file-pdf', $quotesUrl);
 
-        yield MenuItem::linkToUrl('Devis', 'fa fa-file-pdf', $quotesUrl)
-            ->setBadge($this->quoteRepository->count([]) ?? 0);
+        yield MenuItem::section('Configuration');
+
+        $companiesUrl = $this->adminUrlGenerator
+            ->setController(CompanyCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Compagnies', 'fa fa-building', $companiesUrl);
+
+        $citiesUrl = $this->adminUrlGenerator
+            ->setController(CityCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Villes', 'fa fa-map-marker', $citiesUrl);
+
+        $offersUrl = $this->adminUrlGenerator
+            ->setController(OfferCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Offres', 'fa fa-tag', $offersUrl);
+
+        $variationsUrl = $this->adminUrlGenerator
+            ->setController(CompanyOfferVariationCrudController::class)
+            ->generateUrl();
+        yield MenuItem::linkToUrl('Variations de prix', 'fa fa-percent', $variationsUrl);
     }
 
     private function getQuoteStats(): array
     {
         $total = $this->quoteRepository->count([]);
-        $draft = $this->quoteRepository->count(['status' => QuoteStatus::DRAFT]);
         $submitted = $this->quoteRepository->count(['status' => QuoteStatus::SUBMITTED]);
         $accepted = $this->quoteRepository->count(['status' => QuoteStatus::ACCEPTED]);
         $rejected = $this->quoteRepository->count(['status' => QuoteStatus::REJECTED]);
@@ -69,7 +91,6 @@ class DashboardController extends AbstractDashboardController
 
         return [
             'total' => $total,
-            'draft' => $draft,
             'submitted' => $submitted,
             'accepted' => $accepted,
             'rejected' => $rejected,

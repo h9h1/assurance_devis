@@ -1,177 +1,678 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau devis | {{ app_name }}{% endblock %}
+{% block title %}Nouveau devis | Aksam Assurance
+{% endblock %}
 
 {% block body %}
-<section class="hero-card">
-    <div>
-        <span class="badge">Assurance Auto & Moto</span>
-        <h1>Demande de devis en ligne</h1>
-        <p>Remplissez le formulaire étape par étape puis vérifiez votre récapitulatif avant confirmation.</p>
-    </div>
-   
-</section>
+	<!-- Hero Section -->
+	<div class="hero-section">
+		<div class="hero-content">
+			<span class="badge badge-primary">Assurance Auto & Moto</span>
+			<h1>Demande de devis en ligne</h1>
+			<p>Remplissez le formulaire étape par étape et obtenez votre estimation en quelques minutes.</p>
+		</div>
+		<div class="hero-illustration">
+			<i class="fas fa-file-contract"></i>
+		</div>
+	</div>
 
-<form method="post" action="{{ path('quote_new') }}" class="wizard js-quote-wizard" novalidate>
-    <div class="wizard__progress">
-        <div class="wizard__progress-bar" data-progress-bar></div>
-    </div>
+	<!-- Wizard Form -->
+	<form
+		method="post" action="{{ path('quote_new') }}" class="quote-wizard js-quote-wizard" novalidate>
+		<!-- Progress Bar -->
+		<div class="wizard-progress">
+			<div class="progress-bar">
+				<div class="progress-fill" data-progress-bar></div>
+			</div>
+			<div class="progress-steps">
+				<div class="progress-step is-active" data-step="1">
+					<div class="step-number">1</div>
+					<div class="step-label">Personnel</div>
+				</div>
+				<div class="progress-step" data-step="2">
+					<div class="step-number">2</div>
+					<div class="step-label">Conducteur</div>
+				</div>
+				<div class="progress-step" data-step="3">
+					<div class="step-number">3</div>
+					<div class="step-label">Assurance</div>
+				</div>
+				<div class="progress-step" data-step="4">
+					<div class="step-number">4</div>
+					<div class="step-label">Véhicule</div>
+				</div>
+				<div class="progress-step" data-step="5">
+					<div class="step-number">5</div>
+					<div class="step-label">Résumé</div>
+				</div>
+			</div>
+		</div>
 
-    <div class="wizard__steps">
-        <button type="button" class="step-pill is-active" data-step-indicator="1">1. Personnel</button>
-        <button type="button" class="step-pill" data-step-indicator="2">2. Conducteur</button>
-        <button type="button" class="step-pill" data-step-indicator="3">3. Assurance</button>
-        <button type="button" class="step-pill" data-step-indicator="4">4. Véhicule</button>
-        <button type="button" class="step-pill" data-step-indicator="5">5. Récapitulatif</button>
-    </div>
+		<!-- Form Wizard -->
+		<div
+			class="wizard-container">
+			<!-- Step 1: Personal Information -->
+			<section class="wizard-step is-active" data-step="1">
+				<div class="step-header">
+					<h2>Informations personnelles</h2>
+					<p>Commençons par vos coordonnées</p>
+				</div>
 
-    <section class="wizard-step is-active" data-step="1">
-        <h2>Informations personnelles</h2>
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="lastName">Nom</label>
-                <input id="lastName" name="lastName" value="{{ data.lastName|default('') }}" required maxlength="100">
-                {% include 'components/_field_errors.html.twig' with { field: 'lastName', errors: errors } %}
-            </div>
-            <div class="field">
-                <label for="firstName">Prénom</label>
-                <input id="firstName" name="firstName" value="{{ data.firstName|default('') }}" required maxlength="100">
-                {% include 'components/_field_errors.html.twig' with { field: 'firstName', errors: errors } %}
-            </div>
-        </div>
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="lastName">Nom
+							<span class="required">*</span>
+						</label>
+						<input id="lastName" name="lastName" type="text" value="{{ data.lastName|default('') }}" required maxlength="100" class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'lastName', errors: errors } %}
+					</div>
+					<div class="form-group">
+						<label for="firstName">Prénom
+							<span class="required">*</span>
+						</label>
+						<input id="firstName" name="firstName" type="text" value="{{ data.firstName|default('') }}" required maxlength="100" class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'firstName', errors: errors } %}
+					</div>
+				</div>
 
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="city">Ville</label>
-                <select id="city" name="city" required>
-                    <option value="">Choisir une ville</option>
-                    {% for city in cities %}
-                        <option value="{{ city.value }}" {{ data.city|default('') == city.value ? 'selected' : '' }}>{{ city.value }}</option>
-                    {% endfor %}
-                </select>
-                {% include 'components/_field_errors.html.twig' with { field: 'city', errors: errors } %}
-            </div>
-            <div class="field">
-                <label for="phoneNumber">Téléphone</label>
-                <input id="phoneNumber" name="phoneNumber" value="{{ data.phoneNumber|default('') }}" required placeholder="0612345678 ou +212612345678">
-                {% include 'components/_field_errors.html.twig' with { field: 'phoneNumber', errors: errors } %}
-            </div>
-        </div>
-    </section>
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="city">Ville
+							<span class="required">*</span>
+						</label>
+						<select id="city" name="city" required class="form-input">
+							<option value="">Sélectionner une ville</option>
+							{% for city in cities %}
+								<option value="{{ city.name }}" {{ data.city|default('') == city.name ? 'selected' : '' }}>{{ city.name }}</option>
+							{% endfor %}
+						</select>
+						{% include 'components/_field_errors.html.twig' with { field: 'city', errors: errors } %}
+					</div>
+					<div class="form-group">
+						<label for="phoneNumber">Téléphone
+							<span class="required">*</span>
+						</label>
+						<input id="phoneNumber" name="phoneNumber" type="tel" value="{{ data.phoneNumber|default('') }}" required placeholder="0612345678 ou +212612345678" class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'phoneNumber', errors: errors } %}
+					</div>
+				</div>
+			</section>
 
-    <section class="wizard-step" data-step="2">
-        <h2>Informations conducteur</h2>
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="birthDate">Date de naissance</label>
-                <input id="birthDate" type="date" name="birthDate" value="{{ data.birthDate|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'birthDate', errors: errors } %}
-            </div>
-            <div class="field">
-                <label for="licenseDate">Date d'obtention du permis</label>
-                <input id="licenseDate" type="date" name="licenseDate" value="{{ data.licenseDate|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'licenseDate', errors: errors } %}
-            </div>
-        </div>
-    </section>
+			<!-- Step 2: Driver Information -->
+			<section class="wizard-step" data-step="2">
+				<div class="step-header">
+					<h2>Informations du conducteur</h2>
+					<p>Détails concernant votre permis de conduire</p>
+				</div>
 
-    <section class="wizard-step" data-step="3">
-        <h2>Type d'assurance</h2>
-        <div class="choice-cards">
-            <label class="choice-card {{ data.insuranceType|default('auto') == 'auto' ? 'is-selected' : '' }}">
-                <input type="radio" name="insuranceType" value="auto" {{ data.insuranceType|default('auto') == 'auto' ? 'checked' : '' }}>
-                <span>Assurance Auto</span>
-                <small>Véhicule particulier</small>
-            </label>
-            <label class="choice-card {{ data.insuranceType|default('') == 'moto' ? 'is-selected' : '' }}">
-                <input type="radio" name="insuranceType" value="moto" {{ data.insuranceType|default('') == 'moto' ? 'checked' : '' }}>
-                <span>Assurance Moto</span>
-                <small>Deux roues</small>
-            </label>
-        </div>
-        {% include 'components/_field_errors.html.twig' with { field: 'insuranceType', errors: errors } %}
-    </section>
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="birthDate">Date de naissance
+							<span class="required">*</span>
+						</label>
+						<input id="birthDate" name="birthDate" type="date" value="{{ data.birthDate|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'birthDate', errors: errors } %}
+					</div>
+					<div class="form-group">
+						<label for="licenseDate">Date d'obtention du permis
+							<span class="required">*</span>
+						</label>
+						<input id="licenseDate" name="licenseDate" type="date" value="{{ data.licenseDate|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'licenseDate', errors: errors } %}
+					</div>
+				</div>
+			</section>
 
-    <section class="wizard-step" data-step="4">
-        <h2>Informations véhicule</h2>
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="vehicleBrand">Marque du véhicule</label>
-                <select id="vehicleBrand" name="vehicleBrand" required>
-                    <option value="">Choisir une marque</option>
-                    {% for brand in vehiculeBrands %}
-                        <option value="{{ brand.value }}" {{ data.vehicleBrand|default('') == brand.value ? 'selected' : '' }}>{{ brand.value }}</option>
-                    {% endfor %}
-                </select>
-                {% include 'components/_field_errors.html.twig' with { field: 'vehicleBrand', errors: errors } %}
-            </div>
-            <div class="field">
-                <label for="fuelType">Type de carburant</label>
-                <select id="fuelType" name="fuelType" required>
-                    <option value="">Choisir un carburant</option>
-                    {% for fuel in fuelTypes %}
-                        <option value="{{ fuel.value }}" {{ data.fuelType|default('') == fuel.value ? 'selected' : '' }}>{{ fuel.value|capitalize }}</option>
-                    {% endfor %}
-                </select>
-                {% include 'components/_field_errors.html.twig' with { field: 'fuelType', errors: errors } %}
-            </div>
-        </div>
+			<!-- Step 3: Insurance Type -->
+			<section class="wizard-step" data-step="3">
+				<div class="step-header">
+					<h2>Type d'assurance</h2>
+					<p>Sélectionnez le type de couverture désiré</p>
+				</div>
 
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="firstRegistrationDate">Date de mise en circulation</label>
-                <input id="firstRegistrationDate" type="date" name="firstRegistrationDate" value="{{ data.firstRegistrationDate|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'firstRegistrationDate', errors: errors } %}
-            </div>
-            <div class="field">
-                <label for="seatCount">Nombre de places</label>
-                <input id="seatCount" type="number" name="seatCount" min="1" value="{{ data.seatCount|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'seatCount', errors: errors } %}
-            </div>
-        </div>
+				<div class="insurance-cards">
+					<label class="insurance-card {{ data.insuranceType|default('auto') == 'auto' ? 'is-selected' : '' }}">
+						<input type="radio" name="insuranceType" value="auto" {{ data.insuranceType|default('auto') == 'auto' ? 'checked' : '' }} class="radio-input">
+						<span class="card-icon">
+							<i class="fas fa-car"></i>
+						</span>
+						<span class="card-title">Assurance Auto</span>
+						<span class="card-desc">Véhicule particulier</span>
+					</label>
+					<label class="insurance-card {{ data.insuranceType|default('') == 'moto' ? 'is-selected' : '' }}">
+						<input type="radio" name="insuranceType" value="moto" {{ data.insuranceType|default('') == 'moto' ? 'checked' : '' }} class="radio-input">
+						<span class="card-icon">
+							<i class="fas fa-motorcycle"></i>
+						</span>
+						<span class="card-title">Assurance Moto</span>
+						<span class="card-desc">Deux roues motorisés</span>
+					</label>
+				</div>
+				{% include 'components/_field_errors.html.twig' with { field: 'insuranceType', errors: errors } %}
+			</section>
 
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="newValue">Valeur à neuf</label>
-                <input id="newValue" type="number" step="0.01" min="1" name="newValue" value="{{ data.newValue|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'newValue', errors: errors } %}
-            </div>
-            <div class="field">
-                <label for="marketValue">Valeur vénale</label>
-                <input id="marketValue" type="number" step="0.01" min="1" name="marketValue" value="{{ data.marketValue|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'marketValue', errors: errors } %}
-            </div>
-        </div>
+			<!-- Step 4: Vehicle Information -->
+			<section class="wizard-step" data-step="4">
+				<div class="step-header">
+					<h2>Informations du véhicule</h2>
+					<p>Détails techniques de votre véhicule</p>
+				</div>
 
-        <div class="grid grid--2">
-            <div class="field">
-                <label for="registrationNumber">Immatriculation</label>
-                <input id="registrationNumber" name="registrationNumber" value="{{ data.registrationNumber|default('') }}" required>
-                {% include 'components/_field_errors.html.twig' with { field: 'registrationNumber', errors: errors } %}
-            </div>
-            <div class="field js-auto-field" {% if data.insuranceType|default('auto') != 'auto' %}style="display:none"{% endif %}>
-                <label for="fiscalPower">Puissance fiscale</label>
-                <input id="fiscalPower" type="number" min="1" name="fiscalPower" value="{{ data.fiscalPower|default('') }}">
-                {% include 'components/_field_errors.html.twig' with { field: 'fiscalPower', errors: errors } %}
-            </div>
-            <div class="field js-moto-field" {% if data.insuranceType|default('') != 'moto' %}style="display:none"{% endif %}>
-                <label for="engineCapacity">Cylindrée</label>
-                <input id="engineCapacity" type="number" min="1" name="engineCapacity" value="{{ data.engineCapacity|default('') }}">
-                {% include 'components/_field_errors.html.twig' with { field: 'engineCapacity', errors: errors } %}
-            </div>
-        </div>
-    </section>
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="vehicleBrand">Marque du véhicule
+							<span class="required">*</span>
+						</label>
+						<select id="vehicleBrand" name="vehicleBrand" required class="form-input">
+							<option value="">Sélectionner une marque</option>
+							{% for brand in vehiculeBrands %}
+								<option value="{{ brand.value }}" {{ data.vehicleBrand|default('') == brand.value ? 'selected' : '' }}>{{ brand.value }}</option>
+							{% endfor %}
+						</select>
+						{% include 'components/_field_errors.html.twig' with { field: 'vehicleBrand', errors: errors } %}
+					</div>
+					<div class="form-group">
+						<label for="fuelType">Type de carburant
+							<span class="required">*</span>
+						</label>
+						<select id="fuelType" name="fuelType" required class="form-input">
+							<option value="">Sélectionner un carburant</option>
+							{% for fuel in fuelTypes %}
+								<option value="{{ fuel.value }}" {{ data.fuelType|default('') == fuel.value ? 'selected' : '' }}>{{ fuel.value|capitalize }}</option>
+							{% endfor %}
+						</select>
+						{% include 'components/_field_errors.html.twig' with { field: 'fuelType', errors: errors } %}
+					</div>
+				</div>
 
-    <section class="wizard-step" data-step="5">
-        <h2>Récapitulatif</h2>
-        <div class="summary-card" data-summary></div>
-        <p class="summary-note">Vérifiez toutes les informations avant confirmation. Vous pouvez revenir en arrière si nécessaire.</p>
-    </section>
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="firstRegistrationDate">Date de mise en circulation
+							<span class="required">*</span>
+						</label>
+						<input id="firstRegistrationDate" name="firstRegistrationDate" type="date" value="{{ data.firstRegistrationDate|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'firstRegistrationDate', errors: errors } %}
+					</div>
+					<div class="form-group">
+						<label for="seatCount">Nombre de places
+							<span class="required">*</span>
+						</label>
+						<input id="seatCount" name="seatCount" type="number" min="1" value="{{ data.seatCount|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'seatCount', errors: errors } %}
+					</div>
+				</div>
 
-    <div class="wizard__actions">
-        <button type="button" class="btn btn--secondary" data-prev>Précédent</button>
-        <button type="button" class="btn btn--primary" data-next>Suivant</button>
-        <button type="submit" class="btn btn--success" data-submit style="display:none">Confirmer le devis</button>
-    </div>
-</form>
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="newValue">Valeur à neuf (MAD)
+							<span class="required">*</span>
+						</label>
+						<input id="newValue" name="newValue" type="number" step="0.01" min="1" value="{{ data.newValue|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'newValue', errors: errors } %}
+					</div>
+					<div class="form-group">
+						<label for="marketValue">Valeur vénale (MAD)
+							<span class="required">*</span>
+						</label>
+						<input id="marketValue" name="marketValue" type="number" step="0.01" min="1" value="{{ data.marketValue|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'marketValue', errors: errors } %}
+					</div>
+				</div>
+
+				<div class="form-grid form-grid--2">
+					<div class="form-group">
+						<label for="registrationNumber">Immatriculation
+							<span class="required">*</span>
+						</label>
+						<input id="registrationNumber" name="registrationNumber" type="text" value="{{ data.registrationNumber|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'registrationNumber', errors: errors } %}
+					</div>
+					<div class="form-group js-auto-field" {% if data.insuranceType|default('auto') != 'auto' %} style="display:none" {% endif %}>
+						<label for="fiscalPower">Puissance fiscale</label>
+						<input id="fiscalPower" name="fiscalPower" type="number" min="1" value="{{ data.fiscalPower|default('') }}" class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'fiscalPower', errors: errors } %}
+					</div>
+					<div class="form-group js-moto-field" {% if data.insuranceType|default('') != 'moto' %} style="display:none" {% endif %}>
+						<label for="engineCapacity">Cylindrée</label>
+						<input id="engineCapacity" name="engineCapacity" type="number" min="1" value="{{ data.engineCapacity|default('') }}" class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'engineCapacity', errors: errors } %}
+					</div>
+				</div>
+			</section>
+
+			<!-- Step 5: Summary -->
+			<section class="wizard-step" data-step="5">
+				<div class="step-header">
+					<h2>Résumé de votre demande</h2>
+					<p>Vérifiez toutes les informations avant confirmation</p>
+				</div>
+				<div class="summary-content" data-summary></div>
+				<p class="summary-note">
+					<i class="fas fa-info-circle"></i>
+					Vous pouvez revenir en arrière si vous souhaitez modifier vos informations.
+				</p>
+			</section>
+		</div>
+
+		<!-- Action Buttons -->
+		<div class="wizard-actions">
+			<button type="button" class="btn btn-secondary" data-prev>
+				<i class="fas fa-chevron-left"></i>
+				Précédent
+			</button>
+			<button type="button" class="btn btn-primary" data-next>
+				Suivant
+				<i class="fas fa-chevron-right"></i>
+			</button>
+			<button type="submit" class="btn btn-success" data-submit style="display:none">
+				<i class="fas fa-check"></i>
+				Confirmer le devis
+			</button>
+		</div>
+	</form>
+
+	<!-- Styles -->
+	<style>
+		/* Hero Section */
+		.hero-section {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 48px;
+			align-items: center;
+			margin-bottom: 48px;
+			padding: 40px;
+			background: linear-gradient(135deg, rgba(15, 98, 254, 0.05), rgba(0, 67, 206, 0.05));
+			border-radius: 20px;
+			border: 1px solid rgba(15, 98, 254, 0.1);
+		}
+
+		.hero-content h1 {
+			font-size: clamp(2rem, 5vw, 3rem);
+			margin: 16px 0 12px;
+			color: var(--text);
+			line-height: 1.2;
+		}
+
+		.hero-content p {
+			font-size: 1.1rem;
+			color: var(--text-secondary);
+			margin: 0;
+		}
+
+		.hero-illustration {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 120px;
+			color: var(--primary);
+			opacity: 0.1;
+		}
+
+		/* Badge */
+		.badge {
+			display: inline-block;
+			padding: 8px 16px;
+			border-radius: 999px;
+			font-size: 0.85rem;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+		}
+
+		.badge-primary {
+			background: var(--primary-light);
+			color: var(--primary);
+		}
+
+		/* Wizard */
+		.quote-wizard {
+			background: var(--surface);
+			border-radius: var(--radius-lg);
+			padding: 40px;
+			box-shadow: var(--shadow);
+			border: 1px solid var(--border);
+		}
+
+		/* Progress */
+		.wizard-progress {
+			margin-bottom: 48px;
+		}
+
+		.progress-bar {
+			height: 8px;
+			background: var(--surface-muted);
+			border-radius: 999px;
+			overflow: hidden;
+			margin-bottom: 32px;
+		}
+
+		.progress-fill {
+			height: 100%;
+			background: linear-gradient(90deg, var(--primary), var(--info));
+			border-radius: 999px;
+			transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+			width: 20%;
+		}
+
+		.progress-steps {
+			display: grid;
+			grid-template-columns: repeat(5, 1fr);
+			gap: 12px;
+		}
+
+		.progress-step {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+			opacity: 0.5;
+			transition: var(--transition);
+			cursor: pointer;
+		}
+
+		.progress-step.is-active {
+			opacity: 1;
+		}
+
+		.step-number {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: var(--surface-muted);
+			border: 2px solid var(--border);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 700;
+			color: var(--text-secondary);
+			transition: var(--transition);
+		}
+
+		.progress-step.is-active .step-number {
+			background: linear-gradient(135deg, var(--primary), var(--info));
+			color: white;
+			border-color: transparent;
+		}
+
+		.step-label {
+			font-size: 0.85rem;
+			font-weight: 600;
+			text-align: center;
+		}
+
+		/* Wizard Container */
+		.wizard-container {
+			position: relative;
+			min-height: 400px;
+			margin-bottom: 40px;
+		}
+
+		.wizard-step {
+			display: none;
+			animation: fadeIn 0.3s ease;
+		}
+
+		.wizard-step.is-active {
+			display: block;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.step-header {
+			margin-bottom: 32px;
+		}
+
+		.step-header h2 {
+			font-size: 1.75rem;
+			margin: 0 0 8px;
+			color: var(--text);
+		}
+
+		.step-header p {
+			margin: 0;
+			color: var(--text-secondary);
+			font-size: 1rem;
+		}
+
+		/* Forms */
+		.form-grid {
+			display: grid;
+			gap: 24px;
+			margin-bottom: 24px;
+		}
+
+		.form-grid--2 {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.form-group {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.form-group label {
+			font-weight: 600;
+			color: var(--text);
+			font-size: 0.95rem;
+		}
+
+		.required {
+			color: var(--danger);
+		}
+
+		.form-input {
+			padding: 12px 16px;
+			border: 2px solid var(--border);
+			border-radius: var(--radius);
+			font-size: 1rem;
+			font-family: inherit;
+			transition: var(--transition);
+			background: var(--surface);
+		}
+
+		.form-input:focus {
+			outline: none;
+			border-color: var(--primary);
+			box-shadow: 0 0 0 4px var(--primary-light);
+		}
+
+		.form-input:invalid:not(:placeholder-shown) {
+			border-color: var(--danger);
+		}
+
+		/* Insurance Cards */
+		.insurance-cards {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 24px;
+			margin-bottom: 24px;
+		}
+
+		.insurance-card {
+			position: relative;
+			padding: 24px;
+			border: 2px solid var(--border);
+			border-radius: var(--radius);
+			cursor: pointer;
+			transition: var(--transition);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 12px;
+			background: var(--surface);
+		}
+
+		.insurance-card:hover {
+			border-color: var(--primary);
+			background: var(--primary-light);
+		}
+
+		.insurance-card.is-selected {
+			border-color: var(--primary);
+			background: var(--primary-light);
+			box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.1);
+		}
+
+		.radio-input {
+			position: absolute;
+			opacity: 0;
+		}
+
+		.card-icon {
+			font-size: 2rem;
+			color: var(--primary);
+		}
+
+		.card-title {
+			font-weight: 700;
+			font-size: 1.1rem;
+			color: var(--text);
+		}
+
+		.card-desc {
+			font-size: 0.9rem;
+			color: var(--text-secondary);
+		}
+
+		/* Summary */
+		.summary-content {
+			background: var(--surface-muted);
+			border-radius: var(--radius);
+			padding: 24px;
+			margin-bottom: 24px;
+		}
+
+		.summary-note {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 16px;
+			background: var(--info-light);
+			border-radius: var(--radius);
+			color: var(--info);
+			border-left: 4px solid var(--info);
+			margin: 0;
+		}
+
+		.summary-note i {
+			font-size: 1.2rem;
+			flex-shrink: 0;
+		}
+
+		/* Actions */
+		.wizard-actions {
+			display: flex;
+			gap: 16px;
+			justify-content: space-between;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			padding: 12px 24px;
+			border: none;
+			border-radius: var(--radius);
+			font-weight: 600;
+			cursor: pointer;
+			transition: var(--transition);
+			font-size: 1rem;
+			text-decoration: none;
+		}
+
+		.btn-primary {
+			background: linear-gradient(135deg, var(--primary), var(--info));
+			color: white;
+		}
+
+		.btn-primary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 16px rgba(15, 98, 254, 0.3);
+		}
+
+		.btn-secondary {
+			background: var(--surface-muted);
+			color: var(--text);
+			border: 1px solid var(--border);
+		}
+
+		.btn-secondary:hover {
+			background: var(--border);
+			border-color: var(--text);
+		}
+
+		.btn-success {
+			background: linear-gradient(135deg, var(--success), #16a34a);
+			color: white;
+		}
+
+		.btn-success:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 16px rgba(18, 128, 92, 0.3);
+		}
+
+		.btn:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		/* Responsive */
+		@media(max-width: 768px) {
+			.hero-section {
+				grid-template-columns: 1fr;
+				gap: 24px;
+				padding: 24px;
+			}
+
+			.hero-illustration {
+				font-size: 80px;
+			}
+
+			.quote-wizard {
+				padding: 24px;
+			}
+
+			.form-grid--2 {
+				grid-template-columns: 1fr;
+			}
+
+			.insurance-cards {
+				grid-template-columns: 1fr;
+			}
+
+			.progress-steps {
+				grid-template-columns: repeat(5, 1fr);
+				gap: 8px;
+			}
+
+			.step-label {
+				font-size: 0.7rem;
+			}
+
+			.step-number {
+				width: 32px;
+				height: 32px;
+				font-size: 0.85rem;
+			}
+
+			.wizard-actions {
+				flex-direction: column-reverse;
+			}
+
+			.btn {
+				width: 100%;
+			}
+		}
+	</style>
 {% endblock %}
