@@ -24,6 +24,12 @@ class QuoteRequest
 
     public ?string $company = null;
 
+
+    #[Assert\NotBlank(message: 'L\'adresse email est obligatoire.')]
+    #[Assert\Email(message: 'Adresse email invalide.')]
+    #[Assert\Length(max: 180)]
+    public ?string $email = null;
+
     #[Assert\NotBlank(message: 'Le téléphone est obligatoire.')]
     #[Assert\Regex(pattern: '/^(\+212|0)[5-7][0-9]{8}$/', message: 'Format de téléphone invalide.')]
     public ?string $phoneNumber = null;
@@ -141,6 +147,7 @@ class QuoteRequest
         $dto->firstName = self::stringOrNull($data['firstName'] ?? null);
         $dto->city    = self::stringOrNull($data['city'] ?? null);
         $dto->company = self::stringOrNull($data['company'] ?? null);
+        $dto->email = self::stringOrNull($data['email'] ?? null);
         $dto->phoneNumber = self::stringOrNull($data['phoneNumber'] ?? null);
         $dto->birthDate = self::stringOrNull($data['birthDate'] ?? null);
         $dto->licenseDate = self::stringOrNull($data['licenseDate'] ?? null);

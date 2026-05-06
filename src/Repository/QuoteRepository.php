@@ -27,4 +27,15 @@ class QuoteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByUuid(string $uuid): ?\App\Entity\Quote
+    {
+        return $this->findOneBy(['uuid' => $uuid]);
+    }
+
+    public function findByUuidAndToken(string $uuid, string $token): ?\App\Entity\Quote
+    {
+        return $this->findOneBy(['uuid' => $uuid, 'accessToken' => $token]);
+    }
+
 }

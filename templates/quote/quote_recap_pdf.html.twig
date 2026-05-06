@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Devis #{{ quote.id }} — Aksam Assurance</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: DejaVu Sans, Arial, sans-serif; font-size: 9.5pt; color: #1a1a2e; background: #fff; line-height: 1.5; }
+    .section-title { font-size: 9pt; font-weight: bold; color: #0f62fe; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1.5px solid #0f62fe; padding-bottom: 3px; }
+    .info-key { color: #0f62fe; font-weight: bold; font-size: 9pt; padding: 3px 6px 3px 0; white-space: nowrap; width: 42%; }
+    .info-val { color: #1a1a2e; font-size: 9pt; padding: 3px 0; }
+    .row-stripe { background-color: #f7f9ff; }
+    .bullet { color: #0f62fe; font-weight: bold; padding-right: 4px; }
+    .prime-box { border: 2px solid #f59e0b; border-radius: 3px; text-align: center; padding: 12px 16px; }
+    .prime-amount { font-size: 22pt; font-weight: bold; color: #f59e0b; text-decoration: line-through; }
+    .prime-currency { font-size: 12pt; font-weight: bold; color: #f59e0b; }
+</style>
+</head>
+<body>
+<table width="100%" cellpadding="0" cellspacing="0">
+
+    <!-- HEADER -->
+    <tr>
+        <td style="padding-bottom:12px;border-bottom:3px solid #0f62fe;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="35%" valign="middle">
+                        {% if logoBase64 %}
+                            <img src="{{ logoBase64 }}" alt="Aksam Assurance" style="max-height:60px;max-width:180px;">
+                        {% else %}
+                            <span style="font-size:21pt;font-weight:bold;color:#0f62fe;">AKSAM</span><br>
+                            <span style="font-size:7.5pt;color:#0f62fe;letter-spacing:2px;text-transform:uppercase;">ASSURANCES</span>
+                        {% endif %}
+                    </td>
+                    <td width="65%" valign="middle" align="right">
+                        <table cellpadding="0" cellspacing="0" align="right">
+                            <tr>
+                                <td valign="middle" style="padding-right:18px;">
+                                    <span style="font-size:15pt;font-weight:bold;color:#1a1a2e;letter-spacing:2px;">VOTRE DEVIS</span>
+                                </td>
+                                <td valign="middle">
+                                    <table cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="color:#0f62fe;font-weight:bold;font-size:8pt;padding:1px 6px 1px 0;white-space:nowrap;">Offre</td>
+                                            <td style="font-size:8pt;color:#333;padding:1px 0;">: {{ quote.selectedOffer ? (quote.selectedOffer|capitalize ~ ' - Assurance ' ~ quote.insuranceType.value|capitalize) : 'Non sélectionnée' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color:#0f62fe;font-weight:bold;font-size:8pt;padding:1px 6px 1px 0;">N° devis</td>
+                                            <td style="font-size:8pt;color:#333;padding:1px 0;">: {{ quote.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color:#0f62fe;font-weight:bold;font-size:8pt;padding:1px 6px 1px 0;">Tél</td>
+                                            <td style="font-size:8pt;color:#333;padding:1px 0;">: {{ quote.phoneNumber ?? '—' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color:#0f62fe;font-weight:bold;font-size:8pt;padding:1px 6px 1px 0;">Email</td>
+                                            <td style="font-size:8pt;color:#333;padding:1px 0;">: {{ quote.email ?? '—' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color:#0f62fe;font-weight:bold;font-size:8pt;padding:1px 6px 1px 0;">Émis le</td>
+                                            <td style="font-size:8pt;color:#333;padding:1px 0;">: {{ "now"|date("d/m/Y") }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr><td style="height:14px;"></td></tr>
+
+    <!-- INTRO -->
+    <tr>
+        <td style="padding-bottom:14px;">
+            <p style="font-size:10pt;font-weight:bold;color:#1a1a2e;margin-bottom:5px;">M. {{ quote.firstName }} {{ quote.lastName|upper }}</p>
+            <p style="font-size:9pt;color:#333;line-height:1.5;">
+                Vous nous avez consultés pour assurer votre <strong>{{ quote.insuranceType.value|lower }} {{ quote.vehicleBrand.value|lower }}</strong> (immatriculation : <strong>{{ quote.registrationNumber }}</strong>).<br>
+                Nous vous en remercions. Vous trouverez ci-dessous le devis correspondant aux informations que vous nous avez communiquées.
+            </p>
+        </td>
+    </tr>
+
+    <!-- SECTION SIMULATEUR -->
+    <tr><td style="padding-bottom:10px;"><div class="section-title">VOTRE SIMULATEUR ASSURANCE {{ quote.insuranceType.value|upper }}</div></td></tr>
+
+    <!-- GRILLE INFOS + VEHICULE -->
+    <tr>
+        <td style="padding-bottom:14px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="49%" valign="top" style="padding-right:10px;">
+                        <p style="font-size:8.5pt;font-weight:bold;color:#0f62fe;margin-bottom:5px;">VOS INFORMATIONS</p>
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr><td class="info-key">• Assuré</td><td class="info-val">{{ quote.firstName }} {{ quote.lastName|upper }}</td></tr>
+                            <tr class="row-stripe"><td class="info-key">• Téléphone</td><td class="info-val">{{ quote.phoneNumber ?? '—' }}</td></tr>
+                            {% if quote.email %}<tr><td class="info-key">• Email</td><td class="info-val">{{ quote.email }}</td></tr>{% endif %}
+                            <tr class="row-stripe">
+                                <td class="info-key">• Ville</td>
+                                <td class="info-val">{% if quote.cityEntity %}{{ quote.cityEntity.name }}{% elseif quote.city %}{{ quote.city.value }}{% else %}—{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td class="info-key">• Compagnie</td>
+                                <td class="info-val">{% if quote.companyEntity %}{{ quote.companyEntity.name }}{% elseif quote.company %}{{ quote.company.value }}{% else %}—{% endif %}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="2%" style="border-left:1px solid #e0e0e0;"></td>
+                    <td width="49%" valign="top" style="padding-left:10px;">
+                        <p style="font-size:8.5pt;font-weight:bold;color:#0f62fe;margin-bottom:5px;">VOTRE VÉHICULE</p>
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr><td class="info-key">• Type</td><td class="info-val">{{ quote.insuranceType.value|capitalize }}</td></tr>
+                            <tr class="row-stripe"><td class="info-key">• Marque</td><td class="info-val">{{ quote.vehicleBrand.value|capitalize }}</td></tr>
+                            <tr><td class="info-key">• Carburant</td><td class="info-val">{{ quote.fuelType.value|capitalize }}</td></tr>
+                            <tr class="row-stripe"><td class="info-key">• 1ère immat.</td><td class="info-val">{{ quote.firstRegistrationDate|date('d/m/Y') }}</td></tr>
+                            <tr><td class="info-key">• Immatriculation</td><td class="info-val" style="font-family:monospace;letter-spacing:1px;">{{ quote.registrationNumber }}</td></tr>
+                            <tr class="row-stripe"><td class="info-key">• Valeur à neuf</td><td class="info-val">{{ quote.newValue|number_format(2, ',', ' ') }} MAD</td></tr>
+                            <tr><td class="info-key">• Valeur vénale</td><td class="info-val">{{ quote.marketValue|number_format(2, ',', ' ') }} MAD</td></tr>
+                            {% if quote.insuranceType.value|lower == 'auto' and quote.fiscalPower %}
+                            <tr class="row-stripe"><td class="info-key">• Puissance fiscale</td><td class="info-val">{{ quote.fiscalPower }} CV</td></tr>
+                            {% elseif quote.insuranceType.value|lower == 'moto' and quote.engineCapacity %}
+                            <tr class="row-stripe"><td class="info-key">• Cylindrée</td><td class="info-val">{{ quote.engineCapacity }} cc</td></tr>
+                            {% endif %}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- GARANTIES DE BASE -->
+    <tr><td style="padding-bottom:8px;"><div class="section-title">VOS GARANTIES DE BASES</div></td></tr>
+    <tr>
+        <td style="padding-bottom:14px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="50%" valign="top">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Responsabilité Civile (obligatoire)</span></td></tr>
+                            <tr><td style="height:4px;"></td></tr>
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Dommages Collision et Tous Accidents</span></td></tr>
+                            <tr><td style="height:4px;"></td></tr>
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Vol et Tentative de Vol</span></td></tr>
+                            <tr><td style="height:4px;"></td></tr>
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Incendie et Explosion</span></td></tr>
+                        </table>
+                    </td>
+                    <td width="50%" valign="top">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Bris de Glace</span></td></tr>
+                            <tr><td style="height:4px;"></td></tr>
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Catastrophes Naturelles et Événements Catastrophiques</span></td></tr>
+                            <tr><td style="height:4px;"></td></tr>
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Assistance 24h/24 et Véhicule de Remplacement</span></td></tr>
+                            <tr><td style="height:4px;"></td></tr>
+                            <tr><td><span class="bullet">•</span><span style="font-size:9pt;">Protection Conducteur</span></td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- GARANTIES OPTIONNELLES -->
+    <tr><td style="padding-bottom:8px;"><div class="section-title">VOS GARANTIES OPTIONNELLES</div></td></tr>
+    <tr><td style="padding-bottom:14px;text-align:center;"><span style="font-size:9pt;font-style:italic;color:#888;font-weight:bold;">Aucune garantie optionnelle n'a été choisie.</span></td></tr>
+
+    <!-- TARIF -->
+    <tr><td style="padding-bottom:8px;"><div class="section-title">VOTRE TARIF</div></td></tr>
+    <tr>
+        <td style="padding-bottom:10px;">
+            <p style="font-size:8.5pt;font-style:italic;color:#555;line-height:1.4;">Le tarif communiqué est basé sur les informations fournies lors de la simulation.</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:8px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center">
+                        <table width="260" cellpadding="0" cellspacing="0" class="prime-box">
+                            <tr><td align="center" style="font-size:9pt;font-weight:bold;color:#1a1a2e;text-transform:uppercase;letter-spacing:1px;padding-bottom:8px;">PRIME ANNUELLE TTC *</td></tr>
+                            <tr>
+                                <td align="center">
+                                    <span class="prime-amount">{{ quote.customEstimation ? quote.customEstimation|number_format(2, ',', ' ') : '—' }}</span>{% if quote.customEstimation %}<span class="prime-currency"> MAD</span>{% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:24px;text-align:center;">
+            <span style="font-size:7.5pt;color:#777;font-style:italic;">* Le montant indiqué résulte d'une simulation. Pour plus d'informations, veuillez contacter votre conseiller Aksam Assurance.</span>
+        </td>
+    </tr>
+
+    <!-- FOOTER -->
+    <tr>
+        <td style="border-top:1px solid #ddd;padding-top:10px;text-align:center;">
+            <p style="font-size:7.5pt;color:#888;margin-bottom:3px;">Aksam Assurance — Réf. DEV-{{ quote.id }} — Généré le {{ "now"|date("d/m/Y") }} — aksam.ma</p>
+            <p style="font-size:7pt;color:#aaa;font-style:italic;">Entreprise régie par la loi 17-99 portant code des assurances</p>
+        </td>
+    </tr>
+
+</table>
+</body>
+</html>

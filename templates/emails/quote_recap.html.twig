@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Votre devis #{{ quote.id }} — Aksam Assurance</title>
 </head>
+{% set estimation = estimation is defined ? estimation : null %}
+{% set monthly = monthly is defined ? monthly : null %}
+{% set companyName = companyName is defined ? companyName : "" %}
+{% set cityName = cityName is defined ? cityName : "" %}
+
 <body style="margin:0;padding:0;background:#f4f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#122033;line-height:1.6;">
 
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7fb;padding:40px 16px;">

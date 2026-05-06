@@ -42,6 +42,7 @@ class QuoteMapper
             ->setFiscalPower($dto->insuranceType === 'auto' ? $dto->fiscalPower : null)
             ->setEngineCapacity($dto->insuranceType === 'moto' ? $dto->engineCapacity : null)
             // Toujours remplir l'Enum city (NOT NULL en base)
+            ->setEmail($dto->email)
             ->setCity(CityEnum::tryFrom($dto->city ?? '') ?? CityEnum::Unknown)
             // Toujours remplir l'Enum company (NOT NULL en base)
             ->setCompany(CompanyEnum::tryFrom($dto->company ?? '') ?? CompanyEnum::Unknown)
@@ -77,8 +78,11 @@ class QuoteMapper
     {
         return [
             'id'                    => $quote->getId(),
+            'uuid'                  => $quote->getUuid(),
+            'accessToken'           => $quote->getAccessToken(),
             'lastName'              => $quote->getLastName(),
             'firstName'             => $quote->getFirstName(),
+            'email'                 => $quote->getEmail(),
             'city'                  => $quote->getCity()?->value    ?? '',
             'company'               => $quote->getCompany()?->value ?? '',
             'phoneNumber'           => $quote->getPhoneNumber(),
@@ -94,7 +98,10 @@ class QuoteMapper
             'registrationNumber'    => $quote->getRegistrationNumber(),
             'fiscalPower'           => $quote->getFiscalPower(),
             'engineCapacity'        => $quote->getEngineCapacity(),
-            'status'                => $quote->getStatus()->value ?? '',
+            'status'                => $quote->getStatus()->value,
+            'adminNote'             => $quote->getAdminNote(),
+            'customEstimation'      => $quote->getCustomEstimation(),
+            'selectedOffer'         => $quote->getSelectedOffer(),
             'createdAt'             => $quote->getCreatedAt()->format(DATE_ATOM),
             'updatedAt'             => $quote->getUpdatedAt()->format(DATE_ATOM),
         ];

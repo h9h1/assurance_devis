@@ -120,6 +120,13 @@
 						<input id="licenseDate" name="licenseDate" type="date" value="{{ data.licenseDate|default('') }}" required class="form-input">
 						{% include 'components/_field_errors.html.twig' with { field: 'licenseDate', errors: errors } %}
 					</div>
+					<div class="form-group">
+						<label for="email">Email
+							<span class="required">*</span>
+						</label>
+						<input id="email" name="email" type="email" value="{{ data.email|default('') }}" required class="form-input">
+						{% include 'components/_field_errors.html.twig' with { field: 'email', errors: errors } %}
+					</div>
 				</div>
 			</section>
 
@@ -674,5 +681,15 @@
 				width: 100%;
 			}
 		}
-	</style>
+	
+		.field-hint {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-top: 6px;
+			font-size: .8rem;
+			color: #607086;
+		}
+		.field-hint i { color: #0f62fe; font-size: .75rem; }
+		</style>
 {% endblock %}
