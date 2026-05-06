@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+
 
 namespace App\Service;
 
@@ -13,44 +13,44 @@ class QuoteMailerService
 {
     public function __construct(
         private readonly MailerInterface $mailer,
-        private readonly string $senderEmail = 'noreply@aksam-assurance.ma',
-        private readonly string $senderName  = 'Aksam Assurance',
     ) {}
 
     public function sendRecap(Quote $quote): void
     {
+        if (!$quote->getEmail()) {
+            throw new \LogicException('Aucun email renseigné pour ce devis.');
+        }
+
+        $companyName = '';
+        if ($quote->getCompanyEntity())  $companyName = $quote->getCompanyEntity()->getName();
+        elseif ($quote->getCompany())    $companyName = $quote->getCompany()->value;
+
+        $cityName = '';
+        if ($quote->getCityEntity())     $cityName = $quote->getCityEntity()->getName();
+        elseif ($quote->getCity())       $cityName = $quote->getCity()->value;
+
+        // Toujours définir — null si pas encore d'estimation
+        $estimation = null;
+        $monthly    = null;
+        if ($quote->getCustomEstimation()) {
+            $estimation = number_format((float) $quote->getCustomEstimation(), 2, ',', ' ') . ' MAD / an';
+            $monthly    = number_format((float) $quote->getCustomEstimation() / 12, 2, ',', ' ') . ' MAD / mois';
+        }
+
         $email = (new TemplatedEmail())
-            ->from(new Address($this->senderEmail, $this->senderName))
+            ->from(new Address('noreply@aksam-assurance.ma', 'Aksam Assurance'))
             ->to(new Address($quote->getEmail(), $quote->getFirstName() . ' ' . $quote->getLastName()))
-            ->replyTo(new Address('contact@aksam-assurance.ma', $this->senderName))
+            ->replyTo('contact@aksam-assurance.ma')
             ->subject('Votre devis #' . $quote->getId() . ' — Aksam Assurance')
             ->htmlTemplate('emails/quote_recap.html.twig')
             ->context([
                 'quote'       => $quote,
-                'companyName' => $this->resolveCompanyName($quote),
-                'cityName'    => $this->resolveCityName($quote),
-                'estimation'  => $quote->getCustomEstimation()
-                    ? number_format((float) $quote->getCustomEstimation(), 2, ',', ' ') . ' MAD / an'
-                    : null,
-                'monthly'     => $quote->getCustomEstimation()
-                    ? number_format((float) $quote->getCustomEstimation() / 12, 2, ',', ' ') . ' MAD / mois'
-                    : null,
+                'companyName' => $companyName,
+                'cityName'    => $cityName,
+                'estimation'  => $estimation,
+                'monthly'     => $monthly,
             ]);
 
         $this->mailer->send($email);
-    }
-
-    private function resolveCompanyName(Quote $quote): string
-    {
-        if ($quote->getCompanyEntity()) return $quote->getCompanyEntity()->getName();
-        if ($quote->getCompany())       return $quote->getCompany()->value;
-        return '';
-    }
-
-    private function resolveCityName(Quote $quote): string
-    {
-        if ($quote->getCityEntity()) return $quote->getCityEntity()->getName();
-        if ($quote->getCity())       return $quote->getCity()->value;
-        return '';
     }
 }

@@ -166,11 +166,11 @@
 			<i class="fas fa-envelope"></i>
 			Recevoir par email
 		</button>
-		<a href="{{ path('quote_offers', {id: quote.id}) }}" class="btn btn-primary">
+		<a href="{{ path('quote_offers', {uuid: quote.uuid, token: quote.accessToken}) }}" class="btn btn-primary">
 			<i class="fas fa-arrow-right"></i>
 			Voir les offres disponibles
 		</a>
-		 <a href="{{ path('quote_recap_pdf', {id: quote.id}) }}"
+		 <a href="{{ path('quote_recap_pdf', {uuid: quote.uuid, token: quote.accessToken}) }}"
            class="btn btn-download"
            title="Télécharger le récapitulatif PDF">
             <i class="fas fa-file-pdf"></i>
@@ -482,12 +482,26 @@
 		<div class="modal-icon"><i class="fas fa-envelope"></i></div>
 		<h3 class="modal-title">Recevoir le récapitulatif</h3>
 		<p class="modal-desc">Entrez votre email pour recevoir le récapitulatif de votre devis <strong>#{{ quote.id }}</strong>.</p>
-		<form method="POST" action="{{ path('quote_send_email', {id: quote.id}) }}">
+		<form method="POST" action="{{ path('quote_send_email', {uuid: quote.uuid, token: quote.accessToken}) }}">
 			<div class="modal-field">
 				<label for="modalEmail">Adresse email</label>
 				<div class="modal-input-wrap">
 					<i class="fas fa-at modal-input-icon"></i>
-					<input type="email" id="modalEmail" name="email" value="{{ quote.email ?? '' }}" required placeholder="votre@email.com">
+					{% if quote.email %}
+							<input type="email" id="modalEmail" name="email"
+								value="{{ quote.email }}"
+								required
+								placeholder="votre@email.com">
+							<span class="field-hint" style="font-size:.8rem;color:#12805c;margin-top:6px;display:flex;align-items:center;gap:6px;">
+								<i class="fas fa-check-circle"></i>
+								Email renseigné lors de votre demande
+							</span>
+						{% else %}
+							<input type="email" id="modalEmail" name="email"
+								value=""
+								required
+								placeholder="votre@email.com">
+						{% endif %}
 				</div>
 			</div>
 			<div class="modal-actions">

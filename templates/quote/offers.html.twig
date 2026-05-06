@@ -101,7 +101,7 @@
 					</ul>
 				</div>
 
-				<form method="POST" action="{{ path('quote_select_offer', {id: quote.id}) }}" class="offer-form">
+				<form method="POST" action="{{ path('quote_select_offer', {uuid: quote.uuid, token: quote.accessToken}) }}" class="offer-form">
 					<input type="hidden" name="offer_code" value="{{ offer.code }}">
 					<button type="submit" class="btn btn-offer">
 						<i class="fas fa-arrow-right"></i>
@@ -114,7 +114,7 @@
 
 	<!-- Bottom Actions -->
 	<div class="bottom-actions">
-		<a href="{{ path('quote_show', {id: quote.id}) }}" class="btn btn-secondary">
+		<a href="{{ path('quote_show', {uuid: quote.uuid, token: quote.accessToken}) }}" class="btn btn-secondary">
 			<i class="fas fa-chevron-left"></i>
 			Voir le récapitulatif
 		</a>
