@@ -390,3 +390,107 @@ Développé avec ❤️ par l'équipe **Aksam Assurance**
 [aksam.ma](https://aksam.ma) · [contact@aksam-assurance.ma](mailto:contact@aksam-assurance.ma)
 
 </div>
+
+---
+
+## 🐳 Docker
+
+### Structure des fichiers Docker
+
+```
+aksam-assurance/
+├── Dockerfile                    # Image PHP-FPM multi-stage
+├── docker-compose.yml            # Services production
+├── docker-compose.dev.yml        # Overrides développement
+├── Makefile                      # Commandes raccourcies
+├── .env.docker                   # Template variables d'env
+└── docker/
+    ├── nginx/
+    │   └── default.conf          # Config Nginx + Symfony
+    ├── php/
+    │   ├── php.ini               # Config PHP production
+    │   └── www.conf              # Config PHP-FPM pool
+    └── mariadb/
+        └── init.sql              # Init charset UTF8MB4
+```
+
+### Services
+
+| Service | Image | Port | Description |
+|---|---|---|---|
+| `app` | PHP 8.2-FPM Alpine | 9000 (interne) | Application Symfony |
+| `nginx` | Nginx 1.25 Alpine | `8080` | Reverse proxy + assets |
+| `db` | MariaDB 10.11 | `3306` | Base de données |
+| `mailpit` | axllent/mailpit | `8025` (UI), `1025` (SMTP) | Catch emails (dev) |
+
+### 🚀 Démarrage rapide
+
+**1. Copier le fichier d'environnement**
+```bash
+cp .env.docker .env.local
+# Éditer .env.local avec vos valeurs
+```
+
+**2. Installation complète en une commande**
+```bash
+make install
+```
+
+**3. Créer le compte administrateur**
+```bash
+make admin EMAIL=admin@aksam.ma NAME="Votre Nom" PASS=votre_mot_de_passe
+```
+
+**4. Accéder à l'application**
+```
+Application  →  http://localhost:8080
+Admin panel  →  http://localhost:8080/admin
+```
+
+### 🛠️ Mode développement
+
+```bash
+# Démarrer avec Mailpit + live reload
+make dev
+
+# Accès
+# Application  →  http://localhost:8000
+# Mailpit UI   →  http://localhost:8025
+```
+
+### 📋 Commandes Makefile
+
+```bash
+make help              # Afficher toutes les commandes
+
+# Docker
+make build             # Construire les images
+make up                # Démarrer (production)
+make dev               # Démarrer (développement)
+make down              # Arrêter
+make logs              # Voir les logs en temps réel
+make shell             # Shell dans le container PHP
+
+# Symfony
+make migrate           # Exécuter les migrations
+make cache             # Vider le cache
+make routes            # Lister toutes les routes
+make fix-estimations   # Corriger les estimations manquantes
+
+# Base de données
+make db-shell          # Shell MariaDB
+make db-dump           # Exporter la BDD
+make db-reset          # Réinitialiser la BDD ⚠️
+```
+
+### Variables d'environnement
+
+| Variable | Défaut | Description |
+|---|---|---|
+| `APP_ENV` | `prod` | Environnement Symfony |
+| `APP_SECRET` | — | Clé secrète (32 chars min) |
+| `APP_PORT` | `8080` | Port Nginx exposé |
+| `DB_NAME` | `aksam_assurance` | Nom de la base |
+| `DB_USER` | `aksam` | Utilisateur MariaDB |
+| `DB_PASSWORD` | `aksam_pass` | Mot de passe MariaDB |
+| `MAILER_DSN` | `smtp://mailpit:1025` | Config SMTP |
