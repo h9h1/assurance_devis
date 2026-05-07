@@ -1,25 +1,92 @@
-
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+
+  # ── PHP-FPM (Symfony app) ───────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    container_name: aksam_app
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      APP_ENV: ${APP_ENV:-prod}
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: mysql://${DB_USER:-aksam}:${DB_PASSWORD:-aksam_pass}@db:3306/${DB_NAME:-aksam_assurance}?serverVersion=10.11.2-MariaDB&charset=utf8mb4
+      MAILER_DSN: ${MAILER_DSN:-smtp://mailpit:1025}
+      DEFAULT_URI: ${DEFAULT_URI:-http://localhost}
+    volumes:
+      - ./.env:/var/www/html/.env:ro
+      - ./var:/var/www/html/var
+      - ./public/assets:/var/www/html/public/assets:ro
+      - ./vendor:/var/www/html/vendor:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - aksam_network
+
+  # ── Nginx (reverse proxy) ───────────────────────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: aksam_nginx
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./public:/var/www/html/public:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - aksam_network
+
+  # ── MariaDB ─────────────────────────────────────────────────────────────────
+  db:
+    image: mariadb:10.11
+    container_name: aksam_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_secret}
+      MARIADB_DATABASE: ${DB_NAME:-aksam_assurance}
+      MARIADB_USER: ${DB_USER:-aksam}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-aksam_pass}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "${DB_PORT:-3306}:3306"
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 60s
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      start_period: 30s
+    networks:
+      - aksam_network
 
+  # ── Mailpit (SMTP local — dev uniquement) ───────────────────────────────────
+  mailer:
+    image: axllent/mailpit:latest
+    container_name: aksam_mailpit
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"   # UI web
+      - "1025:1025"                    # SMTP
+    environment:
+      MP_MAX_MESSAGES: 500
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - aksam_network
+    profiles:
+      - dev
+
+# ── Volumes ──────────────────────────────────────────────────────────────────
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  db_data:
+    driver: local
+
+# ── Network ──────────────────────────────────────────────────────────────────
+networks:
+  aksam_network:
+    driver: bridge
