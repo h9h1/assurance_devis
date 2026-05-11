@@ -172,9 +172,24 @@ class QuoteWizardController extends AbstractController
         QuoteRepository $quoteRepository,
         EntityManagerInterface $entityManager,
         QuoteEstimatorService $estimator,
+        CompanyRepository $companyRepository,
     ): Response {
         $quote     = $this->resolveQuote($uuid, $request, $quoteRepository);
         $offerCode = $request->request->get('offer_code');
+
+        // ── Sauvegarder la compagnie sélectionnée ──────────────────────────
+        $companyName = trim($request->request->get('company', ''));
+        if ($companyName) {
+            $companyEntity = $companyRepository->findOneBy(['name' => $companyName, 'isActive' => true]);
+            if ($companyEntity) {
+                $quote->setCompanyEntity($companyEntity);
+                // Mettre à jour l'Enum si la valeur correspond
+                $companyEnum = \App\Enum\Company::tryFrom($companyName);
+                if ($companyEnum) {
+                    $quote->setCompany($companyEnum);
+                }
+            }
+        }
 
         if ($offerCode) {
             $company = $quote->getCompanyEntity();

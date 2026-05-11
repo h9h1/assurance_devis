@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Quote;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -27,29 +28,11 @@ class QuoteCrudController extends AbstractCrudController
             TextField::new('lastName')->setLabel('Nom'),
             TextField::new('firstName')->setLabel('Prénom'),
             TextField::new('phoneNumber')->setLabel('Téléphone'),
-            ChoiceField::new('city')->setLabel('Ville')->hideOnIndex(),
-            ChoiceField::new('company')->setLabel('Compagnie'),
-            DateField::new('birthDate')->setLabel('Date de naissance')->hideOnIndex(),
-            DateField::new('licenseDate')->setLabel('Date permis')->hideOnIndex(),
-            ChoiceField::new('insuranceType')->setLabel('Type d\'assurance')->hideOnIndex(),
-            ChoiceField::new('vehiculeBrand')->setLabel('Marque véhicule')->hideOnIndex(),
-            ChoiceField::new('fuelType')->setLabel('Carburant')->hideOnIndex(),
-            DateField::new('firstRegistrationDate')->setLabel('Date 1ère immatriculation')->hideOnIndex(),
-            NumberField::new('seatCount')->setLabel('Nombre de places')->hideOnIndex(),
-            NumberField::new('newValue')->setLabel('Valeur neuve')->hideOnIndex(),
-            NumberField::new('marketValue')->setLabel('Valeur marchande')->hideOnIndex(),
-            TextField::new('registrationNumber')->setLabel('N° immatriculation')->hideOnIndex(),
-            NumberField::new('fiscalPower')->setLabel('Puissance fiscale')->hideOnIndex(),
-            NumberField::new('engineCapacity')->setLabel('Cylindrée')->hideOnIndex(),
-            ChoiceField::new('status')->setLabel('Statut'),
-            NumberField::new('customEstimation')->setLabel('Estimation personnalisée (MAD)')->setFormTypeOption('html5', false),
-            TextEditorField::new('adminNote')->setLabel('Notes admin'),
-            DateField::new('createdAt')->setLabel('Créé le')->hideOnForm(),
-            DateField::new('updatedAt')->setLabel('Modifié le')->hideOnForm(),
+            AssociationField::new('cityEntity')->setLabel('Ville')->setRequired(false),
         ];
-
         return $fields;
     }
+
 
     public function configureCrud(Crud $crud): Crud
     {

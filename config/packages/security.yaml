@@ -1,6 +1,6 @@
 security:
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
 
     providers:
         admin_users:
@@ -25,7 +25,7 @@ security:
                 csrf_token_id: authenticate
                 username_parameter: _username
                 password_parameter: _password
-               
+
             logout:
                 path: admin_logout
                 target: admin_login
@@ -36,7 +36,8 @@ security:
 
     access_control:
         - { path: ^/admin/login, roles: PUBLIC_ACCESS }
-        - { path: ^/admin,       roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/devis, roles: PUBLIC_ACCESS }
 
 when@test:
     security:
