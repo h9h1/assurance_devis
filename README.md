@@ -83,8 +83,8 @@ Login admin        →  http://localhost:8000/admin/login
 ### Cloner le projet
 
 ```bash
-git clone https://github.com/ton-user/aksam-assurance.git
-cd aksam-assurance
+git clone https://github.com/ton-user/assurance-devis.git
+cd assurance-devis
 ```
 
 ### Installer les dépendances
@@ -103,7 +103,7 @@ cp .env .env.local
 
 ```env
 # Base de données
-DATABASE_URL="mysql://user:password@127.0.0.1:3306/aksam_assurance?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+DATABASE_URL="mysql://user:password@127.0.0.1:3306/db_assurance?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
 
 # SMTP (voir section Configuration)
 MAILER_DSN=smtp://user:password@smtp.gmail.com:587?encryption=tls
@@ -122,7 +122,7 @@ php bin/console doctrine:migrations:migrate
 ### Créer le premier administrateur
 
 ```bash
-php bin/console app:create-admin admin@aksam.ma "Votre Nom" votre_mot_de_passe
+php bin/console app:create-admin admin@assurance.ma "Votre Nom" votre_mot_de_passe
 ```
 
 ### Lancer le serveur de développement
@@ -178,7 +178,7 @@ doctrine:
 ## 📁 Structure du projet
 
 ```
-aksam-assurance/
+assurance-devis/
 ├── config/
 │   ├── packages/
 │   │   ├── doctrine.yaml        # Naming strategy
@@ -392,7 +392,7 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 ### Structure des fichiers Docker
 
 ```
-aksam-assurance/
+assurance-devis/
 ├── Dockerfile                    # Image PHP-FPM multi-stage
 ├── docker-compose.yml            # Services production
 ├── docker-compose.dev.yml        # Overrides développement
@@ -432,7 +432,7 @@ make install
 
 **3. Créer le compte administrateur**
 ```bash
-make admin EMAIL=admin@aksam.ma NAME="Votre Nom" PASS=votre_mot_de_passe
+make admin EMAIL=admin@assurance.ma NAME="Votre Nom" PASS=votre_mot_de_passe
 ```
 
 **4. Accéder à l'application**
