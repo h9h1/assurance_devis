@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="public/assets/logo.png" alt="Aksam Assurance" height="80">
+<img src="public/assets/logo.png" alt=" Assurance" height="80">
 
-# 🛡️ Aksam Assurance — Devis en ligne
+# 🛡️ Assurance — Devis en ligne
 
 **Plateforme de simulation et de gestion de devis d'assurance auto & moto au Maroc**
 
@@ -21,7 +21,7 @@
 
 ## 📋 Présentation
 
-**Aksam Assurance** est une application web full-stack développée avec **Symfony 7** permettant aux clients de simuler et soumettre des demandes de devis d'assurance auto et moto en ligne. Un back-office EasyAdmin permet aux administrateurs de gérer les devis, compagnies, offres et variations de prix.
+**Assurance** est une application web full-stack développée avec **Symfony 7** permettant aux clients de simuler et soumettre des demandes de devis d'assurance auto et moto en ligne. Un back-office EasyAdmin permet aux administrateurs de gérer les devis, compagnies, offres et variations de prix.
 
 ---
 
@@ -383,13 +383,7 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 
 ---
 
-<div align="center">
 
-Développé avec ❤️ par l'équipe **Aksam Assurance**
-
-[aksam.ma](https://aksam.ma) · [contact@aksam-assurance.ma](mailto:contact@aksam-assurance.ma)
-
-</div>
 
 ---
 
