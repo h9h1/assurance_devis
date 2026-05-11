@@ -180,7 +180,7 @@
 
             {# CTA Button #}
             <div style="text-align:center;margin:32px 0 8px;">
-                <a href="{{ app.request.schemeAndHttpHost }}/devis/{{ quote.id }}"
+                <a href="{{ app.request.schemeAndHttpHost }}/devis/{{ quote.uuid }}?token={{ quote.accessToken }}" target="_blank" rel="noopener"
                    style="display:inline-block;background:linear-gradient(135deg,#0f62fe,#0043ce);color:white;text-decoration:none;padding:14px 36px;border-radius:12px;font-weight:700;font-size:1rem;box-shadow:0 4px 16px rgba(15,98,254,.3);">
                     Voir mon devis en ligne →
                 </a>

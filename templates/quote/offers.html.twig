@@ -461,16 +461,23 @@ const offersGrid = document.querySelector('.offers-grid');
 
 companySelect.addEventListener('change', function () {
 const selectedCompany = this.value;
-const quoteId = {{ quote.id }};
+
+// Mettre à jour la compagnie dans tous les forms statiques
+document.querySelectorAll('input[name="company"]').forEach(function(input) {
+    input.value = selectedCompany;
+});
+
+const quoteUuid  = '{{ quote.uuid }}';
+const quoteToken = '{{ quote.accessToken }}';
 
 offersGrid.style.opacity = '0.6';
 offersGrid.style.pointerEvents = 'none';
 
-fetch(`/devis/${quoteId}/offres-by-company?company=${
+fetch(`/devis/${quoteUuid}/offres-by-company?token=${quoteToken}&company=${
 encodeURIComponent(selectedCompany)
 }`).then(response => response.json()).then(data => {
 if (data.success) {
-updateOffers(data.offers);
+updateOffers(data.offers, selectedCompany);
 }
 offersGrid.style.opacity = '1';
 offersGrid.style.pointerEvents = 'auto';
@@ -481,7 +488,7 @@ offersGrid.style.pointerEvents = 'auto';
 });
 });
 
-function updateOffers(offers) {
+function updateOffers(offers, selectedCompany) {
 let html = '';
 
 offers.forEach(offer => {
@@ -534,10 +541,11 @@ offer.monthly_price
 							<h3 class="features-title">Ce qui est inclus</h3>
 							<ul class="features-list">${features}</ul>
 						</div>
-						<form method="POST" action="/devis/{{ quote.id }}/choisir-offre" class="offer-form">
-							<input type="hidden" name="offer_code" value="${
-offer.code
-}">
+						<form method="POST" action="{{ path('quote_select_offer', {uuid: quote.uuid, token: quote.accessToken}) }}" class="offer-form">
+							<input type="hidden" name="offer_code" value="${offer.code}">
+                                                        <input type="hidden" name="token" value="${quoteToken}">
+                                                        <input type="hidden" name="company" value="${selectedCompany}">
+                                                        <input type="hidden" name="company" value="${selectedCompany}">
 							<button type="submit" class="btn-offer">
 								<i class="fas fa-arrow-right"></i> Choisir cette offre
 							</button>
