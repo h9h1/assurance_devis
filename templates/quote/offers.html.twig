@@ -20,7 +20,7 @@
 		</div>
 		<select id="company-select" name="quote[company]" class="company-select">
 			{% for company in companies %}
-				<option value="{{ company.name }}" {% if quote.company == company.name %} selected {% endif %}>
+				<option value="{{ company.name }}" {% if (selectedCompany is defined and selectedCompany == company.name) or quote.company == company.name %} selected {% endif %}>
 					{{ company.name }}
 				</option>
 			{% endfor %}
@@ -459,8 +459,18 @@
 const companySelect = document.getElementById('company-select');
 const offersGrid = document.querySelector('.offers-grid');
 
+// Déclencher le chargement des prix avec variation au premier affichage
+const initialCompany = companySelect.value;
+if (initialCompany) {
+    loadOffersForCompany(initialCompany);
+}
+
 companySelect.addEventListener('change', function () {
 const selectedCompany = this.value;
+loadOffersForCompany(selectedCompany);
+});
+
+function loadOffersForCompany(selectedCompany) {
 
 // Mettre à jour la compagnie dans tous les forms statiques
 document.querySelectorAll('input[name="company"]').forEach(function(input) {
@@ -486,7 +496,7 @@ console.error('Erreur:', error);
 offersGrid.style.opacity = '1';
 offersGrid.style.pointerEvents = 'auto';
 });
-});
+}
 
 function updateOffers(offers, selectedCompany) {
 let html = '';

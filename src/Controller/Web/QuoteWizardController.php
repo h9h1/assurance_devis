@@ -156,10 +156,17 @@ class QuoteWizardController extends AbstractController
     ): Response {
         $quote = $this->resolveQuote($uuid, $request, $quoteRepository);
 
+        // Utiliser les prix avec variation si une compagnie est déjà associée
+        $companyEntity = $quote->getCompanyEntity();
+        $offers = $companyEntity
+            ? $estimator->getOffersByCompany($quote, $companyEntity)
+            : $estimator->getOffers($quote);
+
         return $this->render('quote/offers.html.twig', [
-            'quote'     => $mapper->toArray($quote),
-            'offers'    => $estimator->getOffers($quote),
-            'companies' => $companyRepository->findActive(),
+            'quote'           => $mapper->toArray($quote),
+            'offers'          => $offers,
+            'companies'       => $companyRepository->findActive(),
+            'selectedCompany' => $companyEntity?->getName() ?? '',
         ]);
     }
 
