@@ -5,6 +5,70 @@
 {% endblock %}
 
 {% block body %}
+
+{# ── Bloc statut de confirmation ────────────────────────────────────────── #}
+{% if quote.status in ['accepted', 'confirmed', 'rejected'] %}
+<div class="status-confirmation-block status-{{ quote.status }}">
+    {% if quote.status == 'accepted' %}
+        <div class="status-icon">✅</div>
+        <div class="status-content">
+            <h3>Devis accepté</h3>
+            <p>Votre devis a été accepté par notre équipe. Nous vous contacterons prochainement pour finaliser votre souscription.</p>
+        </div>
+    {% elseif quote.status == 'confirmed' %}
+        <div class="status-icon">📋</div>
+        <div class="status-content">
+            <h3>Devis confirmé</h3>
+            <p>Votre devis a été pris en charge par notre équipe. Nous vous contacterons dans les meilleurs délais.</p>
+        </div>
+    {% elseif quote.status == 'rejected' %}
+        <div class="status-icon">❌</div>
+        <div class="status-content">
+            <h3>Devis non retenu</h3>
+            <p>Nous ne sommes pas en mesure de donner suite à votre demande. N'hésitez pas à nous contacter pour plus d'informations.</p>
+        </div>
+    {% endif %}
+    {% if quote.adminNote %}
+    <div class="admin-note-box">
+        <strong><i class="fas fa-comment-alt"></i> Note de notre équipe :</strong>
+        <p>{{ quote.adminNote }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<style>
+.status-confirmation-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 28px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    border: 2px solid;
+    animation: fadeUp .4s ease;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.status-accepted  { background: #e8f5e9; border-color: #12805c; }
+.status-confirmed { background: #e0e7ff; border-color: #0043ce; }
+.status-rejected  { background: #ffebee; border-color: #c0392b; }
+.status-icon { font-size: 2.5rem; flex-shrink: 0; line-height: 1; }
+.status-content h3 { margin: 0 0 6px; font-size: 1.15rem; font-weight: 700; color: #122033; }
+.status-content p  { margin: 0; font-size: .9rem; color: #607086; line-height: 1.6; }
+.admin-note-box {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,.6);
+    border-radius: 8px;
+    font-size: .875rem;
+    color: #122033;
+    border-left: 3px solid #f59e0b;
+    width: 100%;
+}
+.admin-note-box strong { display: block; margin-bottom: 4px; color: #92400e; }
+.admin-note-box p { margin: 0; font-style: italic; }
+</style>
+
 	<!-- Success Header -->
 	<div class="success-header">
 		<div class="success-icon">
