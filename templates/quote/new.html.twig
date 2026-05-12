@@ -486,9 +486,6 @@
 			box-shadow: 0 0 0 4px var(--primary-light);
 		}
 
-		.form-input:invalid:not(:placeholder-shown) {
-			border-color: var(--danger);
-		}
 
 		/* Insurance Cards */
 		.insurance-cards {
@@ -674,5 +671,15 @@
 				width: 100%;
 			}
 		}
-	</style>
+	
+		.field-hint {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-top: 6px;
+			font-size: .8rem;
+			color: #607086;
+		}
+		.field-hint i { color: #0f62fe; font-size: .75rem; }
+		</style>
 {% endblock %}
