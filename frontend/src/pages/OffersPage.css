@@ -1,0 +1,113 @@
+.offers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.offers-header h1 { font-size: clamp(1.6rem,4vw,2.2rem); margin-bottom: 8px; }
+.offers-header p  { color: var(--text-secondary); }
+
+.company-picker {
+  display: flex; flex-direction: column; gap: 6px;
+  min-width: 220px;
+}
+.company-picker label {
+  font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 6px;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+/* Card */
+.offer-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  position: relative;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.offer-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+.offer-card.is-featured {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(15,98,254,.08), var(--shadow-lg);
+  transform: scale(1.03);
+}
+.offer-card.is-featured:hover { transform: scale(1.03) translateY(-4px); }
+
+.featured-ribbon {
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--primary), var(--info));
+  color: #fff;
+  padding: 4px 18px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.offer-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.offer-head h2 { font-size: 1.25rem; }
+
+.offer-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.offer-price {
+  background: var(--surface-muted);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.price-annual {
+  display: flex; align-items: baseline; gap: 4px; margin-bottom: 6px;
+}
+.price-amt  { font-size: 2rem; font-weight: 800; font-family: var(--font-display); color: var(--primary); }
+.price-unit { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+.price-monthly {
+  font-size: 0.85rem; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 6px;
+}
+
+.offer-features {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 8px;
+  flex: 1;
+}
+.offer-features li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.9rem;
+}
+.offer-features li i { color: var(--success); font-size: 0.8rem; flex-shrink: 0; }
+
+/* spinner reuse */
+.btn-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(0,0,0,.2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@media (max-width: 900px) {
+  .offers-grid { grid-template-columns: 1fr; }
+  .offer-card.is-featured { transform: none; }
+}
