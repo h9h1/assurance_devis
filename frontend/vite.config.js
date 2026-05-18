@@ -3,24 +3,26 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-
-  // Set VITE_API_TARGET in .env to override.
-  // Use the HTTPS address your Symfony/DDEV server actually listens on.
   const API_TARGET = env.VITE_API_TARGET || 'https://localhost:8000'
-
-  const proxyOpts = {
-    target: API_TARGET,
-    changeOrigin: true,
-    secure: false,          // accept self-signed certs (DDEV / symfony server:start)
-  }
+  const proxyOpts = { target: API_TARGET, changeOrigin: true, secure: false }
 
   return {
     plugins: [react()],
+    build: {
+      rollupOptions: {
+        input: {
+          main:  'index.html',
+        },
+      },
+      outDir: '../public/react',
+      emptyOutDir: true,
+    },
+
     server: {
       port: 3000,
       proxy: {
         '/api': proxyOpts,
-        // Only proxy the PDF download; all other /devis/* are React Router pages
+        '/admin': proxyOpts,
         '/devis': {
           ...proxyOpts,
           bypass(req) {
@@ -29,10 +31,6 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
-    },
-    build: {
-      outDir: '../public/react',
-      emptyOutDir: true,
     },
   }
 })

@@ -85,7 +85,7 @@ export default function OffersPage() {
           <div className="company-picker">
             <label><i className="fas fa-building" /> Compagnie</label>
             <select value={company} onChange={handleCompanyChange} className="form-input">
-              <option value="">Toutes les compagnies</option>
+              <option value="">Choisi la companie</option>
               {companies.map(c => (
                 <option key={c.name ?? c} value={c.name ?? c}>{c.name ?? c}</option>
               ))}
