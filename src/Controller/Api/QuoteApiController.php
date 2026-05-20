@@ -229,9 +229,8 @@ class QuoteApiController extends AbstractController
         string $uuid,
         Request $request,
         QuoteRepository $quoteRepository,
-        QuoteMapper $mapper,
         EntityManagerInterface $em,
-        MailerInterface $mailer,
+        \App\Service\QuoteMailerService $mailer,
     ): JsonResponse {
         $payload = json_decode($request->getContent(), true) ?? [];
         $token   = $payload['token'] ?? '';
@@ -247,38 +246,16 @@ class QuoteApiController extends AbstractController
             return $this->json(['message' => 'Adresse email invalide.'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // Update email on quote if changed
+        // Met à jour l'email sur le devis si modifié par l'utilisateur
         if ($quote->getEmail() !== $email) {
             $quote->setEmail($email);
             $em->flush();
         }
 
         try {
-            $data = $mapper->toArray($quote);
-
-            $body = sprintf(
-                "Bonjour %s %s,\n\nVoici le récapitulatif de votre devis #%d.\n\n" .
-                "Véhicule : %s — %s\nType d'assurance : %s\nImmatriculation : %s\n" .
-                "%s\n\nCordialement,\nAksam Assurance",
-                $data['firstName'],
-                $data['lastName'],
-                $data['id'],
-                $data['vehicleBrand'],
-                $data['fuelType'],
-                $data['insuranceType'],
-                $data['registrationNumber'],
-                $data['selectedOffer']
-                    ? sprintf("Offre choisie : %s — %s MAD/an", $data['selectedOffer'], number_format((float) $data['customEstimation'], 2, '.', ' '))
-                    : 'Aucune offre sélectionnée.'
-            );
-
-            $message = (new Email())
-                ->from('noreply@aksam-assurance.ma')
-                ->to($email)
-                ->subject(sprintf('Votre devis Aksam Assurance #%d', $data['id']))
-                ->text($body);
-
-            $mailer->send($message);
+            // Utilise QuoteMailerService — même email que celui envoyé par EasyAdmin
+            // avec le template Twig emails/quote_recap.html.twig
+            $mailer->sendRecap($quote);
 
             return $this->json(['message' => sprintf('Email envoyé à %s.', $email)]);
         } catch (\Throwable $e) {
