@@ -53,4 +53,4 @@ export async function sendEmail(uuid, token, email) {
 
 export async function getConfig() {
   return request('GET', `${BASE}/config`)
-}
+} 
